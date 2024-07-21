@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/ilmenite_raw",
+    "top": "fbased:block/ilmenite_raw",
+    "side": "fbased:block/ilmenite_raw"
+  }
+}

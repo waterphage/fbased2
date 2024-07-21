@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/deco/pink_carcass_tile",
+    "top": "fbased:block/deco/pink_carcass_top",
+    "bottom": "fbased:block/deco/pink_carcass_empty"
+  },
+  "render_type": "solid"
+}

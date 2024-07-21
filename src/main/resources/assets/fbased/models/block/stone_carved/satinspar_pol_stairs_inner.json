@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/satinspar_pol",
+    "top": "fbased:block/satinspar_pol",
+    "side": "fbased:block/satinspar_pol"
+  }
+}

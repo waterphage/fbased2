@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/gypsum_bricks",
+    "top": "fbased:block/gypsum_pol",
+    "bottom": "fbased:block/gypsum_tile"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/borax_raw",
+    "top": "fbased:block/borax_raw",
+    "bottom": "fbased:block/borax_raw"
+  },
+  "render_type": "solid"
+}

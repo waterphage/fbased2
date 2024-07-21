@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:granite",
+    "minecraft:diorite",
+    "minecraft:andesite",
+    "minecraft:stone",
+    "minecraft:smooth_sandstone",
+    "minecraft:smooth_red_sandstone",
+    "minecraft:deepslate",
+    "minecraft:cobbled_deepslate",
+    "minecraft:deepslate_tiles",
+    "minecraft:cracked_deepslate_tiles",
+    "minecraft:basalt",
+    "minecraft:polished_basalt",
+    "minecraft:smooth_basalt",
+    "minecraft:blackstone",
+    "minecraft:prismarine",
+    "minecraft:amethyst_block",
+    "minecraft:end_stone",
+    "minecraft:tuff",
+    "minecraft:calcite",
+    "minecraft:obsidian",
+    "minecraft:crying_obsidian",
+    "minecraft:smooth_quartz",
+    "minecraft:magma_block",
+    "minecraft:lava",
+    "minecraft:bedrock"
+  ]
+}

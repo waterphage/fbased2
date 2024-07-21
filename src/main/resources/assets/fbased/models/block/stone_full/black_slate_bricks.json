@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/black_slate_bricks",
+    "top": "fbased:block/black_slate_pol",
+    "bottom": "fbased:block/black_slate_tile"
+  },
+  "render_type": "solid"
+}

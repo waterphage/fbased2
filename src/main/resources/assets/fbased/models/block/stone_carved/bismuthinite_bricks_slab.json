@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/bismuthinite_bricks",
+    "top": "fbased:block/bismuthinite_bricks",
+    "bottom": "fbased:block/bismuthinite_bricks"
+  },
+  "render_type": "solid"
+}

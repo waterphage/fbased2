@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/kaolinite_pol",
+    "top": "fbased:block/kaolinite_pol",
+    "side": "fbased:block/kaolinite_pol"
+  }
+}

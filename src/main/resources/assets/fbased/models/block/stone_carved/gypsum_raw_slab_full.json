@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/gypsum_raw",
+    "top": "fbased:block/gypsum_raw",
+    "side": "fbased:block/gypsum_raw"
+  },
+  "render_type": "solid"
+}

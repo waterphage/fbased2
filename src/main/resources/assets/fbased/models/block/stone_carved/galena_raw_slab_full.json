@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/galena_raw",
+    "top": "fbased:block/galena_raw",
+    "side": "fbased:block/galena_raw"
+  },
+  "render_type": "solid"
+}

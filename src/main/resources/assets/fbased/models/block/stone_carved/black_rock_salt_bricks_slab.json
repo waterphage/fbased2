@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/black_rock_salt_bricks",
+    "top": "fbased:block/black_rock_salt_bricks",
+    "bottom": "fbased:block/black_rock_salt_bricks"
+  },
+  "render_type": "solid"
+}

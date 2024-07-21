@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/marcasite_cobble",
+    "top": "fbased:block/marcasite_cobble",
+    "side": "fbased:block/marcasite_cobble"
+  }
+}

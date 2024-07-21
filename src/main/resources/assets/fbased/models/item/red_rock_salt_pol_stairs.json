@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/red_rock_salt_pol",
+    "top": "fbased:block/red_rock_salt_pol",
+    "side": "fbased:block/red_rock_salt_pol"
+  }
+}

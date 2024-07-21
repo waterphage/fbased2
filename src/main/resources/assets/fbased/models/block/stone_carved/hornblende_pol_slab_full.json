@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/hornblende_pol",
+    "top": "fbased:block/hornblende_pol",
+    "side": "fbased:block/hornblende_doub"
+  },
+  "render_type": "solid"
+}

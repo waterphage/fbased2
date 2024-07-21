@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/rutile_cobble",
+    "top": "fbased:block/rutile_cobble",
+    "bottom": "fbased:block/rutile_cobble"
+  },
+  "render_type": "solid"
+}

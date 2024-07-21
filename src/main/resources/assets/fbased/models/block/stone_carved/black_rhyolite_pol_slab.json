@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/black_rhyolite_pol",
+    "top": "fbased:block/black_rhyolite_pol",
+    "bottom": "fbased:block/black_rhyolite_pol"
+  },
+  "render_type": "solid"
+}

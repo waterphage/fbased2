@@ -1,0 +1,13 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "fbased:galena_bricks_stairs"
+        }
+      ]
+    }
+  ]
+}

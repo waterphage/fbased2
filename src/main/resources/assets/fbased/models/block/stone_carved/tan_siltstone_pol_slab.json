@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/tan_siltstone_pol",
+    "top": "fbased:block/tan_siltstone_pol",
+    "bottom": "fbased:block/tan_siltstone_pol"
+  },
+  "render_type": "solid"
+}

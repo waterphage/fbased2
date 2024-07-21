@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/red_obsidian_bricks",
+    "top": "fbased:block/red_obsidian_pol",
+    "bottom": "fbased:block/red_obsidian_tile"
+  },
+  "render_type": "solid"
+}

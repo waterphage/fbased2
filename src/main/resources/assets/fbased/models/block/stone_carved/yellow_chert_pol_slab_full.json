@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/yellow_chert_pol",
+    "top": "fbased:block/yellow_chert_pol",
+    "side": "fbased:block/yellow_chert_doub"
+  },
+  "render_type": "solid"
+}

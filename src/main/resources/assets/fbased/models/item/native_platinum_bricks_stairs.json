@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/native_platinum_bricks",
+    "top": "fbased:block/native_platinum_bricks",
+    "side": "fbased:block/native_platinum_bricks"
+  }
+}

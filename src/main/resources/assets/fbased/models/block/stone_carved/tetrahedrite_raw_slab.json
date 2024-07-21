@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/tetrahedrite_raw",
+    "top": "fbased:block/tetrahedrite_raw",
+    "bottom": "fbased:block/tetrahedrite_raw"
+  },
+  "render_type": "solid"
+}

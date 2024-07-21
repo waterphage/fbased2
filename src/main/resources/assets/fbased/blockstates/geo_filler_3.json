@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "fbased:block/tech/geo_filler_3"
+    },
+    "facing=east": {
+      "model": "fbased:block/tech/geo_filler_3",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "fbased:block/tech/geo_filler_3",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "fbased:block/tech/geo_filler_3",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "fbased:block/tech/geo_filler_3",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "fbased:block/tech/geo_filler_3",
+      "x": 90
+    }
+  }
+}

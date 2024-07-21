@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/tan_quartzite_pol",
+    "top": "fbased:block/tan_quartzite_pol",
+    "bottom": "fbased:block/tan_quartzite_pol"
+  },
+  "render_type": "solid"
+}

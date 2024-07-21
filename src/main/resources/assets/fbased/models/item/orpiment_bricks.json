@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/orpiment_bricks",
+    "top": "fbased:block/orpiment_pol",
+    "bottom": "fbased:block/orpiment_tile"
+  },
+  "render_type": "solid"
+}

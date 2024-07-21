@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/galena_bricks",
+    "top": "fbased:block/galena_bricks",
+    "bottom": "fbased:block/galena_bricks"
+  },
+  "render_type": "solid"
+}

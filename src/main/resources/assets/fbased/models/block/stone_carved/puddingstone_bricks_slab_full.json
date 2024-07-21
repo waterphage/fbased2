@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/puddingstone_tile",
+    "top": "fbased:block/puddingstone_pol",
+    "side": "fbased:block/puddingstone_bricks"
+  },
+  "render_type": "solid"
+}

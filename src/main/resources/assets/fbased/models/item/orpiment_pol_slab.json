@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/orpiment_pol",
+    "top": "fbased:block/orpiment_pol",
+    "bottom": "fbased:block/orpiment_pol"
+  },
+  "render_type": "solid"
+}

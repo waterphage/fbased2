@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/talc_raw",
+    "top": "fbased:block/talc_raw",
+    "bottom": "fbased:block/talc_raw"
+  },
+  "render_type": "solid"
+}

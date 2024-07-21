@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/red_obsidian_raw",
+    "top": "fbased:block/red_obsidian_raw",
+    "side": "fbased:block/red_obsidian_raw"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/talc_bricks",
+    "top": "fbased:block/talc_bricks",
+    "bottom": "fbased:block/talc_bricks"
+  },
+  "render_type": "solid"
+}

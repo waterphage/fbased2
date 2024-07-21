@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/bismuthinite_pol",
+    "top": "fbased:block/bismuthinite_pol",
+    "bottom": "fbased:block/bismuthinite_pol"
+  },
+  "render_type": "solid"
+}

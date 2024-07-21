@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/horn_silver_raw",
+    "top": "fbased:block/horn_silver_raw",
+    "bottom": "fbased:block/horn_silver_raw"
+  },
+  "render_type": "solid"
+}

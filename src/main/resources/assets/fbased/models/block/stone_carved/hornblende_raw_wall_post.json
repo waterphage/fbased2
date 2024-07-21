@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/hornblende_raw",
+    "particle": "fbased:block/hornblende_raw"
+  },
+  "render_type": "solid"
+}

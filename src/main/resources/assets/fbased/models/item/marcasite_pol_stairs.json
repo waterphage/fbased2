@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/marcasite_pol",
+    "top": "fbased:block/marcasite_pol",
+    "side": "fbased:block/marcasite_pol"
+  }
+}

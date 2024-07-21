@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/green_granite_pol",
+    "top": "fbased:block/green_granite_pol",
+    "side": "fbased:block/green_granite_doub"
+  },
+  "render_type": "solid"
+}

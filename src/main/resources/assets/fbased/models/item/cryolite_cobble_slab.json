@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/cryolite_cobble",
+    "top": "fbased:block/cryolite_cobble",
+    "bottom": "fbased:block/cryolite_cobble"
+  },
+  "render_type": "solid"
+}

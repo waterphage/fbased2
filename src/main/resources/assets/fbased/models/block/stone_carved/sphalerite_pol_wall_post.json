@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/sphalerite_pol",
+    "particle": "fbased:block/sphalerite_pol"
+  },
+  "render_type": "solid"
+}

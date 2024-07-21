@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/mica_cobble",
+    "top": "fbased:block/mica_cobble",
+    "bottom": "fbased:block/mica_cobble"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/pyrolusite_raw",
+    "top": "fbased:block/pyrolusite_raw",
+    "side": "fbased:block/pyrolusite_raw"
+  },
+  "render_type": "solid"
+}

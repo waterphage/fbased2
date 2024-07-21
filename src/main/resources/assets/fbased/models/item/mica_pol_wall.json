@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/mica_pol",
+    "particle": "fbased:block/mica_pol"
+  },
+  "render_type": "solid"
+}

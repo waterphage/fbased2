@@ -1,0 +1,13 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "fbased:yellow_shale_bricks_stairs"
+        }
+      ]
+    }
+  ]
+}

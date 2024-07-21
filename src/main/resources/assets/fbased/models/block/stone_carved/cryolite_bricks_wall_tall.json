@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side_tall",
+  "textures": {
+    "wall": "fbased:block/cryolite_bricks",
+    "particle": "fbased:block/cryolite_bricks"
+  },
+  "render_type": "solid"
+}

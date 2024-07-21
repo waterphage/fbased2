@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side_tall",
+  "textures": {
+    "wall": "fbased:block/orpiment_raw",
+    "particle": "fbased:block/orpiment_raw"
+  },
+  "render_type": "solid"
+}

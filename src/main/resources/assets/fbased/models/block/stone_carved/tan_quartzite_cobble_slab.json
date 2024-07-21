@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/tan_quartzite_cobble",
+    "top": "fbased:block/tan_quartzite_cobble",
+    "bottom": "fbased:block/tan_quartzite_cobble"
+  },
+  "render_type": "solid"
+}

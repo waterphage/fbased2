@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/jet_tile",
+    "top": "fbased:block/jet_pol",
+    "side": "fbased:block/jet_bricks"
+  },
+  "render_type": "solid"
+}

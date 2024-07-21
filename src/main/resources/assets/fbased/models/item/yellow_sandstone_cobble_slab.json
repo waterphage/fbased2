@@ -1,0 +1,10 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/yellow_sandstone_cobble",
+    "top": "fbased:block/yellow_sandstone_cobble",
+    "side": "fbased:block/yellow_sandstone_cobble"
+  },
+  "render_type": "solid"
+}
+"block/([^]*)

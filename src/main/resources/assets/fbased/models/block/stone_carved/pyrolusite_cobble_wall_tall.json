@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side_tall",
+  "textures": {
+    "wall": "fbased:block/pyrolusite_cobble",
+    "particle": "fbased:block/pyrolusite_cobble"
+  },
+  "render_type": "solid"
+}

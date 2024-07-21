@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/yellow_chert_raw",
+    "top": "fbased:block/yellow_chert_raw",
+    "bottom": "fbased:block/yellow_chert_raw"
+  },
+  "render_type": "solid"
+}

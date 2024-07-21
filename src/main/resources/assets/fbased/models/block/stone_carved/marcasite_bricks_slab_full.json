@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/marcasite_tile",
+    "top": "fbased:block/marcasite_pol",
+    "side": "fbased:block/marcasite_bricks"
+  },
+  "render_type": "solid"
+}

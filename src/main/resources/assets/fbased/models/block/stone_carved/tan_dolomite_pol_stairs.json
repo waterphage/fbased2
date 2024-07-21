@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/tan_dolomite_pol",
+    "top": "fbased:block/tan_dolomite_pol",
+    "side": "fbased:block/tan_dolomite_pol"
+  }
+}

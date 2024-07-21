@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/native_copper_bricks",
+    "top": "fbased:block/native_copper_bricks",
+    "bottom": "fbased:block/native_copper_bricks"
+  },
+  "render_type": "solid"
+}

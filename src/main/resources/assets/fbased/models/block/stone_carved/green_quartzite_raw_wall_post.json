@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/green_quartzite_raw",
+    "particle": "fbased:block/green_quartzite_raw"
+  },
+  "render_type": "solid"
+}

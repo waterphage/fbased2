@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/brimstone_raw",
+    "top": "fbased:block/brimstone_raw",
+    "side": "fbased:block/brimstone_raw"
+  },
+  "render_type": "solid"
+}

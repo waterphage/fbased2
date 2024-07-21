@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/hematite_raw",
+    "top": "fbased:block/hematite_raw",
+    "bottom": "fbased:block/hematite_raw"
+  },
+  "render_type": "solid"
+}

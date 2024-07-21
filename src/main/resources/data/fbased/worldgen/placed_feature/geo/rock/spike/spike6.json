@@ -1,0 +1,32 @@
+{"feature": {
+    "type": "minecraft:fossil",
+    "config": {
+      "max_empty_corners_allowed": 7,
+      "fossil_structures": [
+        "fbased:crst_4_1",
+        "fbased:crst_4_2",
+        "fbased:crst_4_3",
+        "fbased:crst_4_4",
+        "fbased:crst_4_5",
+        "fbased:crst_4_6",
+        "fbased:crst_4_7"
+      ],
+      "overlay_structures": [
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty"
+      ],
+      "fossil_processors": "fbased:crystall_6",
+      "overlay_processors": {
+        "processors": [
+          {
+            "processor_type": "minecraft:nop"
+          }
+        ]
+      }
+    }
+  },"placement": [{"type": "minecraft:count","count": {"type": "minecraft:uniform","value": {"min_inclusive": 1,"max_inclusive": 1}}}]}

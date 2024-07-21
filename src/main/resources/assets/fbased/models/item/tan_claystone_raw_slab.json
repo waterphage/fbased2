@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/tan_claystone_raw",
+    "top": "fbased:block/tan_claystone_raw",
+    "side": "fbased:block/tan_claystone_raw"
+  },
+  "render_type": "solid"
+}

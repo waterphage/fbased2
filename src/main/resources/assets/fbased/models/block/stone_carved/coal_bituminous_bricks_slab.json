@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/coal_bituminous_bricks",
+    "top": "fbased:block/coal_bituminous_bricks",
+    "bottom": "fbased:block/coal_bituminous_bricks"
+  },
+  "render_type": "solid"
+}

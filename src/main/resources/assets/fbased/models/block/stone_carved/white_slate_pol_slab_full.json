@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/white_slate_pol",
+    "top": "fbased:block/white_slate_pol",
+    "side": "fbased:block/white_slate_doub"
+  },
+  "render_type": "solid"
+}

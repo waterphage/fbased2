@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/native_copper_bricks",
+    "top": "fbased:block/native_copper_pol",
+    "bottom": "fbased:block/native_copper_tile"
+  },
+  "render_type": "solid"
+}

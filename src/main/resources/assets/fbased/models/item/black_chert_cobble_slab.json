@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/black_chert_cobble",
+    "top": "fbased:block/black_chert_cobble",
+    "side": "fbased:block/black_chert_cobble"
+  },
+  "render_type": "solid"
+}

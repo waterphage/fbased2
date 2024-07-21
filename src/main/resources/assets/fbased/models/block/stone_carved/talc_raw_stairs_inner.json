@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/talc_raw",
+    "top": "fbased:block/talc_raw",
+    "side": "fbased:block/talc_raw"
+  }
+}

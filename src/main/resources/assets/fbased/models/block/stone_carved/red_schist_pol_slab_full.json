@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/red_schist_pol",
+    "top": "fbased:block/red_schist_pol",
+    "side": "fbased:block/red_schist_doub"
+  },
+  "render_type": "solid"
+}

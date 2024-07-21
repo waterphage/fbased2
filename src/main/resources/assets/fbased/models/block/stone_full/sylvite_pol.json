@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/sylvite_pol",
+    "particle": "fbased:block/sylvite_pol"
+  },
+  "render_type": "solid"
+}

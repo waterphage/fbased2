@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/orpiment_bricks",
+    "top": "fbased:block/orpiment_bricks",
+    "side": "fbased:block/orpiment_bricks"
+  }
+}

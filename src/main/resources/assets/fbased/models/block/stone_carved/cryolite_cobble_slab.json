@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/cryolite_cobble",
+    "top": "fbased:block/cryolite_cobble",
+    "bottom": "fbased:block/cryolite_cobble"
+  },
+  "render_type": "solid"
+}

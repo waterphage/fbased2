@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/orthoclase_bricks",
+    "top": "fbased:block/orthoclase_bricks",
+    "bottom": "fbased:block/orthoclase_bricks"
+  },
+  "render_type": "solid"
+}

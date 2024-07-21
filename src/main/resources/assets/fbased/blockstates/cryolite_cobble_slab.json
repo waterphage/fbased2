@@ -1,0 +1,61 @@
+{
+  "variants": {
+    "facing=north,single_slab=true": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=north,single_slab=false": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab_full",
+      "x": 270,
+      "y": 0
+    },
+    "facing=east,single_slab=true": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab",
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,single_slab=false": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab_full",
+      "x": 270,
+      "y": 90
+    },
+    "facing=south,single_slab=true": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab",
+      "uvlock": true
+    },
+    "facing=south,single_slab=false": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab_full",
+      "x": 90,
+      "y": 0
+    },
+    "facing=west,single_slab=true": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=west,single_slab=false": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab_full",
+      "x": 90,
+      "y": 90
+    },
+    "facing=up,single_slab=true": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab",
+      "x": 90,
+      "uvlock": true
+    },
+    "facing=up,single_slab=false": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab_full",
+      "x": 180
+    },
+    "facing=down,single_slab=true": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab",
+      "x": 270,
+      "uvlock": true
+    },
+    "facing=down,single_slab=false": {
+      "model": "fbased:block/stone_carved/cryolite_cobble_slab_full",
+      "x": 0
+    }
+  }
+}

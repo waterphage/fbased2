@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/kimberlite_pol",
+    "top": "fbased:block/kimberlite_pol",
+    "bottom": "fbased:block/kimberlite_pol"
+  },
+  "render_type": "solid"
+}

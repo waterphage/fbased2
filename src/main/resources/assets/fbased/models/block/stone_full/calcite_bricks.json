@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/calcite_bricks",
+    "top": "fbased:block/calcite_pol",
+    "bottom": "fbased:block/calcite_tile"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/kimberlite_raw",
+    "top": "fbased:block/kimberlite_raw",
+    "bottom": "fbased:block/kimberlite_raw"
+  },
+  "render_type": "solid"
+}

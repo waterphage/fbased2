@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/black_limestone_pol",
+    "top": "fbased:block/black_limestone_pol",
+    "side": "fbased:block/black_limestone_pol"
+  },
+  "render_type": "solid"
+}

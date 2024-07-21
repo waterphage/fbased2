@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/green_schist_cobble",
+    "top": "fbased:block/green_schist_cobble",
+    "side": "fbased:block/green_schist_cobble"
+  },
+  "render_type": "solid"
+}

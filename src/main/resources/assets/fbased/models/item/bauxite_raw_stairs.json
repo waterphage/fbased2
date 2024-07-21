@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/bauxite_raw",
+    "top": "fbased:block/bauxite_raw",
+    "side": "fbased:block/bauxite_raw"
+  }
+}

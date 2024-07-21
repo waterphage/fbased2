@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/sylvite_bricks",
+    "top": "fbased:block/sylvite_pol",
+    "bottom": "fbased:block/sylvite_tile"
+  },
+  "render_type": "solid"
+}

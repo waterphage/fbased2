@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/petrified_wood_raw",
+    "top": "fbased:block/petrified_wood_raw",
+    "bottom": "fbased:block/petrified_wood_raw"
+  },
+  "render_type": "solid"
+}

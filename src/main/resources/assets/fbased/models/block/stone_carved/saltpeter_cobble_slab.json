@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/saltpeter_cobble",
+    "top": "fbased:block/saltpeter_cobble",
+    "bottom": "fbased:block/saltpeter_cobble"
+  },
+  "render_type": "solid"
+}

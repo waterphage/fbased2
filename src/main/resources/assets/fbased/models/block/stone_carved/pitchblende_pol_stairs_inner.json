@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/pitchblende_pol",
+    "top": "fbased:block/pitchblende_pol",
+    "side": "fbased:block/pitchblende_pol"
+  }
+}

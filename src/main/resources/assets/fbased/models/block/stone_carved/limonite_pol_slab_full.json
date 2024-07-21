@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/limonite_pol",
+    "top": "fbased:block/limonite_pol",
+    "side": "fbased:block/limonite_doub"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/red_dacite_pol",
+    "top": "fbased:block/red_dacite_pol",
+    "side": "fbased:block/red_dacite_pol"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/magnetite_raw",
+    "top": "fbased:block/magnetite_raw",
+    "side": "fbased:block/magnetite_raw"
+  },
+  "render_type": "solid"
+}

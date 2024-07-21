@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/magnetite_bricks",
+    "top": "fbased:block/magnetite_bricks",
+    "bottom": "fbased:block/magnetite_bricks"
+  },
+  "render_type": "solid"
+}

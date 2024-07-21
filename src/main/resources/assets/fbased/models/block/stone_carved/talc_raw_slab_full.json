@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/talc_raw",
+    "top": "fbased:block/talc_raw",
+    "side": "fbased:block/talc_raw"
+  },
+  "render_type": "solid"
+}

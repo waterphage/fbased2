@@ -1,0 +1,140 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:protected_blocks",
+      "value": "#fbased:geo_hard"
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "position_predicate": {
+            "predicate_type": "minecraft:linear_pos",
+            "min_dist": 0,
+            "max_dist": 255,
+            "min_chance": 0.1,
+            "max_chance": 0.1
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:str_all"
+          },
+          "output_state": {
+            "Name": "minecraft:emerald_block"
+          }
+        },
+        {
+          "position_predicate": {
+            "predicate_type": "minecraft:linear_pos",
+            "min_dist": 0,
+            "max_dist": 255,
+            "min_chance": 0.333,
+            "max_chance": 0.333
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:open"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:str_all"
+          },
+          "output_state": {
+            "Name": "minecraft:lime_stained_glass"
+          }
+        },
+        {
+          "position_predicate": {
+            "predicate_type": "minecraft:linear_pos",
+            "min_dist": 0,
+            "max_dist": 255,
+            "min_chance": 0.5,
+            "max_chance": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:open"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:str_all"
+          },
+          "output_state": {
+            "Name": "minecraft:green_stained_glass"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:open"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:str_all"
+          },
+          "output_state": {
+            "Name": "minecraft:cyan_stained_glass"
+          }
+        }
+      ]
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "position_predicate": {
+            "predicate_type": "minecraft:linear_pos",
+            "min_dist": 0,
+            "max_dist": 255,
+            "min_chance": 0.333,
+            "max_chance": 0.333
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:str_all"
+          },
+          "output_state": {
+            "Name": "minecraft:prismarine"
+          }
+        },
+        {
+          "position_predicate": {
+            "predicate_type": "minecraft:linear_pos",
+            "min_dist": 0,
+            "max_dist": 255,
+            "min_chance": 0.5,
+            "max_chance": 0.5
+          },
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:str_all"
+          },
+          "output_state": {
+            "Name": "minecraft:mossy_cobblestone"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:tag_match",
+            "tag": "fbased:str_all"
+          },
+          "output_state": {
+            "Name": "minecraft:tuff"
+          }
+        }
+      ]
+    }
+  ]
+}

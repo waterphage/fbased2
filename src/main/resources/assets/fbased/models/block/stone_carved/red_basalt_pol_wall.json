@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "fbased:block/red_basalt_pol",
+    "particle": "fbased:block/red_basalt_pol"
+  },
+  "render_type": "solid"
+}

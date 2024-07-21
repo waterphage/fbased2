@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/white_gneiss_bricks",
+    "top": "fbased:block/white_gneiss_bricks",
+    "side": "fbased:block/white_gneiss_bricks"
+  },
+  "render_type": "solid"
+}

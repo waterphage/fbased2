@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/brimstone_bricks",
+    "top": "fbased:block/brimstone_pol",
+    "bottom": "fbased:block/brimstone_tile"
+  },
+  "render_type": "solid"
+}

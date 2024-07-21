@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/satinspar_pol",
+    "top": "fbased:block/satinspar_pol",
+    "side": "fbased:block/satinspar_doub"
+  },
+  "render_type": "solid"
+}

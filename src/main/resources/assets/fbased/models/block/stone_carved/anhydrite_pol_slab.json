@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/anhydrite_pol",
+    "top": "fbased:block/anhydrite_pol",
+    "bottom": "fbased:block/anhydrite_pol"
+  },
+  "render_type": "solid"
+}

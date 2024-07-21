@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/malachite_raw",
+    "top": "fbased:block/malachite_raw",
+    "bottom": "fbased:block/malachite_raw"
+  },
+  "render_type": "solid"
+}

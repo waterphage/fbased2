@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/satinspar_pol",
+    "top": "fbased:block/satinspar_pol",
+    "bottom": "fbased:block/satinspar_pol"
+  },
+  "render_type": "solid"
+}

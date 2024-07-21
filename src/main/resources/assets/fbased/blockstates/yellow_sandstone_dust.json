@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fbased:block/stone_full/yellow_sandstone_dust"
+      },
+      {
+        "model": "fbased:block/stone_full/yellow_sandstone_dust",
+        "y": 90
+      },
+      {
+        "model": "fbased:block/stone_full/yellow_sandstone_dust",
+        "y": 180
+      },
+      {
+        "model": "fbased:block/stone_full/yellow_sandstone_dust",
+        "y": 270
+      }
+    ]
+  }
+}

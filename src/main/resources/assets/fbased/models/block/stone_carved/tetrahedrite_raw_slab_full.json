@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/tetrahedrite_raw",
+    "top": "fbased:block/tetrahedrite_raw",
+    "side": "fbased:block/tetrahedrite_raw"
+  },
+  "render_type": "solid"
+}

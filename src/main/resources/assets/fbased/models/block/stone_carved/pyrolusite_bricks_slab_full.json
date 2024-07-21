@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/pyrolusite_tile",
+    "top": "fbased:block/pyrolusite_pol",
+    "side": "fbased:block/pyrolusite_bricks"
+  },
+  "render_type": "solid"
+}

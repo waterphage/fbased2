@@ -1,0 +1,85 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:protected_blocks",
+      "value": "#fbased:geo_hard"
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:pink_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:lime_terracotta"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:purple_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:red_terracotta"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:blue_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:yellow_terracotta"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:light_blue_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:brown_terracotta"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:lime_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:orange_terracotta"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:orange_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:black_terracotta"
+          }
+        }
+      ]
+    }
+  ]
+}

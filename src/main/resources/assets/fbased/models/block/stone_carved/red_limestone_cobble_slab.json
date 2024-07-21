@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/red_limestone_cobble",
+    "top": "fbased:block/red_limestone_cobble",
+    "bottom": "fbased:block/red_limestone_cobble"
+  },
+  "render_type": "solid"
+}

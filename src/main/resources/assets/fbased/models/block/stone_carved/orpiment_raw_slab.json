@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/orpiment_raw",
+    "top": "fbased:block/orpiment_raw",
+    "bottom": "fbased:block/orpiment_raw"
+  },
+  "render_type": "solid"
+}

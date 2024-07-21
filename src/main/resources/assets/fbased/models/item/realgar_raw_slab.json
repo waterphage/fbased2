@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/realgar_raw",
+    "top": "fbased:block/realgar_raw",
+    "bottom": "fbased:block/realgar_raw"
+  },
+  "render_type": "solid"
+}

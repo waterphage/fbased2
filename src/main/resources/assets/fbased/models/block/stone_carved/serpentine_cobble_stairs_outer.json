@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/serpentine_cobble",
+    "top": "fbased:block/serpentine_cobble",
+    "side": "fbased:block/serpentine_cobble"
+  }
+}

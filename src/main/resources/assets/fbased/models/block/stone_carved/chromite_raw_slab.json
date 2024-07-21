@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/chromite_raw",
+    "top": "fbased:block/chromite_raw",
+    "bottom": "fbased:block/chromite_raw"
+  },
+  "render_type": "solid"
+}

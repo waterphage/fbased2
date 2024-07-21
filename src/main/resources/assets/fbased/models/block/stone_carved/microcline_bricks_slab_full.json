@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/microcline_tile",
+    "top": "fbased:block/microcline_pol",
+    "side": "fbased:block/microcline_bricks"
+  },
+  "render_type": "solid"
+}

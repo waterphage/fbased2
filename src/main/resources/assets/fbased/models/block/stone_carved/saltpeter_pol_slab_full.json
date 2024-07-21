@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/saltpeter_pol",
+    "top": "fbased:block/saltpeter_pol",
+    "side": "fbased:block/saltpeter_doub"
+  },
+  "render_type": "solid"
+}

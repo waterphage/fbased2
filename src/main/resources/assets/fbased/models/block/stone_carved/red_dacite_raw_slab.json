@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/red_dacite_raw",
+    "top": "fbased:block/red_dacite_raw",
+    "bottom": "fbased:block/red_dacite_raw"
+  },
+  "render_type": "solid"
+}

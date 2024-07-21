@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side_tall",
+  "textures": {
+    "wall": "fbased:block/red_dacite_cobble",
+    "particle": "fbased:block/red_dacite_cobble"
+  },
+  "render_type": "solid"
+}

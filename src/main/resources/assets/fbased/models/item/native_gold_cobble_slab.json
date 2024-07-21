@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/native_gold_cobble",
+    "top": "fbased:block/native_gold_cobble",
+    "bottom": "fbased:block/native_gold_cobble"
+  },
+  "render_type": "solid"
+}

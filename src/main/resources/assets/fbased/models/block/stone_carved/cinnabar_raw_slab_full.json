@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/cinnabar_raw",
+    "top": "fbased:block/cinnabar_raw",
+    "side": "fbased:block/cinnabar_raw"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "fbased:block/serpentine_pol",
+    "particle": "fbased:block/serpentine_pol"
+  },
+  "render_type": "solid"
+}

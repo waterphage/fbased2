@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/deco/green_carcass_empty",
+    "top": "fbased:block/deco/green_carcass_tile",
+    "side": "fbased:block/deco/green_carcass_tile"
+  }
+}

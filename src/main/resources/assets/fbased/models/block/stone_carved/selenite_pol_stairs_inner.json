@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/selenite_pol",
+    "top": "fbased:block/selenite_pol",
+    "side": "fbased:block/selenite_pol"
+  }
+}

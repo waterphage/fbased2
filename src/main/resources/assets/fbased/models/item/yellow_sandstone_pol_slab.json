@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/yellow_sandstone_pol",
+    "top": "fbased:block/yellow_sandstone_pol",
+    "side": "fbased:block/yellow_sandstone_pol"
+  },
+  "render_type": "solid"
+}

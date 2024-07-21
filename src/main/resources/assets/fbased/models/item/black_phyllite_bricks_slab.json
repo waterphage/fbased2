@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/black_phyllite_bricks",
+    "top": "fbased:block/black_phyllite_bricks",
+    "side": "fbased:block/black_phyllite_bricks"
+  },
+  "render_type": "solid"
+}

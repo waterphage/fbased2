@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "fbased:block/test_aquifer"
+    },
+    "facing=east": {
+      "model": "fbased:block/test_aquifer",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "fbased:block/test_aquifer",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "fbased:block/test_aquifer",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "fbased:block/test_aquifer",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "fbased:block/test_aquifer",
+      "x": 90
+    }
+  }
+}

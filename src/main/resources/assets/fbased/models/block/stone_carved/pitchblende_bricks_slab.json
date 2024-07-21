@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/pitchblende_bricks",
+    "top": "fbased:block/pitchblende_bricks",
+    "bottom": "fbased:block/pitchblende_bricks"
+  },
+  "render_type": "solid"
+}

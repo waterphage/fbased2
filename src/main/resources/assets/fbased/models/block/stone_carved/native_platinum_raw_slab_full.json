@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/native_platinum_raw",
+    "top": "fbased:block/native_platinum_raw",
+    "side": "fbased:block/native_platinum_raw"
+  },
+  "render_type": "solid"
+}

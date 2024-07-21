@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/yellow_conglomerate_cobble",
+    "top": "fbased:block/yellow_conglomerate_cobble",
+    "bottom": "fbased:block/yellow_conglomerate_cobble"
+  },
+  "render_type": "solid"
+}

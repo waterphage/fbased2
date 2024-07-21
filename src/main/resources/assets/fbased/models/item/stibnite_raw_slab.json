@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/stibnite_raw",
+    "top": "fbased:block/stibnite_raw",
+    "bottom": "fbased:block/stibnite_raw"
+  },
+  "render_type": "solid"
+}

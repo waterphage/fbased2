@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/cinnabar_pol",
+    "top": "fbased:block/cinnabar_pol",
+    "bottom": "fbased:block/cinnabar_pol"
+  },
+  "render_type": "solid"
+}

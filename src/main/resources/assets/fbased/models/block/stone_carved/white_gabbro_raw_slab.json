@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/white_gabbro_raw",
+    "top": "fbased:block/white_gabbro_raw",
+    "bottom": "fbased:block/white_gabbro_raw"
+  },
+  "render_type": "solid"
+}

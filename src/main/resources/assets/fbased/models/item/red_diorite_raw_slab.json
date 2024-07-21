@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/red_diorite_raw",
+    "top": "fbased:block/red_diorite_raw",
+    "side": "fbased:block/red_diorite_raw"
+  },
+  "render_type": "solid"
+}

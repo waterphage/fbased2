@@ -1,0 +1,8 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:black_concrete_powder",
+    "minecraft:magma_block",
+    "minecraft:sand"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/anhydrite_pol",
+    "top": "fbased:block/anhydrite_pol",
+    "side": "fbased:block/anhydrite_pol"
+  }
+}

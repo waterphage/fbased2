@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/lignite_raw",
+    "top": "fbased:block/lignite_raw",
+    "bottom": "fbased:block/lignite_raw"
+  },
+  "render_type": "solid"
+}

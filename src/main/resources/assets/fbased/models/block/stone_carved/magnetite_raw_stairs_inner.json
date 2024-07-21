@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/magnetite_raw",
+    "top": "fbased:block/magnetite_raw",
+    "side": "fbased:block/magnetite_raw"
+  }
+}

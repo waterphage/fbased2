@@ -1,0 +1,412 @@
+{
+  "feature": {
+    "type": "minecraft:disk",
+    "config": {
+      "state_provider": {
+        "fallback": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:lava"
+          }
+        },
+        "rules": [
+          {
+            "if_true": {
+              "type": "minecraft:all_of",
+              "predicates": [
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "blocks": "minecraft:air"
+                },
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    -1,
+                    0
+                  ],
+                  "blocks": "minecraft:netherrack"
+                }
+              ]
+            },
+            "then": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:fire"
+              }
+            }
+          },
+          {
+            "if_true": {
+              "type": "minecraft:all_of",
+              "predicates": [
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "blocks": "minecraft:air"
+                },
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    -1,
+                    0
+                  ],
+                  "blocks": "minecraft:soul_soil"
+                }
+              ]
+            },
+            "then": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:soul_fire"
+              }
+            }
+          },
+          {
+            "if_true": {
+              "type": "minecraft:all_of",
+              "predicates": [
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "blocks": "minecraft:air"
+                },
+                {
+                  "type": "minecraft:not",
+                  "predicate": {
+                    "type": "minecraft:matching_blocks",
+                    "offset": [
+                      0,
+                      -1,
+                      0
+                    ],
+                    "blocks": [
+                      "minecraft:netherrack",
+                      "minecraft:soul_soil"
+                    ]
+                  }
+                }
+              ]
+            },
+            "then": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:air"
+              }
+            }
+          },
+          {
+            "if_true": {
+              "type": "minecraft:matching_blocks",
+              "offset": [
+                0,
+                0,
+                0
+              ],
+              "blocks": "minecraft:netherrack"
+            },
+            "then": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:netherrack"
+              }
+            }
+          },
+          {
+            "if_true": {
+              "type": "minecraft:matching_blocks",
+              "offset": [
+                0,
+                0,
+                0
+              ],
+              "blocks": "minecraft:soul_soil"
+            },
+            "then": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:soul_soil"
+              }
+            }
+          },
+          {
+            "if_true": {
+              "type": "minecraft:all_of",
+              "predicates": [
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "blocks": "minecraft:magma_block"
+                },
+                {
+                  "type": "minecraft:any_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        1,
+                        0,
+                        0
+                      ],
+                      "blocks": [
+                        "minecraft:air",
+                        "minecraft:fire",
+                        "minecraft:soul_fire"
+                      ]
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        -1,
+                        0,
+                        0
+                      ],
+                      "blocks": [
+                        "minecraft:air",
+                        "minecraft:fire",
+                        "minecraft:soul_fire"
+                      ]
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        0,
+                        -1
+                      ],
+                      "blocks": [
+                        "minecraft:air",
+                        "minecraft:fire",
+                        "minecraft:soul_fire"
+                      ]
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        0,
+                        1
+                      ],
+                      "blocks": [
+                        "minecraft:air",
+                        "minecraft:fire",
+                        "minecraft:soul_fire"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "then": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:magma_block"
+              }
+            }
+          },
+          {
+            "if_true": {
+              "type": "minecraft:all_of",
+              "predicates": [
+                {
+                  "type": "minecraft:not",
+                  "predicate": {
+                    "type": "minecraft:matching_blocks",
+                    "offset": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "blocks": [
+                      "minecraft:magma_block",
+                      "minecraft:soul_soil",
+                      "minecraft:netherrack"
+                    ]
+                  }
+                }
+              ]
+            },
+            "then": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:black_concrete_powder"
+              }
+            }
+          }
+        ]
+      },
+      "target": {
+        "type": "minecraft:any_of",
+        "predicates": [
+          {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:not",
+                "predicate": {
+                  "type": "minecraft:any_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "tag": "fbased:open3"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        0,
+                        -3,
+                        0
+                      ],
+                      "tag": "fbased:open3"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        0,
+                        -1,
+                        -1
+                      ],
+                      "tag": "fbased:open3"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        0,
+                        -1,
+                        1
+                      ],
+                      "tag": "fbased:open3"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        1,
+                        -1,
+                        0
+                      ],
+                      "tag": "fbased:open3"
+                    },
+                    {
+                      "type": "minecraft:matching_block_tag",
+                      "offset": [
+                        -1,
+                        -1,
+                        0
+                      ],
+                      "tag": "fbased:open3"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  1,
+                  0
+                ],
+                "blocks": "minecraft:air"
+              },
+              {
+                "type": "minecraft:matching_block_tag",
+                "offset": [
+                  1,
+                  2,
+                  0
+                ],
+                "tag": "fbased:open3"
+              },
+              {
+                "type": "minecraft:matching_block_tag",
+                "offset": [
+                  -1,
+                  2,
+                  0
+                ],
+                "tag": "fbased:open3"
+              },
+              {
+                "type": "minecraft:matching_block_tag",
+                "offset": [
+                  0,
+                  2,
+                  -1
+                ],
+                "tag": "fbased:open3"
+              },
+              {
+                "type": "minecraft:matching_block_tag",
+                "offset": [
+                  0,
+                  2,
+                  1
+                ],
+                "tag": "fbased:open3"
+              }
+            ]
+          },
+          {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  0,
+                  0
+                ],
+                "blocks": "minecraft:air"
+              },
+              {
+                "type": "minecraft:not",
+                "predicate": {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    -1,
+                    0
+                  ],
+                  "blocks": "minecraft:air"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "radius": 3,
+      "half_height": 2
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 15
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

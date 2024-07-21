@@ -1,0 +1,176 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:protected_blocks",
+      "value": "#fbased:geo_hard"
+    },
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:orange_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:magma_block"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:lime_concrete",
+            "probability": 0.5
+          },
+          "output_state": {
+            "Name": "minecraft:magma_block"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:lime_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:light_blue_concrete",
+            "probability": 0.333
+          },
+          "output_state": {
+            "Name": "minecraft:magma_block"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:light_blue_concrete",
+            "probability": 0.5
+          },
+          "output_state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:light_blue_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:cracked_deepslate_tiles"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:blue_concrete",
+            "probability": 0.5
+          },
+          "output_state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:blue_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:cracked_deepslate_tiles"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:purple_concrete",
+            "probability": 0.333
+          },
+          "output_state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:purple_concrete",
+            "probability": 0.5
+          },
+          "output_state": {
+            "Name": "minecraft:cracked_deepslate_tiles"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:purple_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:deepslate_tiles"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:pink_concrete",
+            "probability": 0.5
+          },
+          "output_state": {
+            "Name": "minecraft:cracked_deepslate_tiles"
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "input_predicate": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:pink_concrete"
+          },
+          "output_state": {
+            "Name": "minecraft:deepslate_tiles"
+          }
+        }
+      ]
+    }
+  ]
+}

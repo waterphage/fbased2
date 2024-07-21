@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/red_obsidian_bricks",
+    "top": "fbased:block/red_obsidian_bricks",
+    "side": "fbased:block/red_obsidian_bricks"
+  }
+}

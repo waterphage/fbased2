@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/horn_silver_gravel"
+  }
+}

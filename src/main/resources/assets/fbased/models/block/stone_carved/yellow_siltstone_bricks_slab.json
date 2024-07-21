@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/yellow_siltstone_bricks",
+    "top": "fbased:block/yellow_siltstone_bricks",
+    "bottom": "fbased:block/yellow_siltstone_bricks"
+  },
+  "render_type": "solid"
+}

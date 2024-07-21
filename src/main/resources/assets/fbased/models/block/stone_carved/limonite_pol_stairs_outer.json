@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/limonite_pol",
+    "top": "fbased:block/limonite_pol",
+    "side": "fbased:block/limonite_pol"
+  }
+}

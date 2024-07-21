@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/jet_pol",
+    "top": "fbased:block/jet_pol",
+    "bottom": "fbased:block/jet_pol"
+  },
+  "render_type": "solid"
+}

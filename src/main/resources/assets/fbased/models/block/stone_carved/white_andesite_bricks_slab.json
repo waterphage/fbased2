@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/white_andesite_bricks",
+    "top": "fbased:block/white_andesite_bricks",
+    "bottom": "fbased:block/white_andesite_bricks"
+  },
+  "render_type": "solid"
+}

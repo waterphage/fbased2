@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/white_granite_cobble",
+    "top": "fbased:block/white_granite_cobble",
+    "side": "fbased:block/white_granite_cobble"
+  },
+  "render_type": "solid"
+}

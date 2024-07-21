@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/petrified_wood_pol",
+    "top": "fbased:block/petrified_wood_pol",
+    "side": "fbased:block/petrified_wood_doub"
+  },
+  "render_type": "solid"
+}

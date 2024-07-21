@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "fbased:block/stone_full/yellow_limestone_cobble",
+      "x": 90,
+      "y": 0
+    },
+    "facing=east": {
+      "model": "fbased:block/stone_full/yellow_limestone_cobble",
+      "x": 90,
+      "y": 90
+    },
+    "facing=south": {
+      "model": "fbased:block/stone_full/yellow_limestone_cobble",
+      "x": 270,
+      "y": 0
+    },
+    "facing=west": {
+      "model": "fbased:block/stone_full/yellow_limestone_cobble",
+      "x": 270,
+      "y": 90
+    },
+    "facing=up": {
+      "model": "fbased:block/stone_full/yellow_limestone_cobble",
+      "x": 0
+    },
+    "facing=down": {
+      "model": "fbased:block/stone_full/yellow_limestone_cobble",
+      "x": 180
+    }
+  }
+}

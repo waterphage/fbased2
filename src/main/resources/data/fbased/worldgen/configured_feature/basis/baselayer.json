@@ -1,0 +1,202 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "tries": 320,
+    "xz_spread": 1,
+    "y_spread": 320,
+    "feature": {
+      "feature": {
+        "type": "minecraft:simple_block",
+        "config": {
+          "to_place": {
+            "type": "minecraft:simple_state_provider",
+            "state": {
+              "Name": "minecraft:coarse_dirt"
+            }
+          }
+        }
+      },
+      "placement": [
+        {
+          "type": "minecraft:environment_scan",
+          "direction_of_search": "down",
+          "max_steps": 1,
+          "target_condition": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:not",
+                "predicate": {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "blocks": [
+                    "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "minecraft:block_predicate_filter",
+          "predicate": {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  1,
+                  0
+                ],
+                "blocks": [
+                  "minecraft:air",
+                  "minecraft:water"
+                ]
+              },
+              {
+                "type": "minecraft:not",
+                "predicate": {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    -3,
+                    0
+                  ],
+                  "blocks": [
+                    "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                  ]
+                }
+              },
+              {
+                "type": "minecraft:all_of",
+                "predicates": [
+                  {
+                    "type": "minecraft:matching_blocks",
+                    "offset": [
+                      1,
+                      2,
+                      0
+                    ],
+                    "blocks": [
+                      "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                    ]
+                  },
+                  {
+                    "type": "minecraft:matching_blocks",
+                    "offset": [
+                      0,
+                      2,
+                      1
+                    ],
+                    "blocks": [
+                      "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                    ]
+                  },
+                  {
+                    "type": "minecraft:matching_blocks",
+                    "offset": [
+                      0,
+                      2,
+                      -1
+                    ],
+                    "blocks": [
+                      "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                    ]
+                  },
+                  {
+                    "type": "minecraft:matching_blocks",
+                    "offset": [
+                      -1,
+                      2,
+                      0
+                    ],
+                    "blocks": [
+                      "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "minecraft:not",
+                "predicate": {
+                  "type": "minecraft:any_of",
+                  "predicates": [
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        -1,
+                        1
+                      ],
+                      "blocks": [
+                        "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                      ]
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        0,
+                        -1,
+                        -1
+                      ],
+                      "blocks": [
+                        "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                      ]
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        -1,
+                        -1,
+                        0
+                      ],
+                      "blocks": [
+                        "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                      ]
+                    },
+                    {
+                      "type": "minecraft:matching_blocks",
+                      "offset": [
+                        1,
+                        -1,
+                        0
+                      ],
+                      "blocks": [
+                        "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

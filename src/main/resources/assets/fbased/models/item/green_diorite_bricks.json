@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/green_diorite_bricks",
+    "particle": "fbased:block/green_diorite_bricks"
+  },
+  "render_type": "solid"
+}

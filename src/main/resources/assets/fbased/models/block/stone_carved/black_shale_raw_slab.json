@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/black_shale_raw",
+    "top": "fbased:block/black_shale_raw",
+    "bottom": "fbased:block/black_shale_raw"
+  },
+  "render_type": "solid"
+}

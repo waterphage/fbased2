@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/realgar_raw",
+    "top": "fbased:block/realgar_raw",
+    "bottom": "fbased:block/realgar_raw"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/cobaltite_raw",
+    "top": "fbased:block/cobaltite_raw",
+    "side": "fbased:block/cobaltite_raw"
+  },
+  "render_type": "solid"
+}

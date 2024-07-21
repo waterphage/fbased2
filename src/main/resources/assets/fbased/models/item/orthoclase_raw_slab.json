@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/orthoclase_raw",
+    "top": "fbased:block/orthoclase_raw",
+    "bottom": "fbased:block/orthoclase_raw"
+  },
+  "render_type": "solid"
+}

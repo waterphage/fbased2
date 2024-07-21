@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/green_quartzite_bricks",
+    "top": "fbased:block/green_quartzite_bricks",
+    "side": "fbased:block/green_quartzite_bricks"
+  },
+  "render_type": "solid"
+}

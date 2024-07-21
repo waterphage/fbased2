@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/native_copper_cobble",
+    "top": "fbased:block/native_copper_cobble",
+    "side": "fbased:block/native_copper_cobble"
+  }
+}

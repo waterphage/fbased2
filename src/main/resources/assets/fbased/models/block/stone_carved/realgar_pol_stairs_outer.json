@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/realgar_pol",
+    "top": "fbased:block/realgar_pol",
+    "side": "fbased:block/realgar_pol"
+  }
+}

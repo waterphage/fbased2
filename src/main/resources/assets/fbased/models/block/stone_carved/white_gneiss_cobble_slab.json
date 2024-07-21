@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/white_gneiss_cobble",
+    "top": "fbased:block/white_gneiss_cobble",
+    "bottom": "fbased:block/white_gneiss_cobble"
+  },
+  "render_type": "solid"
+}

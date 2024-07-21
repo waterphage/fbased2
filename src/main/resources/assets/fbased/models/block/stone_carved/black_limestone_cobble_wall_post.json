@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/black_limestone_cobble",
+    "particle": "fbased:block/black_limestone_cobble"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/red_dacite_tile",
+    "top": "fbased:block/red_dacite_pol",
+    "side": "fbased:block/red_dacite_bricks"
+  },
+  "render_type": "solid"
+}

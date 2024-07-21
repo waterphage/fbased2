@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/kimberlite_tile",
+    "top": "fbased:block/kimberlite_pol",
+    "side": "fbased:block/kimberlite_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/gypsum_raw",
+    "particle": "fbased:block/gypsum_raw"
+  },
+  "render_type": "solid"
+}

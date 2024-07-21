@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/yellow_conglomerate_bricks",
+    "top": "fbased:block/yellow_conglomerate_bricks",
+    "side": "fbased:block/yellow_conglomerate_bricks"
+  },
+  "render_type": "solid"
+}

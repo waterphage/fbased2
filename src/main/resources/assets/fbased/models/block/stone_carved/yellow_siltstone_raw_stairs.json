@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/yellow_siltstone_raw",
+    "top": "fbased:block/yellow_siltstone_raw",
+    "side": "fbased:block/yellow_siltstone_raw"
+  }
+}

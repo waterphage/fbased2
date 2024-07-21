@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/black_diorite_bricks",
+    "top": "fbased:block/black_diorite_bricks",
+    "bottom": "fbased:block/black_diorite_bricks"
+  },
+  "render_type": "solid"
+}

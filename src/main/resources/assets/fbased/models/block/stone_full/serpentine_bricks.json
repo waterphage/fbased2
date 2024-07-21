@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/serpentine_bricks",
+    "top": "fbased:block/serpentine_pol",
+    "bottom": "fbased:block/serpentine_tile"
+  },
+  "render_type": "solid"
+}

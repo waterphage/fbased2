@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/pitchblende_pol",
+    "particle": "fbased:block/pitchblende_pol"
+  },
+  "render_type": "solid"
+}

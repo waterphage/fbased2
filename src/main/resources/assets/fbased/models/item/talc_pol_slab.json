@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/talc_pol",
+    "top": "fbased:block/talc_pol",
+    "bottom": "fbased:block/talc_pol"
+  },
+  "render_type": "solid"
+}

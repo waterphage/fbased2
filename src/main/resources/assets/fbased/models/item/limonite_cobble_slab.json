@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/limonite_cobble",
+    "top": "fbased:block/limonite_cobble",
+    "bottom": "fbased:block/limonite_cobble"
+  },
+  "render_type": "solid"
+}

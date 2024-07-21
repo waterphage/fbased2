@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/green_schist_tile",
+    "top": "fbased:block/green_schist_pol",
+    "side": "fbased:block/green_schist_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/kaolinite_pol",
+    "particle": "fbased:block/kaolinite_pol"
+  },
+  "render_type": "solid"
+}

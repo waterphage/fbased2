@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/cryolite_tile",
+    "top": "fbased:block/cryolite_pol",
+    "side": "fbased:block/cryolite_bricks"
+  },
+  "render_type": "solid"
+}

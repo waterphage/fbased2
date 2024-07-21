@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/satinspar_cobble",
+    "top": "fbased:block/satinspar_cobble",
+    "bottom": "fbased:block/satinspar_cobble"
+  },
+  "render_type": "solid"
+}

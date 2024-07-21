@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/white_rhyolite_pol",
+    "particle": "fbased:block/white_rhyolite_pol"
+  },
+  "render_type": "solid"
+}

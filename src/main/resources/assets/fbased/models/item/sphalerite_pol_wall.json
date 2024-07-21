@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/sphalerite_pol",
+    "particle": "fbased:block/sphalerite_pol"
+  },
+  "render_type": "solid"
+}

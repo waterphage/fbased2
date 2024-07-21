@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/pitchblende_raw",
+    "top": "fbased:block/pitchblende_raw",
+    "side": "fbased:block/pitchblende_raw"
+  },
+  "render_type": "solid"
+}

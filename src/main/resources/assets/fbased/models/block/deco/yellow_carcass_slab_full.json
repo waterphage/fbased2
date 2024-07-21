@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/deco/yellow_carcass_tile",
+    "bottom": "fbased:block/deco/yellow_carcass_empty",
+    "top": "fbased:block/deco/yellow_carcass_top"
+  },
+  "render_type": "solid"
+}

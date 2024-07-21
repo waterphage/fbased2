@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/red_gneiss_raw",
+    "top": "fbased:block/red_gneiss_raw",
+    "side": "fbased:block/red_gneiss_raw"
+  },
+  "render_type": "solid"
+}

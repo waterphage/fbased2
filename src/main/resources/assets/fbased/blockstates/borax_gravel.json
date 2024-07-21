@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fbased:block/stone_full/borax_gravel"
+      },
+      {
+        "model": "fbased:block/stone_full/borax_gravel",
+        "y": 90
+      },
+      {
+        "model": "fbased:block/stone_full/borax_gravel",
+        "y": 180
+      },
+      {
+        "model": "fbased:block/stone_full/borax_gravel",
+        "y": 270
+      }
+    ]
+  }
+}

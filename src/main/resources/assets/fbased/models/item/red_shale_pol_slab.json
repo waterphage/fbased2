@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/red_shale_pol",
+    "top": "fbased:block/red_shale_pol",
+    "side": "fbased:block/red_shale_pol"
+  },
+  "render_type": "solid"
+}

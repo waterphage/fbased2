@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/ilmenite_raw",
+    "top": "fbased:block/ilmenite_raw",
+    "bottom": "fbased:block/ilmenite_raw"
+  },
+  "render_type": "solid"
+}

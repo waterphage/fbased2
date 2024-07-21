@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/tan_quartzite_tile",
+    "top": "fbased:block/tan_quartzite_pol",
+    "side": "fbased:block/tan_quartzite_bricks"
+  },
+  "render_type": "solid"
+}

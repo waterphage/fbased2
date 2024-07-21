@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/bismuthinite_cobble",
+    "top": "fbased:block/bismuthinite_cobble",
+    "side": "fbased:block/bismuthinite_cobble"
+  }
+}

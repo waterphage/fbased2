@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/ilmenite_pol",
+    "particle": "fbased:block/ilmenite_pol"
+  },
+  "render_type": "solid"
+}

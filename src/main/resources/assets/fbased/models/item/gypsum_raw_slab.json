@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/gypsum_raw",
+    "top": "fbased:block/gypsum_raw",
+    "bottom": "fbased:block/gypsum_raw"
+  },
+  "render_type": "solid"
+}

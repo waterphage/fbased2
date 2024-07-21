@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/green_marble_raw",
+    "particle": "fbased:block/green_marble_raw"
+  },
+  "render_type": "solid"
+}

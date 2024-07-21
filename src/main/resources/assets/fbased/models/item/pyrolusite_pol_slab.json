@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/pyrolusite_pol",
+    "top": "fbased:block/pyrolusite_pol",
+    "bottom": "fbased:block/pyrolusite_pol"
+  },
+  "render_type": "solid"
+}

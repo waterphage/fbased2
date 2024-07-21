@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "fbased:block/magnetite_pol",
+    "particle": "fbased:block/magnetite_pol"
+  },
+  "render_type": "solid"
+}

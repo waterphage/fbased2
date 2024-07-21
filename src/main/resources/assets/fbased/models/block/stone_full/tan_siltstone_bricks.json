@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/tan_siltstone_bricks",
+    "top": "fbased:block/tan_siltstone_pol",
+    "bottom": "fbased:block/tan_siltstone_tile"
+  },
+  "render_type": "solid"
+}

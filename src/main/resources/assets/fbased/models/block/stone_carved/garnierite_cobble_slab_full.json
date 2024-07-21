@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/garnierite_cobble",
+    "top": "fbased:block/garnierite_cobble",
+    "side": "fbased:block/garnierite_cobble"
+  },
+  "render_type": "solid"
+}

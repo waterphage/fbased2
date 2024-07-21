@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/green_basalt_pol",
+    "top": "fbased:block/green_basalt_pol",
+    "bottom": "fbased:block/green_basalt_pol"
+  },
+  "render_type": "solid"
+}

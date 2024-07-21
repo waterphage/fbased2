@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/magnetite_raw",
+    "top": "fbased:block/magnetite_raw",
+    "bottom": "fbased:block/magnetite_raw"
+  },
+  "render_type": "solid"
+}

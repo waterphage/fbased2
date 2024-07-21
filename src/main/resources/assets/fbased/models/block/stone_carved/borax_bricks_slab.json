@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/borax_bricks",
+    "top": "fbased:block/borax_bricks",
+    "bottom": "fbased:block/borax_bricks"
+  },
+  "render_type": "solid"
+}

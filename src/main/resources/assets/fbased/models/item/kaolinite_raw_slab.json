@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/kaolinite_raw",
+    "top": "fbased:block/kaolinite_raw",
+    "bottom": "fbased:block/kaolinite_raw"
+  },
+  "render_type": "solid"
+}

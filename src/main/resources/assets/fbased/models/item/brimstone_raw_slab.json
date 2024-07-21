@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/brimstone_raw",
+    "top": "fbased:block/brimstone_raw",
+    "bottom": "fbased:block/brimstone_raw"
+  },
+  "render_type": "solid"
+}

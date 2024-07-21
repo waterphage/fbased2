@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/orthoclase_tile",
+    "top": "fbased:block/orthoclase_pol",
+    "side": "fbased:block/orthoclase_bricks"
+  },
+  "render_type": "solid"
+}

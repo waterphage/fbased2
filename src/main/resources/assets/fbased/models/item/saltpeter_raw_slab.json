@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/saltpeter_raw",
+    "top": "fbased:block/saltpeter_raw",
+    "bottom": "fbased:block/saltpeter_raw"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/cinnabar_cobble",
+    "top": "fbased:block/cinnabar_cobble",
+    "bottom": "fbased:block/cinnabar_cobble"
+  },
+  "render_type": "solid"
+}

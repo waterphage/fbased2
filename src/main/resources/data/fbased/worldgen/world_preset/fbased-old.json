@@ -1,0 +1,52 @@
+{
+  "dimensions": {
+    "minecraft:overworld": {
+      "type": "fbased:overworld",
+      "generator": {
+        "type": "minecraft:noise",
+        "settings": "fbased:overworld",
+        "biome_source": {
+          "type": "minecraft:multi_noise",
+          "biomes": [
+            {
+              "biome": "fbased:steppe",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [-2,1],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo0",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,0],
+                "weirdness": [-2,2],
+                "depth": [1,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo1",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [0,2],
+                "weirdness": [-2,2],
+                "depth": [1,2],
+                "offset": 0
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

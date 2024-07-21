@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/native_aluminum_cobble",
+    "top": "fbased:block/native_aluminum_cobble",
+    "bottom": "fbased:block/native_aluminum_cobble"
+  },
+  "render_type": "solid"
+}

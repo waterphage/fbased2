@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/puddingstone_raw",
+    "top": "fbased:block/puddingstone_raw",
+    "bottom": "fbased:block/puddingstone_raw"
+  },
+  "render_type": "solid"
+}

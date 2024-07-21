@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/yellow_siltstone_raw",
+    "top": "fbased:block/yellow_siltstone_raw",
+    "side": "fbased:block/yellow_siltstone_raw"
+  },
+  "render_type": "solid"
+}

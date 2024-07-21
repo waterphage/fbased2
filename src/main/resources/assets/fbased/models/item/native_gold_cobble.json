@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/native_gold_cobble",
+    "particle": "fbased:block/native_gold_cobble"
+  },
+  "render_type": "solid"
+}

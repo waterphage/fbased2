@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/yellow_mudstone_raw",
+    "top": "fbased:block/yellow_mudstone_raw",
+    "bottom": "fbased:block/yellow_mudstone_raw"
+  },
+  "render_type": "solid"
+}

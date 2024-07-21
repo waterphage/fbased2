@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/hornblende_cobble",
+    "top": "fbased:block/hornblende_cobble",
+    "bottom": "fbased:block/hornblende_cobble"
+  },
+  "render_type": "solid"
+}

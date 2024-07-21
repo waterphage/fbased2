@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/periclase_tile",
+    "top": "fbased:block/periclase_pol",
+    "side": "fbased:block/periclase_bricks"
+  },
+  "render_type": "solid"
+}

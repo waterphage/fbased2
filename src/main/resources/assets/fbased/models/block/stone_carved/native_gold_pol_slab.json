@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/native_gold_pol",
+    "top": "fbased:block/native_gold_pol",
+    "bottom": "fbased:block/native_gold_pol"
+  },
+  "render_type": "solid"
+}

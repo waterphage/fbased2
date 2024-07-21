@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/microcline_raw",
+    "top": "fbased:block/microcline_raw",
+    "bottom": "fbased:block/microcline_raw"
+  },
+  "render_type": "solid"
+}

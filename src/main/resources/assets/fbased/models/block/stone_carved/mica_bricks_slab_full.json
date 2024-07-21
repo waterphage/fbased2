@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/mica_tile",
+    "top": "fbased:block/mica_pol",
+    "side": "fbased:block/mica_bricks"
+  },
+  "render_type": "solid"
+}

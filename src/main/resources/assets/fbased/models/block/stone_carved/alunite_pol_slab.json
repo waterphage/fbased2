@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/alunite_pol",
+    "top": "fbased:block/alunite_pol",
+    "bottom": "fbased:block/alunite_pol"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/malachite_pol",
+    "top": "fbased:block/malachite_pol",
+    "side": "fbased:block/malachite_doub"
+  },
+  "render_type": "solid"
+}

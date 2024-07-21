@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/green_andesite_bricks",
+    "top": "fbased:block/green_andesite_pol",
+    "bottom": "fbased:block/green_andesite_tile"
+  },
+  "render_type": "solid"
+}

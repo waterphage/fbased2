@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/cassiterite_cobble",
+    "particle": "fbased:block/cassiterite_cobble"
+  },
+  "render_type": "solid"
+}

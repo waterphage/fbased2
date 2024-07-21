@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/tan_quartzite_pol",
+    "top": "fbased:block/tan_quartzite_pol",
+    "side": "fbased:block/tan_quartzite_pol"
+  }
+}

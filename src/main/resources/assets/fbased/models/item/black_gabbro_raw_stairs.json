@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/black_gabbro_raw",
+    "top": "fbased:block/black_gabbro_raw",
+    "side": "fbased:block/black_gabbro_raw"
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "feature": {
+    "type": "minecraft:simple_random_selector",
+    "config": {
+      "features": [
+        {
+          "feature": {
+            "type": "minecraft:fossil",
+            "config": {
+              "max_empty_corners_allowed": 7,
+              "fossil_structures": [
+                "fbased:tthr_1_1",
+                "fbased:tthr_1_2",
+                "fbased:tthr_1_3",
+                "fbased:tthr_1_4",
+                "fbased:tthr_1_5",
+                "fbased:tthr_1_6",
+                "fbased:tthr_1_7"
+              ],
+              "overlay_structures": [
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty"
+              ],
+              "fossil_processors": "fbased:redstone",
+              "overlay_processors": {
+                "processors": [
+                  {
+                    "processor_type": "minecraft:nop"
+                  }
+                ]
+              }
+            }
+          },
+          "placement": []
+        },
+        {
+          "feature": {
+            "type": "minecraft:fossil",
+            "config": {
+              "max_empty_corners_allowed": 7,
+              "fossil_structures": [
+                "fbased:ring_2_1",
+                "fbased:ring_2_2",
+                "fbased:ring_2_3",
+                "fbased:ring_2_4",
+                "fbased:ring_2_5",
+                "fbased:ring_2_6",
+                "fbased:ring_2_7"
+              ],
+              "overlay_structures": [
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty"
+              ],
+              "fossil_processors": "fbased:redstone",
+              "overlay_processors": {
+                "processors": [
+                  {
+                    "processor_type": "minecraft:nop"
+                  }
+                ]
+              }
+            }
+          },
+          "placement": []
+        }
+      ]
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:random_offset",
+      "xz_spread": 8,
+      "y_spread": 0
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 0
+        },
+        "max_inclusive": {
+          "absolute": 320
+        }
+      }
+    }
+  ]
+}

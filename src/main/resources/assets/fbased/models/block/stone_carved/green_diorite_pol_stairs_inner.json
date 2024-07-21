@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/green_diorite_pol",
+    "top": "fbased:block/green_diorite_pol",
+    "side": "fbased:block/green_diorite_pol"
+  }
+}

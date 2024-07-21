@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/saltpeter_pol",
+    "top": "fbased:block/saltpeter_pol",
+    "bottom": "fbased:block/saltpeter_pol"
+  },
+  "render_type": "solid"
+}

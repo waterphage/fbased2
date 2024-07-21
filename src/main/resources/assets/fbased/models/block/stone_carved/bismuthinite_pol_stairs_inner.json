@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/bismuthinite_pol",
+    "top": "fbased:block/bismuthinite_pol",
+    "side": "fbased:block/bismuthinite_pol"
+  }
+}

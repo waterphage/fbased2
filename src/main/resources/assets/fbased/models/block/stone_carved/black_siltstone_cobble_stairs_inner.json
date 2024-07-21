@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/black_siltstone_cobble",
+    "top": "fbased:block/black_siltstone_cobble",
+    "side": "fbased:block/black_siltstone_cobble"
+  }
+}

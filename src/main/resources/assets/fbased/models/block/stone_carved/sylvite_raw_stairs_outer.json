@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/sylvite_raw",
+    "top": "fbased:block/sylvite_raw",
+    "side": "fbased:block/sylvite_raw"
+  }
+}

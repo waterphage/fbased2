@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/satinspar_raw",
+    "top": "fbased:block/satinspar_raw",
+    "bottom": "fbased:block/satinspar_raw"
+  },
+  "render_type": "solid"
+}

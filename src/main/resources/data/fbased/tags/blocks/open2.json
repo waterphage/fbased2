@@ -1,0 +1,9 @@
+{
+  "replace": true,
+  "values": [
+    "minecraft:air",
+    "minecraft:water",
+    "minecraft:lava",
+    "minecraft:magma_block"
+  ]
+}

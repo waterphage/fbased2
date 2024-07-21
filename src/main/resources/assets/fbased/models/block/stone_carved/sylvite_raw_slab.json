@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/sylvite_raw",
+    "top": "fbased:block/sylvite_raw",
+    "bottom": "fbased:block/sylvite_raw"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/red_schist_pol",
+    "top": "fbased:block/red_schist_pol",
+    "bottom": "fbased:block/red_schist_pol"
+  },
+  "render_type": "solid"
+}

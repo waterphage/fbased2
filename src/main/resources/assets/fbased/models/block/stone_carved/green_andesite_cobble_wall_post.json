@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/green_andesite_cobble",
+    "particle": "fbased:block/green_andesite_cobble"
+  },
+  "render_type": "solid"
+}

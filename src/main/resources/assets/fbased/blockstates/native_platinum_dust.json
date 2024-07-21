@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fbased:block/stone_full/native_platinum_dust"
+      },
+      {
+        "model": "fbased:block/stone_full/native_platinum_dust",
+        "y": 90
+      },
+      {
+        "model": "fbased:block/stone_full/native_platinum_dust",
+        "y": 180
+      },
+      {
+        "model": "fbased:block/stone_full/native_platinum_dust",
+        "y": 270
+      }
+    ]
+  }
+}

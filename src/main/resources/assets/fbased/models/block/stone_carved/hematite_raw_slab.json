@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/hematite_raw",
+    "top": "fbased:block/hematite_raw",
+    "bottom": "fbased:block/hematite_raw"
+  },
+  "render_type": "solid"
+}

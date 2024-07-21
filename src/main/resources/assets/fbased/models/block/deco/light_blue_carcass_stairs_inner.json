@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/deco/light_blue_carcass_empty",
+    "top": "fbased:block/deco/light_blue_carcass_tile",
+    "side": "fbased:block/deco/light_blue_carcass_tile"
+  }
+}

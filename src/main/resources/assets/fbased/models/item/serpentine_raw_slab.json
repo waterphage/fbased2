@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/serpentine_raw",
+    "top": "fbased:block/serpentine_raw",
+    "bottom": "fbased:block/serpentine_raw"
+  },
+  "render_type": "solid"
+}

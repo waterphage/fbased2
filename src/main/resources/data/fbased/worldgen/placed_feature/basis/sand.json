@@ -1,0 +1,181 @@
+{
+  "feature": {
+    "type": "minecraft:disk",
+    "config": {
+      "state_provider": {
+        "fallback": {
+          "type": "minecraft:simple_state_provider",
+          "state": {
+            "Name": "minecraft:sand",
+            "Properties": {
+              "natural": "true"
+            }
+          }
+        },
+        "rules": []
+      },
+      "target": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:solid"
+          },
+          {
+            "type": "minecraft:matching_blocks",
+            "offset": [
+              0,
+              1,
+              0
+            ],
+            "blocks": "minecraft:air"
+          },
+          {
+            "type": "minecraft:not",
+            "predicate": {
+              "type": "minecraft:matching_blocks",
+              "offset": [
+                0,
+                -3,
+                0
+              ],
+              "blocks": [
+                "minecraft:air",
+                "minecraft:water",
+                "minecraft:lava",
+                "minecraft:magma_block"
+              ]
+            }
+          },
+          {
+            "type": "minecraft:all_of",
+            "predicates": [
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  1,
+                  2,
+                  0
+                ],
+                "blocks": [
+                  "minecraft:air",
+                  "minecraft:water",
+                  "minecraft:lava"
+                ]
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  2,
+                  1
+                ],
+                "blocks": [
+                  "minecraft:air",
+                  "minecraft:water",
+                  "minecraft:lava"
+                ]
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  0,
+                  2,
+                  -1
+                ],
+                "blocks": [
+                  "minecraft:air",
+                  "minecraft:water",
+                  "minecraft:lava"
+                ]
+              },
+              {
+                "type": "minecraft:matching_blocks",
+                "offset": [
+                  -1,
+                  2,
+                  0
+                ],
+                "blocks": [
+                  "minecraft:air",
+                  "minecraft:water",
+                  "minecraft:lava"
+                ]
+              }
+            ]
+          },
+          {
+            "type": "minecraft:not",
+            "predicate": {
+              "type": "minecraft:any_of",
+              "predicates": [
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    -1,
+                    1
+                  ],
+                  "blocks": [
+                    "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                  ]
+                },
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    0,
+                    -1,
+                    -1
+                  ],
+                  "blocks": [
+                    "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                  ]
+                },
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    -1,
+                    -1,
+                    0
+                  ],
+                  "blocks": [
+                    "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                  ]
+                },
+                {
+                  "type": "minecraft:matching_blocks",
+                  "offset": [
+                    1,
+                    -1,
+                    0
+                  ],
+                  "blocks": [
+                    "minecraft:air",
+                    "minecraft:water",
+                    "minecraft:lava"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "radius": 3,
+      "half_height": 2
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 25
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

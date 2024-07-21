@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/green_gneiss_raw",
+    "top": "fbased:block/green_gneiss_raw",
+    "side": "fbased:block/green_gneiss_raw"
+  },
+  "render_type": "solid"
+}

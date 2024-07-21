@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/red_rhyolite_cobble",
+    "top": "fbased:block/red_rhyolite_cobble",
+    "side": "fbased:block/red_rhyolite_cobble"
+  },
+  "render_type": "solid"
+}

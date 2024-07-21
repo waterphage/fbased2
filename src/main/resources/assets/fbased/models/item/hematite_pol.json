@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/hematite_pol",
+    "particle": "fbased:block/hematite_pol"
+  },
+  "render_type": "solid"
+}

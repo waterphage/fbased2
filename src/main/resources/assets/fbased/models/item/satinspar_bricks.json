@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/satinspar_bricks",
+    "top": "fbased:block/satinspar_pol",
+    "bottom": "fbased:block/satinspar_tile"
+  },
+  "render_type": "solid"
+}

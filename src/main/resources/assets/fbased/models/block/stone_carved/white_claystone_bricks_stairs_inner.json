@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/white_claystone_bricks",
+    "top": "fbased:block/white_claystone_bricks",
+    "side": "fbased:block/white_claystone_bricks"
+  }
+}

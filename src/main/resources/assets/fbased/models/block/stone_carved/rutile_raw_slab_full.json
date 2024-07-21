@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/rutile_raw",
+    "top": "fbased:block/rutile_raw",
+    "side": "fbased:block/rutile_raw"
+  },
+  "render_type": "solid"
+}

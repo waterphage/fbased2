@@ -1,0 +1,98 @@
+{
+  "feature": {
+    "type": "minecraft:simple_random_selector",
+    "config": {
+      "features": [
+        {
+          "feature": {
+            "type": "minecraft:fossil",
+            "config": {
+              "max_empty_corners_allowed": 7,
+              "fossil_structures": [
+                "fbased:tthr_1_1",
+                "fbased:tthr_1_2",
+                "fbased:tthr_1_3",
+                "fbased:tthr_1_4",
+                "fbased:tthr_1_5",
+                "fbased:tthr_1_6",
+                "fbased:tthr_1_7"
+              ],
+              "overlay_structures": [
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty"
+              ],
+              "fossil_processors": "fbased:diamond",
+              "overlay_processors": {
+                "processors": [
+                  {
+                    "processor_type": "minecraft:nop"
+                  }
+                ]
+              }
+            }
+          },
+          "placement": []
+        },
+        {
+          "feature": {
+            "type": "minecraft:fossil",
+            "config": {
+              "max_empty_corners_allowed": 7,
+              "fossil_structures": [
+                "fbased:crst_4_1",
+                "fbased:crst_4_2",
+                "fbased:crst_4_3",
+                "fbased:crst_4_4",
+                "fbased:crst_4_5",
+                "fbased:crst_4_6",
+                "fbased:crst_4_7"
+              ],
+              "overlay_structures": [
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty",
+                "fbased:empty"
+              ],
+              "fossil_processors": "fbased:diamond",
+              "overlay_processors": {
+                "processors": [
+                  {
+                    "processor_type": "minecraft:nop"
+                  }
+                ]
+              }
+            }
+          },
+          "placement": []
+        }
+      ]
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:random_offset",
+      "xz_spread": 8,
+      "y_spread": 0
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 0
+        },
+        "max_inclusive": {
+          "absolute": 320
+        }
+      }
+    }
+  ]
+}

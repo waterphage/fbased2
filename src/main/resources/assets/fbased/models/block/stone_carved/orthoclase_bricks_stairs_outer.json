@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/orthoclase_bricks",
+    "top": "fbased:block/orthoclase_bricks",
+    "side": "fbased:block/orthoclase_bricks"
+  }
+}

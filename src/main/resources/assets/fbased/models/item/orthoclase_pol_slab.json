@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/orthoclase_pol",
+    "top": "fbased:block/orthoclase_pol",
+    "bottom": "fbased:block/orthoclase_pol"
+  },
+  "render_type": "solid"
+}

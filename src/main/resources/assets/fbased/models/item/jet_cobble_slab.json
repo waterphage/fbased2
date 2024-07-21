@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/jet_cobble",
+    "top": "fbased:block/jet_cobble",
+    "bottom": "fbased:block/jet_cobble"
+  },
+  "render_type": "solid"
+}

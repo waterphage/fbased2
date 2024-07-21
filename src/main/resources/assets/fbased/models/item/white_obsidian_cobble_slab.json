@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/white_obsidian_cobble",
+    "top": "fbased:block/white_obsidian_cobble",
+    "side": "fbased:block/white_obsidian_cobble"
+  },
+  "render_type": "solid"
+}

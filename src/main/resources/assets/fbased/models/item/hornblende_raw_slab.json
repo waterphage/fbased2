@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/hornblende_raw",
+    "top": "fbased:block/hornblende_raw",
+    "bottom": "fbased:block/hornblende_raw"
+  },
+  "render_type": "solid"
+}

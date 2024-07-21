@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/cassiterite_pol",
+    "top": "fbased:block/cassiterite_pol",
+    "bottom": "fbased:block/cassiterite_pol"
+  },
+  "render_type": "solid"
+}

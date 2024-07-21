@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/hornblende_cobble",
+    "top": "fbased:block/hornblende_cobble",
+    "bottom": "fbased:block/hornblende_cobble"
+  },
+  "render_type": "solid"
+}

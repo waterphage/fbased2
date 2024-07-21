@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/olivine_raw",
+    "top": "fbased:block/olivine_raw",
+    "side": "fbased:block/olivine_raw"
+  },
+  "render_type": "solid"
+}

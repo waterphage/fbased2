@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/green_slate_bricks",
+    "top": "fbased:block/green_slate_bricks",
+    "bottom": "fbased:block/green_slate_bricks"
+  },
+  "render_type": "solid"
+}

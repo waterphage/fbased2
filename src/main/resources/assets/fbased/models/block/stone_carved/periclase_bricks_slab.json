@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/periclase_bricks",
+    "top": "fbased:block/periclase_bricks",
+    "bottom": "fbased:block/periclase_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/marcasite_cobble",
+    "top": "fbased:block/marcasite_cobble",
+    "bottom": "fbased:block/marcasite_cobble"
+  },
+  "render_type": "solid"
+}

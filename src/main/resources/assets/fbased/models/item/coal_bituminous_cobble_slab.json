@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/coal_bituminous_cobble",
+    "top": "fbased:block/coal_bituminous_cobble",
+    "bottom": "fbased:block/coal_bituminous_cobble"
+  },
+  "render_type": "solid"
+}

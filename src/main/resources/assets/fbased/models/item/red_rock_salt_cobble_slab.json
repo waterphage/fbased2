@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/red_rock_salt_cobble",
+    "top": "fbased:block/red_rock_salt_cobble",
+    "side": "fbased:block/red_rock_salt_cobble"
+  },
+  "render_type": "solid"
+}

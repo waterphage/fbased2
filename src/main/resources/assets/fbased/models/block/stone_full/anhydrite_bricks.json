@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/anhydrite_bricks",
+    "top": "fbased:block/anhydrite_pol",
+    "bottom": "fbased:block/anhydrite_tile"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/red_gabbro_pol",
+    "top": "fbased:block/red_gabbro_pol",
+    "side": "fbased:block/red_gabbro_pol"
+  },
+  "render_type": "solid"
+}

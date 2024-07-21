@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/cobaltite_pol",
+    "particle": "fbased:block/cobaltite_pol"
+  },
+  "render_type": "solid"
+}

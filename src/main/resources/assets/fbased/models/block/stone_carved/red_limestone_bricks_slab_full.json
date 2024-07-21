@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/red_limestone_tile",
+    "top": "fbased:block/red_limestone_pol",
+    "side": "fbased:block/red_limestone_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/yellow_siltstone_cobble",
+    "particle": "fbased:block/yellow_siltstone_cobble"
+  },
+  "render_type": "solid"
+}

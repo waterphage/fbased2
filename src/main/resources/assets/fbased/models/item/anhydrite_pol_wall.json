@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/anhydrite_pol",
+    "particle": "fbased:block/anhydrite_pol"
+  },
+  "render_type": "solid"
+}

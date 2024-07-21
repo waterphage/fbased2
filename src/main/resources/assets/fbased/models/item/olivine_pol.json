@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/olivine_pol",
+    "particle": "fbased:block/olivine_pol"
+  },
+  "render_type": "solid"
+}

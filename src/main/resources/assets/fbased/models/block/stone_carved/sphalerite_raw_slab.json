@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/sphalerite_raw",
+    "top": "fbased:block/sphalerite_raw",
+    "bottom": "fbased:block/sphalerite_raw"
+  },
+  "render_type": "solid"
+}

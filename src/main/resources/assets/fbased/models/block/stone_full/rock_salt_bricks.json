@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/rock_salt_bricks",
+    "top": "fbased:block/rock_salt_pol",
+    "side": "fbased:block/rock_salt_tile"
+  },
+  "render_type": "solid"
+}

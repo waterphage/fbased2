@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/native_copper_raw",
+    "top": "fbased:block/native_copper_raw",
+    "side": "fbased:block/native_copper_raw"
+  }
+}

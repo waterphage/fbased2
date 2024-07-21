@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "fbased:block/limonite_cobble",
+    "particle": "fbased:block/limonite_cobble"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "fbased:block/alabaster_bricks",
+    "particle": "fbased:block/alabaster_bricks"
+  },
+  "render_type": "solid"
+}

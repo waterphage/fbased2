@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/microcline_cobble",
+    "top": "fbased:block/microcline_cobble",
+    "bottom": "fbased:block/microcline_cobble"
+  },
+  "render_type": "solid"
+}

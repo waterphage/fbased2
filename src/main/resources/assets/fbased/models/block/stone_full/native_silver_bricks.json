@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/native_silver_bricks",
+    "top": "fbased:block/native_silver_pol",
+    "bottom": "fbased:block/native_silver_tile"
+  },
+  "render_type": "solid"
+}

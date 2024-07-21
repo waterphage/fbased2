@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/olivine_raw",
+    "top": "fbased:block/olivine_raw",
+    "bottom": "fbased:block/olivine_raw"
+  },
+  "render_type": "solid"
+}

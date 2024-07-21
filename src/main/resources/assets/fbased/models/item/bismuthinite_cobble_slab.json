@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/bismuthinite_cobble",
+    "top": "fbased:block/bismuthinite_cobble",
+    "bottom": "fbased:block/bismuthinite_cobble"
+  },
+  "render_type": "solid"
+}

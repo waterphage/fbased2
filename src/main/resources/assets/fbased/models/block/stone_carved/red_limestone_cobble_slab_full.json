@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/red_limestone_cobble",
+    "top": "fbased:block/red_limestone_cobble",
+    "side": "fbased:block/red_limestone_cobble"
+  },
+  "render_type": "solid"
+}

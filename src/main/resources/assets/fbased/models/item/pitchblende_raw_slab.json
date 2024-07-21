@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/pitchblende_raw",
+    "top": "fbased:block/pitchblende_raw",
+    "bottom": "fbased:block/pitchblende_raw"
+  },
+  "render_type": "solid"
+}

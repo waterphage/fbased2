@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/bauxite_tile",
+    "top": "fbased:block/bauxite_pol",
+    "side": "fbased:block/bauxite_bricks"
+  },
+  "render_type": "solid"
+}

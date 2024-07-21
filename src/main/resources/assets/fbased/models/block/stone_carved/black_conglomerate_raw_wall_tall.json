@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side_tall",
+  "textures": {
+    "wall": "fbased:block/black_conglomerate_raw",
+    "particle": "fbased:block/black_conglomerate_raw"
+  },
+  "render_type": "solid"
+}

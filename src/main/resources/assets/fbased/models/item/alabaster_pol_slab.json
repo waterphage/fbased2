@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/alabaster_pol",
+    "top": "fbased:block/alabaster_pol",
+    "bottom": "fbased:block/alabaster_pol"
+  },
+  "render_type": "solid"
+}

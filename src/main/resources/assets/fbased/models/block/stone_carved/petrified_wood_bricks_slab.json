@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/petrified_wood_bricks",
+    "top": "fbased:block/petrified_wood_bricks",
+    "bottom": "fbased:block/petrified_wood_bricks"
+  },
+  "render_type": "solid"
+}

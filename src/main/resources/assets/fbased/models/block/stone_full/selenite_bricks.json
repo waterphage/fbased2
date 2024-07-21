@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/selenite_bricks",
+    "top": "fbased:block/selenite_pol",
+    "bottom": "fbased:block/selenite_tile"
+  },
+  "render_type": "solid"
+}

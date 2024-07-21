@@ -1,0 +1,80 @@
+{
+  "feature": {
+    "type": "minecraft:fossil",
+    "config": {
+      "max_empty_corners_allowed": 7,
+      "fossil_structures": [
+        "fbased:crst_1_1",
+        "fbased:crst_1_2",
+        "fbased:crst_1_3",
+        "fbased:crst_1_4",
+        "fbased:crst_1_5",
+        "fbased:crst_1_6",
+        "fbased:crst_1_7",
+        "fbased:disc_1_1",
+        "fbased:disc_1_2",
+        "fbased:disc_1_3",
+        "fbased:disc_1_4",
+        "fbased:disc_1_5",
+        "fbased:disc_1_6",
+        "fbased:disc_1_7"
+      ],
+      "overlay_structures": [
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty"
+      ],
+      "fossil_processors": "fbased:magma_cooled",
+      "overlay_processors": {
+        "processors": [
+          {
+            "processor_type": "minecraft:nop"
+          }
+        ]
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:rarity_filter",
+      "chance": 3
+    },
+    {
+      "type": "minecraft:random_offset",
+      "xz_spread": 8,
+      "y_spread": 0
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:biased_to_bottom",
+        "min_inclusive": {
+          "absolute": 24
+        },
+        "max_inclusive": {
+          "absolute": 128
+        }
+      }
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:not",
+        "predicate": {
+          "type": "minecraft:solid"
+        }
+      }
+    }
+  ]
+}

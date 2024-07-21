@@ -1,0 +1,59 @@
+{
+  "feature": {
+    "type": "minecraft:ore",
+    "config": {
+      "size": 64,
+      "discard_chance_on_air_exposure": 0,
+      "targets": [
+        {
+          "target": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:cyan_terracotta",
+            "probability": 0.667
+          },
+          "state": {
+            "Name": "minecraft:soul_soil"
+          }
+        },
+        {
+          "target": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:cyan_terracotta"
+          },
+          "state": {
+            "Name": "minecraft:blackstone"
+          }
+        },
+        {
+          "target": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:gray_concrete"
+          },
+          "state": {
+            "Name": "minecraft:netherrack"
+          }
+        },
+        {
+          "target": {
+            "predicate_type": "minecraft:random_block_match",
+            "block": "minecraft:light_gray_concrete",
+            "probability": 0.333
+          },
+          "state": {
+            "Name": "minecraft:obsidian"
+          }
+        },
+        {
+          "target": {
+            "predicate_type": "minecraft:block_match",
+            "block": "minecraft:light_gray_concrete"
+          },
+          "state": {
+            "Name": "minecraft:smooth_basalt"
+          }
+        }
+      ]
+    }
+  },
+  "placement": []
+}

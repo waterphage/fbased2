@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/white_quartzite_raw",
+    "top": "fbased:block/white_quartzite_raw",
+    "bottom": "fbased:block/white_quartzite_raw"
+  },
+  "render_type": "solid"
+}

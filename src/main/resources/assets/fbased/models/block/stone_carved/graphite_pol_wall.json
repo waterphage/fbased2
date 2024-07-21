@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "fbased:block/graphite_pol",
+    "particle": "fbased:block/graphite_pol"
+  },
+  "render_type": "solid"
+}

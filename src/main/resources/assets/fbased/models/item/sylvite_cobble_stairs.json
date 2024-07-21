@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "fbased:block/sylvite_cobble",
+    "top": "fbased:block/sylvite_cobble",
+    "side": "fbased:block/sylvite_cobble"
+  }
+}

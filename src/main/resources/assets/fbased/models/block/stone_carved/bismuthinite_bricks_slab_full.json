@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/bismuthinite_tile",
+    "top": "fbased:block/bismuthinite_pol",
+    "side": "fbased:block/bismuthinite_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/marcasite_pol",
+    "top": "fbased:block/marcasite_pol",
+    "bottom": "fbased:block/marcasite_pol"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/graphite_pol",
+    "top": "fbased:block/graphite_pol",
+    "bottom": "fbased:block/graphite_pol"
+  },
+  "render_type": "solid"
+}

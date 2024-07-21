@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side_tall",
+  "textures": {
+    "wall": "fbased:block/satinspar_pol",
+    "particle": "fbased:block/satinspar_pol"
+  },
+  "render_type": "solid"
+}

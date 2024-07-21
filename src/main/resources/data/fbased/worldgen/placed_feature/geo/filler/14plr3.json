@@ -1,0 +1,73 @@
+{
+  "feature": {
+    "type": "minecraft:random_patch",
+    "config": {
+      "tries": 30,
+      "xz_spread": 1,
+      "y_spread": 320,
+      "feature": {
+        "feature": {
+          "type": "minecraft:ore",
+          "config": {
+            "size": 64,
+            "discard_chance_on_air_exposure": 0,
+            "targets": [
+              {
+                "target": {
+                  "predicate_type": "minecraft:block_match",
+                  "block": "fbased:geo_filler_1"
+                },
+                "state": {
+                  "Name": "fbased:red_schist_raw",
+                  "Properties": {
+                    "facing": "up"
+                  }
+                }
+              },
+              {
+                "target": {
+                  "predicate_type": "minecraft:block_match",
+                  "block": "fbased:geo_filler_2"
+                },
+                "state": {
+                  "Name": "fbased:white_schist_raw",
+                  "Properties": {
+                    "facing": "up"
+                  }
+                }
+              },
+              {
+                "target": {
+                  "predicate_type": "minecraft:block_match",
+                  "block": "fbased:geo_filler_3"
+                },
+                "state": {
+                  "Name": "fbased:white_limestone_raw",
+                  "Properties": {
+                    "facing": "up"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "placement": []
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 5
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "absolute": 160
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/mica_raw",
+    "top": "fbased:block/mica_raw",
+    "bottom": "fbased:block/mica_raw"
+  },
+  "render_type": "solid"
+}

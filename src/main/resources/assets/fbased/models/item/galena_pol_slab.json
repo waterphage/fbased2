@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/galena_pol",
+    "top": "fbased:block/galena_pol",
+    "bottom": "fbased:block/galena_pol"
+  },
+  "render_type": "solid"
+}

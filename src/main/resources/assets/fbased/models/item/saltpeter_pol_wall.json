@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/saltpeter_pol",
+    "particle": "fbased:block/saltpeter_pol"
+  },
+  "render_type": "solid"
+}

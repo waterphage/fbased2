@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side_tall",
+  "textures": {
+    "wall": "fbased:block/olivine_raw",
+    "particle": "fbased:block/olivine_raw"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/galena_pol",
+    "top": "fbased:block/galena_pol",
+    "side": "fbased:block/galena_pol"
+  }
+}

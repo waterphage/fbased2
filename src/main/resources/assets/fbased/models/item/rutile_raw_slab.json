@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/rutile_raw",
+    "top": "fbased:block/rutile_raw",
+    "bottom": "fbased:block/rutile_raw"
+  },
+  "render_type": "solid"
+}

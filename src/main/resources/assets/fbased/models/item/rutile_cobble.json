@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/rutile_cobble",
+    "particle": "fbased:block/rutile_cobble"
+  },
+  "render_type": "solid"
+}

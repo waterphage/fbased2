@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/coal_bituminous_bricks",
+    "top": "fbased:block/coal_bituminous_pol",
+    "bottom": "fbased:block/coal_bituminous_tile"
+  },
+  "render_type": "solid"
+}

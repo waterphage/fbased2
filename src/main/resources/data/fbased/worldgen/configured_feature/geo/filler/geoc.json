@@ -1,0 +1,58 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 1,
+          "data": {
+            "Name": "fbased:black_rock_salt_raw"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "fbased:black_conglomerate_raw"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "fbased:white_rock_salt_raw"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "fbased:white_conglomerate_raw"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "fbased:yellow_rock_salt_raw"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "fbased:yellow_conglomerate_raw"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "fbased:red_rock_salt_raw"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "fbased:tan_conglomerate_raw"
+          }
+        }
+      ]
+    }
+  }
+}

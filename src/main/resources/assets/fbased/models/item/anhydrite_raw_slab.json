@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/anhydrite_raw",
+    "top": "fbased:block/anhydrite_raw",
+    "bottom": "fbased:block/anhydrite_raw"
+  },
+  "render_type": "solid"
+}

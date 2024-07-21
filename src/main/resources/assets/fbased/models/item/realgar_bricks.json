@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/realgar_bricks",
+    "top": "fbased:block/realgar_pol",
+    "bottom": "fbased:block/realgar_tile"
+  },
+  "render_type": "solid"
+}

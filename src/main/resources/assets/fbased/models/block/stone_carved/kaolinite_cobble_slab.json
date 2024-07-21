@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/kaolinite_cobble",
+    "top": "fbased:block/kaolinite_cobble",
+    "bottom": "fbased:block/kaolinite_cobble"
+  },
+  "render_type": "solid"
+}

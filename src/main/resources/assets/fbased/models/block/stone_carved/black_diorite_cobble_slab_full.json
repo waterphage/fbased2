@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/black_diorite_cobble",
+    "top": "fbased:block/black_diorite_cobble",
+    "side": "fbased:block/black_diorite_cobble"
+  },
+  "render_type": "solid"
+}

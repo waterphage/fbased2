@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/black_dolomite_tile",
+    "top": "fbased:block/black_dolomite_pol",
+    "side": "fbased:block/black_dolomite_bricks"
+  },
+  "render_type": "solid"
+}

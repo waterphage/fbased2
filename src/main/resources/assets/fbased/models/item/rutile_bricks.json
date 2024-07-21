@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/rutile_bricks",
+    "top": "fbased:block/rutile_pol",
+    "bottom": "fbased:block/rutile_tile"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/calcite_bricks",
+    "particle": "fbased:block/calcite_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/alabaster_cobble",
+    "top": "fbased:block/alabaster_cobble",
+    "bottom": "fbased:block/alabaster_cobble"
+  },
+  "render_type": "solid"
+}

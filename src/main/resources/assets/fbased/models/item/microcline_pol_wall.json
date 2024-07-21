@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/microcline_pol",
+    "particle": "fbased:block/microcline_pol"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/tan_dolomite_raw",
+    "top": "fbased:block/tan_dolomite_raw",
+    "side": "fbased:block/tan_dolomite_raw"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/garnierite_raw",
+    "top": "fbased:block/garnierite_raw",
+    "bottom": "fbased:block/garnierite_raw"
+  },
+  "render_type": "solid"
+}

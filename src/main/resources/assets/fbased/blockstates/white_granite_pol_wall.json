@@ -1,0 +1,90 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall_post"
+      }
+    },
+    {
+      "when": {
+        "north": "low"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "low"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall",
+        "y": 90,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "south": "low"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall",
+        "y": 180,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "west": "low"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall",
+        "y": 270,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "north": "tall"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall_tall",
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "east": "tall"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall_tall",
+        "y": 90,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "south": "tall"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall_tall",
+        "y": 180,
+        "uvlock": true
+      }
+    },
+    {
+      "when": {
+        "west": "tall"
+      },
+      "apply": {
+        "model": "fbased:block/stone_carved/white_granite_pol_wall_tall",
+        "y": 270,
+        "uvlock": true
+      }
+    }
+  ]
+}

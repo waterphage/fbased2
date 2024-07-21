@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/black_shale_bricks",
+    "top": "fbased:block/black_shale_bricks",
+    "side": "fbased:block/black_shale_bricks"
+  },
+  "render_type": "solid"
+}

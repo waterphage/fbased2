@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/native_platinum_pol",
+    "top": "fbased:block/native_platinum_pol",
+    "bottom": "fbased:block/native_platinum_pol"
+  },
+  "render_type": "solid"
+}

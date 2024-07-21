@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/tan_chert_cobble",
+    "particle": "fbased:block/tan_chert_cobble"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/hornblende_cobble",
+    "top": "fbased:block/hornblende_cobble",
+    "side": "fbased:block/hornblende_cobble"
+  }
+}

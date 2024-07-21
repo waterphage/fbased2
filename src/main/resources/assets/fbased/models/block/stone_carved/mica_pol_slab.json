@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/mica_pol",
+    "top": "fbased:block/mica_pol",
+    "bottom": "fbased:block/mica_pol"
+  },
+  "render_type": "solid"
+}

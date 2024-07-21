@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/white_quartzite_cobble",
+    "top": "fbased:block/white_quartzite_cobble",
+    "side": "fbased:block/white_quartzite_cobble"
+  },
+  "render_type": "solid"
+}

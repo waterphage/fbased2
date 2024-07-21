@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/tan_siltstone_cobble",
+    "top": "fbased:block/tan_siltstone_cobble",
+    "side": "fbased:block/tan_siltstone_cobble"
+  },
+  "render_type": "solid"
+}

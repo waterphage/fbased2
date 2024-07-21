@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/satinspar_cobble",
+    "particle": "fbased:block/satinspar_cobble"
+  },
+  "render_type": "solid"
+}

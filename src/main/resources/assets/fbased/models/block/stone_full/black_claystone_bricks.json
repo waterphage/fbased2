@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/black_claystone_bricks",
+    "top": "fbased:block/black_claystone_pol",
+    "bottom": "fbased:block/black_claystone_tile"
+  },
+  "render_type": "solid"
+}

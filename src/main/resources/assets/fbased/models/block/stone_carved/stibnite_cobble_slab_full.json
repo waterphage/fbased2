@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/stibnite_cobble",
+    "top": "fbased:block/stibnite_cobble",
+    "side": "fbased:block/stibnite_cobble"
+  },
+  "render_type": "solid"
+}

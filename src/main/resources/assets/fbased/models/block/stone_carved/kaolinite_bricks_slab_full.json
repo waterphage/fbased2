@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/kaolinite_tile",
+    "top": "fbased:block/kaolinite_pol",
+    "side": "fbased:block/kaolinite_bricks"
+  },
+  "render_type": "solid"
+}

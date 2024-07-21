@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/tan_conglomerate_raw",
+    "top": "fbased:block/tan_conglomerate_raw",
+    "side": "fbased:block/tan_conglomerate_raw"
+  },
+  "render_type": "solid"
+}

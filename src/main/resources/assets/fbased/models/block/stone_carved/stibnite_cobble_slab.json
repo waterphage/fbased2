@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/stibnite_cobble",
+    "top": "fbased:block/stibnite_cobble",
+    "bottom": "fbased:block/stibnite_cobble"
+  },
+  "render_type": "solid"
+}

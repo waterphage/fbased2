@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/limonite_bricks",
+    "top": "fbased:block/limonite_bricks",
+    "bottom": "fbased:block/limonite_bricks"
+  },
+  "render_type": "solid"
+}

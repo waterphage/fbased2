@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/red_diorite_pol",
+    "top": "fbased:block/red_diorite_pol",
+    "bottom": "fbased:block/red_diorite_pol"
+  },
+  "render_type": "solid"
+}

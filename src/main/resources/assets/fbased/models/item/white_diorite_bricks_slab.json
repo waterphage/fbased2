@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/white_diorite_bricks",
+    "top": "fbased:block/white_diorite_bricks",
+    "side": "fbased:block/white_diorite_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/kaolinite_raw",
+    "top": "fbased:block/kaolinite_raw",
+    "side": "fbased:block/kaolinite_raw"
+  }
+}

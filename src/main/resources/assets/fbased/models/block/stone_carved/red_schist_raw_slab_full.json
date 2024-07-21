@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/red_schist_raw",
+    "top": "fbased:block/red_schist_raw",
+    "side": "fbased:block/red_schist_raw"
+  },
+  "render_type": "solid"
+}

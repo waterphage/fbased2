@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/alabaster_bricks",
+    "top": "fbased:block/alabaster_pol",
+    "bottom": "fbased:block/alabaster_tile"
+  },
+  "render_type": "solid"
+}

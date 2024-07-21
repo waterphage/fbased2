@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/anhydrite_pol",
+    "top": "fbased:block/anhydrite_pol",
+    "side": "fbased:block/anhydrite_doub"
+  },
+  "render_type": "solid"
+}

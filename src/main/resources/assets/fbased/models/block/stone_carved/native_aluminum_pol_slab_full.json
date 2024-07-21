@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/native_aluminum_pol",
+    "top": "fbased:block/native_aluminum_pol",
+    "side": "fbased:block/native_aluminum_doub"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "fbased:block/black_rhyolite_raw",
+    "top": "fbased:block/black_rhyolite_raw",
+    "side": "fbased:block/black_rhyolite_raw"
+  },
+  "render_type": "solid"
+}

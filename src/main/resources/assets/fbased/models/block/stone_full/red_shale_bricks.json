@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/red_shale_bricks",
+    "top": "fbased:block/red_shale_pol",
+    "bottom": "fbased:block/red_shale_tile"
+  },
+  "render_type": "solid"
+}

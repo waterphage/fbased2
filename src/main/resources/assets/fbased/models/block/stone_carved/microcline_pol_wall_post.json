@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/microcline_pol",
+    "particle": "fbased:block/microcline_pol"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/calcite_bricks",
+    "top": "fbased:block/calcite_bricks",
+    "bottom": "fbased:block/calcite_bricks"
+  },
+  "render_type": "solid"
+}

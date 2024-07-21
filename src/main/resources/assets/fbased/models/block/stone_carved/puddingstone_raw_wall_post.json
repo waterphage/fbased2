@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/puddingstone_raw",
+    "particle": "fbased:block/puddingstone_raw"
+  },
+  "render_type": "solid"
+}

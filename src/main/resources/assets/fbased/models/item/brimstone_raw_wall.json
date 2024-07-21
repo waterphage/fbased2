@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/brimstone_raw",
+    "particle": "fbased:block/brimstone_raw"
+  },
+  "render_type": "solid"
+}

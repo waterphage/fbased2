@@ -1,0 +1,1256 @@
+{
+  "dimensions": {
+    "minecraft:overworld": {
+      "type": "fbased:overworld",
+      "generator": {
+        "type": "minecraft:noise",
+        "settings": "fbased:overworld",
+        "biome_source": {
+          "type": "minecraft:multi_noise",
+          "biomes": [
+            {
+              "biome": "fbased:c_5_1_magma",
+              "parameters": {
+                "temperature": [0.778,2],
+                "humidity": [0.6,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0.457,
+                  1.5
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:c_5_2_glasslands",
+              "parameters": {
+                "temperature": [0.778,2],
+                "humidity": [0.2,0.6],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0.457,
+                  1.5
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:c_5_3_ashlands",
+              "parameters": {
+                "temperature": [0.778,2],
+                "humidity": [-0.2,0.2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0.457,
+                  1.5
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:c_5_4_uberdrip",
+              "parameters": {
+                "temperature": [0.778,2],
+                "humidity": [-0.6,-0.2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0.457,
+                  1.5
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:c_5_5_acid_bath",
+              "parameters": {
+                "temperature": [0.778,2],
+                "humidity": [-2,-0.6],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0.457,
+                  1.5
+                ],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:hot_4",
+              "parameters": {
+                "temperature": [0.667,0.778],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0.457,
+                  1.5
+                ],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:hot_1",
+              "parameters": {
+                "temperature": [0.667,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  -2,
+                  -0.457
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:hot_2",
+              "parameters": {
+                "temperature": [0.667,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  -0.457,
+                  0
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:hot_3",
+              "parameters": {
+                "temperature": [0.667,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0,
+                  0.457
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:steppe_1",
+              "parameters": {
+                "temperature": [-0.667,0.667],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  -2,
+                  -0.457
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:steppe_2",
+              "parameters": {
+                "temperature": [-0.667,0.667],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  -0.457,
+                  0
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:steppe_3",
+              "parameters": {
+                "temperature": [-0.667,0.667],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0,
+                  0.457
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:steppe_4",
+              "parameters": {
+                "temperature": [-0.667,0.667],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0.457,
+                  1.5
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:cold_1",
+              "parameters": {
+                "temperature": [-2,-0.667],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  -2,
+                  -0.457
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:cold_2",
+              "parameters": {
+                "temperature": [-2,-0.667],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  -0.457,
+                  0
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:cold_3",
+              "parameters": {
+                "temperature": [-2,-0.667],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0,
+                  0.457
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:cold_4",
+              "parameters": {
+                "temperature": [-2,-0.667],
+                "humidity": [-2,2],
+                "continentalness": [-2,2],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  0.457,
+                  1.5
+                ],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/diamond",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [0.8,2],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/diamond",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [0.8,2],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/lapis",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [0.6,0.7],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/lapis",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [0.6,0.7],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/redstone",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [0.5,0.6],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/redstone",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [0.5,0.6],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/emerald",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [0.4,0.5],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/emerald",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [0.4,0.5],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/quartz",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [0.3,0.4],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/quartz",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [0.3,0.4],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/copper",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [0.2,0.3],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/copper",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [0.2,0.3],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/gold",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [0.1,0.2],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/gold",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [0.1,0.2],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/base",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [-0.1,0.1],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/base",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [-0.1,0.1],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/redstone",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [-0.2,-0.1],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/redstone",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [-0.2,-0.1],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/lapis",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [-0.3,-0.2],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/lapis",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [-0.3,-0.2],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/quartz",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [-0.4,0.3],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/quartz",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [-0.4,0.3],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/emerald",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [-0.5,-0.4],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/emerald",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [-0.5,-0.4],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/gold",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [-0.6,-0.5],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/gold",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [-0.6,-0.5],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/copper",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [-0.7,-0.6],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/copper",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [-0.7,-0.6],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/diamond",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [-2,-0.8],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/diamond",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [-2,-0.8],
+                "weirdness": [0.5,2],
+                "depth": [1.5,2],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geo/geo0",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  -2,
+                  -0.7
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo1",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  -0.7,
+                  -0.6
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo2",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  -0.6,
+                  -0.5
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo3",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  -0.5,
+                  -0.4
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo4",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  -0.4,
+                  -0.3
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo5",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  -0.3,
+                  -0.2
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo6",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  -0.2,
+                  -0.1
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo7",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  -0.1,
+                  0
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo8",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  0,
+                  0.1
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo9",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  0.1,
+                  0.2
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo10",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  0.2,
+                  0.3
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo11",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  0.3,
+                  0.4
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo12",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  0.4,
+                  0.5
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo13",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  0.5,
+                  0.6
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo14",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  0.6,
+                  0.7
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geo/geo15",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [-2,-0.05],
+                "erosion": [
+                  0.8,
+                  2
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geoa/ravine_cold",
+              "parameters": {
+                "temperature": [-2,0.667],
+                "humidity": [-2,2],
+                "continentalness": [-0.05,0.05],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/ravine_hot",
+              "parameters": {
+                "temperature": [0.667,2],
+                "humidity": [-2,2],
+                "continentalness": [-0.05,0.05],
+                "erosion": [-2,2],
+                "weirdness": [-2,2],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+
+            {
+              "biome": "fbased:geoa/geo0",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  -2,
+                  -0.7
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo1",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  -0.7,
+                  -0.6
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo2",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  -0.6,
+                  -0.5
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo3",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  -0.5,
+                  -0.4
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo4",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  -0.4,
+                  -0.3
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo5",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  -0.3,
+                  -0.2
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo6",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  -0.2,
+                  -0.1
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo7",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  -0.1,
+                  0
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo8",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  0,
+                  0.1
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo9",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  0.1,
+                  0.2
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo10",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  0.2,
+                  0.3
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo11",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  0.3,
+                  0.4
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo12",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  0.4,
+                  0.5
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo13",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  0.5,
+                  0.6
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo14",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  0.6,
+                  0.7
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            },
+            {
+              "biome": "fbased:geoa/geo15",
+              "parameters": {
+                "temperature": [-2,2],
+                "humidity": [-2,2],
+                "continentalness": [0.05,2],
+                "erosion": [
+                  0.8,
+                  2
+                ],
+                "weirdness": [-2,0.5],
+                "depth": [
+                  1.5,
+                  2
+                ],
+                "offset": 0
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

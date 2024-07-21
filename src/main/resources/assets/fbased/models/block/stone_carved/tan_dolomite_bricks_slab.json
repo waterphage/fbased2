@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/tan_dolomite_bricks",
+    "top": "fbased:block/tan_dolomite_bricks",
+    "bottom": "fbased:block/tan_dolomite_bricks"
+  },
+  "render_type": "solid"
+}

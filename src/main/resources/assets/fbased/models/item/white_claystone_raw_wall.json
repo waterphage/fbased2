@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/white_claystone_raw",
+    "particle": "fbased:block/white_claystone_raw"
+  },
+  "render_type": "solid"
+}

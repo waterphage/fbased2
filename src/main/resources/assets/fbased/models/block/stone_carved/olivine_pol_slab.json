@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/olivine_pol",
+    "top": "fbased:block/olivine_pol",
+    "bottom": "fbased:block/olivine_pol"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side_tall",
+  "textures": {
+    "wall": "fbased:block/white_andesite_cobble",
+    "particle": "fbased:block/white_andesite_cobble"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/native_copper_raw",
+    "top": "fbased:block/native_copper_raw",
+    "bottom": "fbased:block/native_copper_raw"
+  },
+  "render_type": "solid"
+}

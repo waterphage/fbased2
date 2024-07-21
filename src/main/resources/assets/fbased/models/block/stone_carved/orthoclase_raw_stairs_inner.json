@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/orthoclase_raw",
+    "top": "fbased:block/orthoclase_raw",
+    "side": "fbased:block/orthoclase_raw"
+  }
+}
