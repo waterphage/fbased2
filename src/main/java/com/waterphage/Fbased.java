@@ -1,8 +1,7 @@
 package com.waterphage;
 
 import com.waterphage.block.*;
-import com.waterphage.block.worldgen.ModChunk;
-import com.waterphage.block.worldgen.blockstates.ModPredicatesType;
+import com.waterphage.block.worldgen.RegDump;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.text.Text;
@@ -24,8 +23,7 @@ public class Fbased implements ModInitializer {
 		ModTabs.registerModTabs();
 		ModTags.registerModTags();
 		ModKeys.registerModKeys();
-		ModChunk.registerModChunk();
-		ModPredicatesType.registerpredicates();
+		RegDump.registerModChunk();
 
 
 

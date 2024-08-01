@@ -3,7 +3,10 @@
 	"package": "com.waterphage.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin$createMultiNoiseSamplerInvoker",
+		"ExampleMixin$sampleBlockStateInvoker",
+		"ExampleMixin$getHorizontalCellBlockCountInvoker",
+		"ExampleMixin$getVerticalCellBlockCountInvoker"
 	],
 	"injectors": {
 		"defaultRequire": 1

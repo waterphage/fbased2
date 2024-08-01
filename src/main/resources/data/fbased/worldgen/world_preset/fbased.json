@@ -3,7 +3,7 @@
     "minecraft:overworld": {
       "type": "fbased:overworld",
       "generator": {
-        "type": "minecraft:noise",
+        "type": "fbased:fbasedgen",
         "settings": "fbased:overworld",
         "biome_source": {
           "type": "minecraft:multi_noise",
