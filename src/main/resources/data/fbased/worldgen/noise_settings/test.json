@@ -1,5 +1,5 @@
 {
-  "sea_level": 0,
+  "sea_level": 400,
   "disable_mob_generation": false,
   "aquifers_enabled": true,
   "ore_veins_enabled": true,
@@ -20,34 +20,76 @@
     "size_vertical": 2
   },
   "noise_router": {
-    "barrier": 0,
-    "fluid_level_floodedness": -1,
-    "fluid_level_spread": -999,
+    "barrier": {
+      "type": "minecraft:interpolated",
+      "argument": {
+        "type": "minecraft:noise",
+        "noise": "minecraft:calcite",
+        "xz_scale": 1,
+        "y_scale": 1
+      }
+    },
+    "fluid_level_floodedness": {
+      "type": "minecraft:interpolated",
+      "argument": {
+        "type": "minecraft:noise",
+        "noise": "minecraft:calcite",
+        "xz_scale": 1,
+        "y_scale": 0.7
+      }
+    },
+    "fluid_level_spread": {
+      "type": "minecraft:interpolated",
+      "argument": {
+        "type": "minecraft:noise",
+        "noise": "minecraft:calcite",
+        "xz_scale": 0.7,
+        "y_scale": 1
+      }
+    },
     "lava": 1,
     "temperature": {
       "type": "minecraft:interpolated",
-      "argument": 0
+      "argument": {
+        "type": "minecraft:noise",
+        "noise": "minecraft:calcite",
+        "xz_scale": 1,
+        "y_scale": 1
+      }
     },
     "vegetation": 0,
     "continents": 0,
-    "erosion": 0,
-    "depth": 0,
+    "erosion": {
+      "type": "minecraft:noise",
+      "noise": "minecraft:calcite",
+      "xz_scale": 1,
+      "y_scale": 0.7
+    },
+    "depth": {
+      "type": "minecraft:noise",
+      "noise": "minecraft:calcite",
+      "xz_scale": 0.7,
+      "y_scale": 1
+    },
     "ridges": 0,
     "initial_density_without_jaggedness": 0,
     "final_density": {
-      "type": "minecraft:add",
-      "argument1": {
-        "type": "minecraft:y_clamped_gradient",
-        "from_y": 0,
-        "to_y": 384,
-        "from_value": 1,
-        "to_value": -1
-      },
-      "argument2": {
-        "type": "minecraft:noise",
-        "noise": "minecraft:cave_cheese",
-        "xz_scale": 1,
-        "y_scale": 1
+      "type": "minecraft:interpolated",
+      "argument": {
+        "type": "minecraft:add",
+        "argument1": {
+          "type": "minecraft:y_clamped_gradient",
+          "from_y": 0,
+          "to_y": 384,
+          "from_value": 1,
+          "to_value": -1
+        },
+        "argument2": {
+          "type": "minecraft:noise",
+          "noise": "minecraft:cave_cheese",
+          "xz_scale": 1,
+          "y_scale": 1
+        }
       }
     },
     "vein_toggle": 0,

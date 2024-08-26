@@ -9,7 +9,7 @@
           "type": "minecraft:multi_noise",
           "biomes": [
             {
-              "biome": "fbased:test",
+              "biome": "fbased:steppe",
               "parameters": {
                 "temperature": [-2,2],
                 "humidity": [-2,2],
