@@ -7,23 +7,18 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.HeightContext;
-import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
 import net.minecraft.world.gen.noise.NoiseConfig;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
-import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +29,7 @@ import static java.lang.Math.abs;
 public class ModRules extends MaterialRules {
     public static void registerrules() {
         Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "geology_s"), GeologyS.CODEC.codec());
+        Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "geology_d"), GeologyD.CODEC.codec());
         Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "geology"), Geology.CODEC.codec());
     }
 
@@ -45,76 +41,14 @@ public class ModRules extends MaterialRules {
         Codec<MaterialRules.MaterialRule> CODEC = Registries.MATERIAL_RULE.getCodec().dispatch(materialRule -> materialRule.codec().codec(), Function.identity());
 
         static Codec<? extends MaterialRules.MaterialRule> registerAndGetDefault(Registry<Codec<? extends MaterialRules.MaterialRule>> registry) {
+            ModRules.register(registry, "geology_s", ModRules.GeologyS.CODEC);
+            ModRules.register(registry, "geology_d", ModRules.GeologyD.CODEC);
             return ModRules.register(registry, "geology", ModRules.Geology.CODEC);
         }
 
         CodecHolder<? extends MaterialRules.MaterialRule> codec();
     }
 
-    public static class MaterialRuleContextUtil {
-
-        public static SurfaceBuilder getSurfaceBuilder(Object context) {
-            try {
-                Field field = context.getClass().getDeclaredField("surfaceBuilder");
-                field.setAccessible(true);
-                return (SurfaceBuilder) field.get(context);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException("Failed to access field 'surfaceBuilder'", e);
-            }
-        }
-
-        public static NoiseConfig getNoiseConfig(Object context) {
-            try {
-                Field field = context.getClass().getDeclaredField("noiseConfig");
-                field.setAccessible(true);
-                return (NoiseConfig) field.get(context);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException("Failed to access field 'noiseConfig'", e);
-            }
-        }
-
-        public static Chunk getChunk(Object context) {
-            try {
-                Field field = context.getClass().getDeclaredField("chunk");
-                field.setAccessible(true);
-                return (Chunk) field.get(context);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException("Failed to access field 'chunk'", e);
-            }
-        }
-
-        public static ChunkNoiseSampler getChunkNoiseSampler(Object context) {
-            try {
-                Field field = context.getClass().getDeclaredField("chunkNoiseSampler");
-                field.setAccessible(true);
-                return (ChunkNoiseSampler) field.get(context);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException("Failed to access field 'chunkNoiseSampler'", e);
-            }
-        }
-
-        public static Function<BlockPos, RegistryEntry<Biome>> getPosToBiome(Object context) {
-            try {
-                Field field = context.getClass().getDeclaredField("posToBiome");
-                field.setAccessible(true);
-                return (Function<BlockPos, RegistryEntry<Biome>>) field.get(context);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException("Failed to access field 'posToBiome'", e);
-            }
-        }
-
-        public static HeightContext getHeightContext(Object context) {
-            try {
-                Field field = context.getClass().getDeclaredField("heightContext");
-                field.setAccessible(true);
-                return (HeightContext) field.get(context);
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new RuntimeException("Failed to access field 'heightContext'", e);
-            }
-        }
-
-        // Additional getters as needed
-    }
     public static ModRules.Geology condition(List<String> id_o,List<String> id_l,List<String> id_d,List<String> scale, List<Geology.GeoEntry> rock) {
         return new ModRules.Geology(id_o,id_l,id_d,scale, rock);
     }
@@ -161,12 +95,9 @@ public class ModRules extends MaterialRules {
         }
 
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext cont) {
-            SurfaceBuilder surf = MaterialRuleContextUtil.getSurfaceBuilder(cont);
-            Chunk chunk = MaterialRuleContextUtil.getChunk(cont);
-            ChunkNoiseSampler sampl = MaterialRuleContextUtil.getChunkNoiseSampler(cont);
-            HeightContext height = MaterialRuleContextUtil.getHeightContext(cont);
-            NoiseConfig noise = MaterialRuleContextUtil.getNoiseConfig(cont);
-            Function<BlockPos, RegistryEntry<Biome>> biome = MaterialRuleContextUtil.getPosToBiome(cont);
+            Chunk chunk = cont.chunk;
+            HeightContext height = cont.heightContext;
+            NoiseConfig noise = cont.noiseConfig;
             net.minecraft.util.math.random.Random random = Random.create();
 
 
@@ -271,12 +202,8 @@ public class ModRules extends MaterialRules {
         }
 
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext cont) {
-            SurfaceBuilder surf = MaterialRuleContextUtil.getSurfaceBuilder(cont);
-            Chunk chunk = MaterialRuleContextUtil.getChunk(cont);
-            ChunkNoiseSampler sampl = MaterialRuleContextUtil.getChunkNoiseSampler(cont);
-            HeightContext height = MaterialRuleContextUtil.getHeightContext(cont);
-            NoiseConfig noise = MaterialRuleContextUtil.getNoiseConfig(cont);
-            Function<BlockPos, RegistryEntry<Biome>> biome = MaterialRuleContextUtil.getPosToBiome(cont);
+            HeightContext height = cont.heightContext;
+            Chunk chunk = cont.chunk;
             net.minecraft.util.math.random.Random random = Random.create();
 
             int ymax = height.getHeight();
@@ -289,4 +216,95 @@ public class ModRules extends MaterialRules {
             };
         }
     }
+
+    public static ModRules.GeologyD condition(List<String> id_o,List<String> id_l,List<String> id_d,List<String> scale,List<Integer> matrix, List<List<Integer>> goal, List<BlockStateProvider> rock) {
+        return new ModRules.GeologyD(id_o,id_l,id_d,scale, matrix, goal, rock);
+    }
+
+    record GeologyD(List<String> id_o,List<String> id_l,List<String> id_d,List<String> scale,List<Integer> matrix,List<List<Integer>> goal, List<BlockStateProvider> rock) implements MaterialRules.MaterialRule {
+        static final CodecHolder<ModRules.GeologyD> CODEC = CodecHolder.of(
+                RecordCodecBuilder.mapCodec(
+                        instance -> instance.group(
+                                        Codec.STRING.listOf().fieldOf("biome_noise_a").forGetter(ModRules.GeologyD::id_l),
+                                        Codec.STRING.listOf().fieldOf("biome_noise").forGetter(ModRules.GeologyD::id_o),
+                                        Codec.STRING.listOf().fieldOf("local_noise").forGetter(ModRules.GeologyD::id_d),
+                                        Codec.STRING.listOf().fieldOf("mode").forGetter(ModRules.GeologyD::scale),
+                                        Codec.INT.listOf().fieldOf("matrix").forGetter(ModRules.GeologyD::matrix),
+                                        Codec.INT.listOf().listOf().fieldOf("goal").forGetter(ModRules.GeologyD::goal),
+                                        BlockStateProvider.TYPE_CODEC.listOf().fieldOf("types").forGetter(ModRules.GeologyD::rock)
+                                )
+                                .apply(instance, ModRules.GeologyD::new)
+                )
+        );
+        public CodecHolder<GeologyD> GeologyD(CodecHolder<GeologyD> codec) {
+            return CODEC;
+        }
+        @Override
+        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+            return CODEC;
+        }
+
+        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext cont) {
+            Chunk chunk = cont.chunk;
+            HeightContext height = cont.heightContext;
+            NoiseConfig noise = cont.noiseConfig;
+            net.minecraft.util.math.random.Random random = Random.create();
+
+            class Backup{
+                public int xprev=-9999;
+                public int zprev=-9999;
+                public int ym;
+
+                public List<Integer> point;
+                public double dist_os;
+                public double dist_ls;
+            }
+            Backup backup = new Backup();
+
+            DoublePerlinNoiseSampler dist_o = noise.getOrCreateSampler(RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, new Identifier(id_o.get(0),id_o.get(1))));
+            DoublePerlinNoiseSampler dist_l = noise.getOrCreateSampler(RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, new Identifier(id_l.get(0),id_l.get(1))));
+            DoublePerlinNoiseSampler dist_d = noise.getOrCreateSampler(RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, new Identifier(id_d.get(0),id_d.get(1))));
+            List<Float> use = new ArrayList<>(Arrays.asList(1F,1F,1F,0.5F,0F,0.2F,0F,0F,5F));
+
+            int i=0;
+            for (String elem : scale) {
+                try {
+                    Float value = Float.parseFloat(elem);
+                    use.set(i,value);
+                } catch (NumberFormatException nfe) {}
+                i += 1;
+            }
+            Float os_xz=use.get(0); //offset layer noise xz scale
+            Float ol_xz=use.get(1); //surface alignment noise xz scale
+            Float od_xz=use.get(2); // displace noise scale
+            Float s_p=use.get(3); //surface alignment rule constant
+            Float s=use.get(4); //surface alignment rule noise power
+            Float l_p=use.get(5); //layer filling base constant
+            Float l=use.get(6); //layer filling noise power
+            Float l_a=use.get(7); //layer filling power constant
+            Float s_o=use.get(8); // displace power
+
+            int ymax = height.getHeight();
+            return (x,y, z) -> {
+
+                if (x!=backup.xprev||z!=backup.zprev){
+                    backup.ym=chunk.sampleHeightmap(Heightmap.Type.OCEAN_FLOOR_WG,x,z);
+                    backup.dist_os=(0.5D+0.5D*dist_o.sample(x*os_xz,0, z*os_xz));
+                    backup.dist_ls=(0.5D+0.5D*dist_l.sample(x*ol_xz,0, z*ol_xz));
+                    backup.point = new ArrayList<>();
+                    for (int k=0; k<goal.size();k++) {
+                        backup.point.add((int)(Math.round(goal.get(k).get(0)+goal.get(k).get(1)*matrix.get(0)+backup.dist_os*matrix.get(0)+backup.dist_ls*matrix.get(0)*matrix.get(1))%rock.size()));
+                    }
+                }
+                double dist_od=dist_d.sample(x*od_xz, y*od_xz, z*od_xz);
+                int ys = (int)(Math.round(backup.ym*(s_p+s*backup.dist_ls) + ymax*(1-s_p-s*backup.dist_ls)));
+                int layer = (int)(Math.round(abs(y - ys-s_o*dist_od)*Math.pow(l_p,l_a+l*backup.dist_os))) % backup.point.size();
+                BlockPos pos = new BlockPos(x,y,z);
+                backup.xprev=x;
+                backup.zprev=z;
+                return rock.get(backup.point.get(layer)).get(random,pos);
+            };
+        }
+    }
+
 }

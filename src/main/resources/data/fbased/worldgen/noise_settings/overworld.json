@@ -90,92 +90,29 @@
         }
       },
       {
-        "type": "fbased:geology",
+        "type": "fbased:geology_d",
         "biome_noise_a": ["minecraft","erosion"],
         "biome_noise": ["minecraft","continentalness_large"],
         "local_noise": ["minecraft","calcite"],
-        "mode": ["0.1","1","10","x","x","x","x","x","16","8"],
+        "mode": ["0.1","1","10","x","x","x","x","x","16"],
+        "matrix": [4,4],
+        "goal": [[0,0],[-1,0],[0,-1],[1,0],[0,1]],
         "types": [
-          {
-            "c": [-1,-1],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:brown_terracotta"}}
-          },
-          {
-            "c": [-0.333,-1],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:red_terracotta"}}
-          },
-          {
-            "c": [0.333,-1],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:orange_terracotta"}}
-          },
-          {
-            "c": [1,-1],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:yellow_terracotta"}}
-          },
-          {
-            "c": [-1,-0.333],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:lime_terracotta"}}
-          },
-          {
-            "c": [-0.333,-0.333],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:green_terracotta"}}
-          },
-          {
-            "c": [0.333,-0.333],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:cyan_terracotta"}}
-          },
-          {
-            "c": [1,-0.333],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:light_blue_terracotta"}}
-          },
-          {
-            "c": [-1,0.333],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:blue_terracotta"}}
-          },
-          {
-            "c": [-0.333,0.333],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:purple_terracotta"}}
-          },
-          {
-            "c": [0.333,0.333],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:magenta_terracotta"}}
-          },
-          {
-            "c": [1,0.333],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:pink_terracotta"}}
-          },
-          {
-            "c": [-1,1],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:white_terracotta"}}
-          },
-          {
-            "c": [-0.333,1],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:light_gray_terracotta"}}
-          },
-          {
-            "c": [0.333,1],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:gray_terracotta"}}
-          },
-          {
-            "c": [1,1],
-            "m": {"type": "minecraft:simple_state_provider",
-              "state": {"Name": "minecraft:black_terracotta"}}
-          }
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:white_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:light_gray_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:gray_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:black_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:brown_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:orange_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:yellow_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:lime_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:green_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:cyan_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:light_blue_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:blue_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:purple_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:magenta_concrete"}},
+          {"type": "minecraft:simple_state_provider", "state": {"Name": "minecraft:pink_concrete"}}
         ]
       }
     ]
