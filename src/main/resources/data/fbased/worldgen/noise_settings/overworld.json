@@ -37,7 +37,7 @@
         }
       }
     },
-    "erosion": 0,
+    "erosion": "fbased:eros",
     "depth": 0,
     "ridges": 0,
     "initial_density_without_jaggedness": 0,
@@ -91,173 +91,91 @@
       },
       {
         "type": "fbased:geology",
-        "a": 1,
+        "biome_noise_a": ["minecraft","erosion"],
+        "biome_noise": ["minecraft","continentalness_large"],
+        "local_noise": ["minecraft","calcite"],
+        "mode": ["0.1","1","10","x","x","x","x","x","16","8"],
         "types": [
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:black_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:black_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:brown_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:black_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:brown_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:black_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:brown_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:brown_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:orange_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:brown_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:orange_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:brown_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:orange_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:brown_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:orange_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:orange_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:yellow_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:orange_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:yellow_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:orange_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:yellow_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:yellow_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:lime_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:yellow_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:lime_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:yellow_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:lime_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:yellow_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:lime_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:lime_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:green_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:lime_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:green_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:lime_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:green_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:green_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:cyan_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:green_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:cyan_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:green_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:cyan_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:green_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:cyan_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:cyan_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:light_blue_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:cyan_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:light_blue_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:cyan_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:light_blue_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:light_blue_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:blue_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:light_blue_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:blue_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:light_blue_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:blue_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:light_blue_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:blue_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:blue_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:purple_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:blue_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:purple_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:blue_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:purple_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:purple_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:magenta_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:purple_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:magenta_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:purple_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:magenta_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:purple_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:magenta_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:magenta_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:pink_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:magenta_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:pink_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:magenta_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:pink_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:pink_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:white_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:pink_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:white_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:pink_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:white_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:pink_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:white_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:white_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:light_gray_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:white_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:light_gray_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:white_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:light_gray_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:light_gray_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:gray_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:light_gray_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:gray_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:light_gray_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:gray_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:light_gray_terracotta"}}]},
-          {"type": "minecraft:simple_state_provider",
-            "state": {"Name": "minecraft:gray_terracotta"}},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 3, "data": {"Name": "minecraft:gray_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:black_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:gray_terracotta"}},
-            {"weight": 1, "data": {"Name": "minecraft:black_terracotta"}}]},
-          {"type": "minecraft:weighted_state_provider", "entries": [
-            {"weight": 1, "data": {"Name": "minecraft:gray_terracotta"}},
-            {"weight": 3, "data": {"Name": "minecraft:black_terracotta"}}]}
+          {
+            "c": [-1,-1],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:brown_terracotta"}}
+          },
+          {
+            "c": [-0.333,-1],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:red_terracotta"}}
+          },
+          {
+            "c": [0.333,-1],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:orange_terracotta"}}
+          },
+          {
+            "c": [1,-1],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:yellow_terracotta"}}
+          },
+          {
+            "c": [-1,-0.333],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:lime_terracotta"}}
+          },
+          {
+            "c": [-0.333,-0.333],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:green_terracotta"}}
+          },
+          {
+            "c": [0.333,-0.333],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:cyan_terracotta"}}
+          },
+          {
+            "c": [1,-0.333],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:light_blue_terracotta"}}
+          },
+          {
+            "c": [-1,0.333],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:blue_terracotta"}}
+          },
+          {
+            "c": [-0.333,0.333],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:purple_terracotta"}}
+          },
+          {
+            "c": [0.333,0.333],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:magenta_terracotta"}}
+          },
+          {
+            "c": [1,0.333],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:pink_terracotta"}}
+          },
+          {
+            "c": [-1,1],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:white_terracotta"}}
+          },
+          {
+            "c": [-0.333,1],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:light_gray_terracotta"}}
+          },
+          {
+            "c": [0.333,1],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:gray_terracotta"}}
+          },
+          {
+            "c": [1,1],
+            "m": {"type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:black_terracotta"}}
+          }
         ]
       }
     ]
