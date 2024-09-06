@@ -21,7 +21,9 @@ public class FbBlock extends FacingBlock  {
     }
 
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(new Property[]{FACING});
+        builder.add(
+                new Property[]{FACING}
+        );
     }
     @Environment(EnvType.CLIENT)
     @Override

@@ -32,15 +32,7 @@
             "argument1": -1,
             "argument2": {
               "type": "minecraft:abs",
-              "argument": {
-                "type": "minecraft:cache_2d",
-                "argument": {
-                  "type": "minecraft:noise",
-                  "noise": "minecraft:continentalness_large",
-                  "xz_scale": 0.1,
-                  "y_scale": 0
-                }
-              }
+              "argument": "fbased:cont"
             }
           }
         }

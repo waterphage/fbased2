@@ -75,9 +75,9 @@ public class ModBlocks {
 
     private static String carcass(){
         for (ModMaterials.Color dir: ModMaterials.Color.values()){
-            registerBlock(dir.name + "_carcass", new FbCrpBlock(FabricBlockSettings.create().mapColor(MapColor.SPRUCE_BROWN).instrument(Instrument.BASS).hardness(0).resistance(0)));
-            registerBlock(dir.name + "_carcass_stairs", new FbCrpStrBlock(FabricBlockSettings.create().mapColor(MapColor.SPRUCE_BROWN).instrument(Instrument.BASS).hardness(0).resistance(0)));
-            registerBlock(dir.name + "_carcass_slab", new FbCrpSlbBlock(FabricBlockSettings.create().mapColor(MapColor.SPRUCE_BROWN).instrument(Instrument.BASS).hardness(0).resistance(0), SoundEvents.BLOCK_WOOD_PLACE));
+            registerBlock(dir.name + "_carcass", new FbCrpBlock(FabricBlockSettings.create().mapColor(MapColor.SPRUCE_BROWN).instrument(Instrument.BASS).hardness(0).resistance(0).nonOpaque()));
+            registerBlock(dir.name + "_carcass_stairs", new FbCrpStrBlock(FabricBlockSettings.create().mapColor(MapColor.SPRUCE_BROWN).instrument(Instrument.BASS).hardness(0).resistance(0).nonOpaque()));
+            registerBlock(dir.name + "_carcass_slab", new FbCrpSlbBlock(FabricBlockSettings.create().mapColor(MapColor.SPRUCE_BROWN).instrument(Instrument.BASS).hardness(0).resistance(0).nonOpaque(), SoundEvents.BLOCK_WOOD_PLACE));
         }
         return null;
     }
