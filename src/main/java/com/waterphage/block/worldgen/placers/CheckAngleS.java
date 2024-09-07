@@ -38,9 +38,8 @@ public class CheckAngleS extends PlacementModifier {
         int x=pos.getX();int y=pos.getY();int z=pos.getZ();
         m:
         if(spacing){
-            if(world.getBlockState(new BlockPos(x,y+1,z)).isSolid()){break m;}
             if(!world.getBlockState(new BlockPos(x,y,z)).isSolid()){break m;}
-
+            if(world.getBlockState(new BlockPos(x,y+1,z)).isSolid()){break m;}
             if(!world.getBlockState(new BlockPos(x,y-3,z)).isSolid()){break m;}
             if(!world.getBlockState(new BlockPos(x-1,y-1,z-1)).isSolid()){break m;}
             if(!world.getBlockState(new BlockPos(x-1,y-1,z+1)).isSolid()){break m;}
@@ -52,9 +51,8 @@ public class CheckAngleS extends PlacementModifier {
             if(world.getBlockState(new BlockPos(x+1,y+2,z+1)).isSolid()){break m;}
             builder.add(new BlockPos(x,y,z));
         }else{
-            if(world.getBlockState(new BlockPos(x,y-1,z)).isSolid()){break m;}
             if(!world.getBlockState(new BlockPos(x,y,z)).isSolid()){break m;}
-
+            if(world.getBlockState(new BlockPos(x,y-1,z)).isSolid()){break m;}
             if(!world.getBlockState(new BlockPos(x,y+3,z)).isSolid()){break m;}
             if(!world.getBlockState(new BlockPos(x-1,y+1,z-1)).isSolid()){break m;}
             if(!world.getBlockState(new BlockPos(x-1,y+1,z+1)).isSolid()){break m;}
