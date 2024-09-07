@@ -1,0 +1,77 @@
+{
+  "feature": {
+    "type": "fbased:mul",
+    "config": {
+      "features": [
+        {
+          "entry": {
+            "feature": "fbased:test",
+            "placement": [
+              {
+                "type": "fbased:angle_s",
+                "floor": true
+              }
+            ]
+          }
+        },
+        {
+          "entry": {
+            "feature": {
+              "type": "minecraft:simple_block",
+              "config": {
+                "to_place": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "minecraft:sand"
+                  }
+                }
+              }
+            },
+            "placement": [
+              {
+                "type": "fbased:angle_g",
+                "floor": true,
+                "depth": 5
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "placement": [
+    {
+      "type": "fbased:tex_v",
+      "spacing": 0,
+      "spacingY": 10,
+      "mode": "OCEAN_FLOOR_WG",
+      "shift":[0,0],
+      "mesh": "full"
+    },
+    {
+      "type": "minecraft:environment_scan",
+      "direction_of_search": "down",
+      "max_steps": 10,
+      "target_condition": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_fluids",
+            "offset": [
+              0,
+              1,
+              0
+            ],
+            "fluids": "minecraft:empty"
+          },
+          {
+            "type": "minecraft:solid"
+          }
+        ]
+      }
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

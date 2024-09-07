@@ -275,51 +275,6 @@ public class ModRules extends MaterialRules {
             return CODEC;
         }
 
-        public Backup write(Backup backup,MaterialRules.MaterialRuleContext cont){
-            Float xz_o=Float.parseFloat(id_o.get(2));
-            Float xz_l=Float.parseFloat(id_l.get(2));
-            int s_k=goal.size();int s_m=rock.size();
-            int m0=matrix.get(0);int m1=matrix.get(1);
-            Chunk chunk = cont.chunk;
-            NoiseConfig noise = cont.noiseConfig;
-            BlockPos.Mutable pos = cont.pos;
-            int x=pos.getX();int z=pos.getZ();
-            DoublePerlinNoiseSampler dist_o = noise.getOrCreateSampler(RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, new Identifier(id_o.get(0),id_o.get(1))));
-            DoublePerlinNoiseSampler dist_l = noise.getOrCreateSampler(RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, new Identifier(id_l.get(0),id_l.get(1))));
-            backup.ym=chunk.sampleHeightmap(Heightmap.Type.OCEAN_FLOOR_WG,x,z);
-            backup.dist_os=(0.5D+0.5D*dist_o.sample(x*xz_o,0, z*xz_o));
-            backup.dist_ls=(0.5D+0.5D*dist_l.sample(x*xz_l,0, z*xz_l));
-            backup.point = new ArrayList<Integer>();
-            for (int k=0; k<s_k;k++) {
-                backup.point.add((int)Math.round(abs((backup.dist_os*(m0-1)+goal.get(k).get(0)+(backup.dist_ls*(m1-1)+goal.get(k).get(1))*m0)))%s_m);
-            }
-            return backup;
-        };
-        public MaterialRules.BlockStateRule applyb(Backup backup,MaterialRules.MaterialRuleContext cont) {
-            net.minecraft.util.math.random.Random random = Random.create();
-            Chunk chunk = cont.chunk;
-            HeightContext height = cont.heightContext;
-            NoiseConfig noise = cont.noiseConfig;
-            int s_m=rock.size();
-            double ymax = height.getHeight();
-            DoublePerlinNoiseSampler dist_d = noise.getOrCreateSampler(RegistryKey.of(RegistryKeys.NOISE_PARAMETERS, new Identifier(id_d.get(0),id_d.get(1))));
-            Float sc_o0=sc_o.get(0);Float sc_o1=sc_o.get(1);Float sc_o2=sc_o.get(2);Float sc_o3=sc_o.get(3);
-            Float sc_l0=sc_l.get(0);Float sc_l1=sc_l.get(1);Float sc_l2=sc_l.get(2);Float sc_l3=sc_l.get(3);
-            int m0=matrix.get(0);int m1=matrix.get(1);
-            float b0=bed.get(0);float b1=bed.get(1);float b2=(bed.get(2)-1)/(m0-1+0F);float b3=(bed.get(3)-1)/(m1-1+0F);
-            return (x,y,z)->{
-                int ys = (int)(Math.round(backup.ym*0.5 + ymax*0.5));
-                double size = Math.pow(sc_l0,sc_l1+sc_l2*backup.dist_os+sc_l3*backup.dist_ls);
-                double scale_o=Math.pow(sc_o0,sc_o1+sc_o2*backup.dist_os+sc_o3*backup.dist_ls);
-                double dist_od=dist_d.sample(x*scale_o, y*scale_o, z*scale_o);
-                double dist_y=Math.pow((ymax-y)/(ymax-b0),b1);
-                int layer = (int)(Math.round(abs(y-ys+0.5*backup.point.size()*dist_od)/size)) % backup.point.size();
-                int mapy=(int)Math.round(dist_y*(b2*(m0-1)-backup.point.get(layer)%64)+dist_y*(b3*(m1-1)-backup.point.get(layer)/64)*m0);
-                BlockPos pos = new BlockPos(x,y,z);
-                return rock.get(abs(backup.point.get(layer)+mapy)%s_m).get(random,pos);
-            };
-        }
-
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext cont) {
             Chunk chunk = cont.chunk;
             HeightContext height = cont.heightContext;

@@ -1,0 +1,52 @@
+{
+  "type": "fbased:mul",
+  "config": {
+    "features": [
+      {
+        "entry":{
+          "feature": {
+            "type": "minecraft:simple_block",
+            "config": {
+              "to_place": {
+                "type": "minecraft:simple_state_provider",
+                "state": {
+                  "Name": "minecraft:tall_grass"
+                }
+              }
+            }
+          },
+          "placement": [
+            {
+              "type": "minecraft:block_predicate_filter",
+              "predicate": {
+                "type": "minecraft:matching_fluids",
+                "offset": [0, 2, 0],
+                "fluids": "minecraft:empty"
+              }
+            },
+            {
+              "type": "fbased:offset",
+              "xyz": [0, 1, 0]
+            }
+          ]
+        }
+      },
+      {
+        "entry": {
+          "feature": {
+            "type": "minecraft:simple_block",
+            "config": {
+              "to_place": {
+                "type": "minecraft:simple_state_provider",
+                "state": {
+                  "Name": "minecraft:grass_block"
+                }
+              }
+            }
+          },
+          "placement": []
+        }
+      }
+    ]
+  }
+}

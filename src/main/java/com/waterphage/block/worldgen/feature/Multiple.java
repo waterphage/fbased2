@@ -57,7 +57,7 @@ public class Multiple extends Feature<Multiple.MultipleConfig> {
         public static class MultipleEntry {
             public static final Codec<MultipleEntry> CODEC = RecordCodecBuilder.create(
                     instance -> instance.group(
-                            PlacedFeature.REGISTRY_CODEC.fieldOf("feature").forGetter(config -> config.feature)
+                            PlacedFeature.REGISTRY_CODEC.fieldOf("entry").forGetter(config -> config.feature)
                     ).apply(instance, MultipleEntry::new));
 
             public final RegistryEntry<PlacedFeature> feature;

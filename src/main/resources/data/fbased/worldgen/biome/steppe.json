@@ -19,12 +19,12 @@
   },
   "features": [
     [
-
+      "fbased:test"
     ],
     [
-    "fbased:test"
     ],
-    [],
+    [
+    ],
     [],
     [],
     [],

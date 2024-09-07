@@ -51,7 +51,7 @@ public class CheckAngle extends PlacementModifier {
         int x=pos.getX();int y=pos.getY();int z=pos.getZ();
         m:
         if(spacing){
-            for (int i=0;i<=depth;i++){
+            for (int i=1;i<=depth;i++){
                 if(!world.getBlockState(new BlockPos(x,y-i-3,z)).isSolid()){break m;}
                 if(!world.getBlockState(new BlockPos(x-i-1,y-i-1,z-i-1)).isSolid()){break m;}
                 if(!world.getBlockState(new BlockPos(x-i-1,y-i-1,z+i+1)).isSolid()){break m;}
@@ -64,7 +64,7 @@ public class CheckAngle extends PlacementModifier {
                 builder.add(new BlockPos(x,y-i,z));
             }
         }else{
-            for (int i=0;i<=depth;i++){
+            for (int i=1;i<=depth;i++){
                 if(!world.getBlockState(new BlockPos(x,y+i+3,z)).isSolid()){break m;}
                 if(!world.getBlockState(new BlockPos(x-i-1,y+i+1,z-i-1)).isSolid()){break m;}
                 if(!world.getBlockState(new BlockPos(x-i-1,y+i+1,z+i+1)).isSolid()){break m;}
