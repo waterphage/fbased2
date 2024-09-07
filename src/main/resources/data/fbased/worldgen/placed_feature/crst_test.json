@@ -1,0 +1,56 @@
+{
+  "feature": {
+    "type": "fbased:fossil",
+    "config": {
+      "fossil_structures": [
+        "fbased:crst_1_1",
+        "fbased:crst_1_2",
+        "fbased:crst_1_3",
+        "fbased:crst_1_4",
+        "fbased:crst_1_5",
+        "fbased:crst_1_6",
+        "fbased:crst_1_7"
+      ],
+      "overlay_structures": [
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty",
+        "fbased:empty"
+      ],
+      "fossil_processors": [
+        {
+          "processor_type": "minecraft:nop"
+        }
+      ],
+      "overlay_processors": [
+        {
+          "processor_type": "minecraft:nop"
+        }
+      ]
+    }
+  },
+  "placement": [
+    {
+      "type": "minecraft:count",
+      "count": 10
+    },
+    {
+      "type": "minecraft:in_square"
+    },
+    {
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "absolute": 0
+        },
+        "max_inclusive": {
+          "absolute": 384
+        }
+      }
+    }
+  ]
+}

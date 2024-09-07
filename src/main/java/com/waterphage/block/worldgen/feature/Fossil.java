@@ -39,7 +39,6 @@ public class Fossil extends Feature<Fossil.FossilConfig> {
         int i = random.nextInt(fossilConfig.fossilStructures.size());
         StructureTemplateManager structureTemplateManager = structureWorldAccess.toServerWorld().getServer().getStructureTemplateManager();
         StructureTemplate structureTemplate = structureTemplateManager.getTemplateOrBlank((Identifier)fossilConfig.fossilStructures.get(i));
-        StructureTemplate structureTemplate2 = structureTemplateManager.getTemplateOrBlank((Identifier)fossilConfig.overlayStructures.get(i));
         ChunkPos chunkPos = new ChunkPos(blockPos);
         BlockBox blockBox = new BlockBox(
                 chunkPos.getStartX() - 16,
@@ -66,9 +65,6 @@ public class Fossil extends Feature<Fossil.FossilConfig> {
         structurePlacementData.clearProcessors();
         fossilConfig.fossilProcessors.value().getList().forEach(structurePlacementData::addProcessor);
         structureTemplate.place(structureWorldAccess, blockPos3, blockPos3, structurePlacementData, random, 4);
-        structurePlacementData.clearProcessors();
-        fossilConfig.overlayProcessors.value().getList().forEach(structurePlacementData::addProcessor);
-        structureTemplate2.place(structureWorldAccess, blockPos3, blockPos3, structurePlacementData, random, 4);
         return true;
     }
 

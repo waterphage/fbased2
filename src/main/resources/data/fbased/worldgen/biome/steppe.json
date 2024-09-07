@@ -19,9 +19,10 @@
   },
   "features": [
     [
-      "fbased:test"
+      "fbased:crst_test"
     ],
     [
+      "fbased:test"
     ],
     [
     ],
