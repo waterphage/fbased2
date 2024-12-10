@@ -61,86 +61,64 @@ public class FbStrBlock extends FacingBlock implements Waterloggable {
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext ctx) {
 
-        // changes hitbox depending on block state
-
         Direction dir = state.get(FACING);
         Direction rot = state.get(NEW_DIR);
-
-        if (dir==Direction.UP){
-            if (rot==Direction.SOUTH) {
-                return VoxelShapes.union(D_N_E_SHP,D_N_W_SHP,D_S_W_SHP,D_S_E_SHP, U_S_W_SHP,U_S_E_SHP);
-            }else if (rot==Direction.WEST) {
-                return VoxelShapes.union(D_N_E_SHP,D_N_W_SHP,D_S_W_SHP,D_S_E_SHP, U_S_W_SHP,U_N_W_SHP);
-            }else if (rot==Direction.NORTH) {
-                return VoxelShapes.union(D_N_E_SHP,D_N_W_SHP,D_S_W_SHP,D_S_E_SHP, U_N_W_SHP,U_N_E_SHP);
-            }else {
-                return VoxelShapes.union(D_N_E_SHP,D_N_W_SHP,D_S_W_SHP,D_S_E_SHP, U_S_E_SHP,U_N_E_SHP);
+        switch (dir){
+            case UP -> {
+                VoxelShape slab= VoxelShapes.union(D_N_E_SHP,D_N_W_SHP,D_S_W_SHP,D_S_E_SHP);
+                switch (rot){
+                    case SOUTH -> {return VoxelShapes.union(slab, U_S_W_SHP,U_S_E_SHP);}
+                    case WEST -> {return VoxelShapes.union(slab, U_S_W_SHP,U_N_W_SHP);}
+                    case NORTH -> {return VoxelShapes.union(slab, U_N_W_SHP,U_N_E_SHP);}
+                    default -> {return VoxelShapes.union(slab, U_S_E_SHP,U_N_E_SHP);}
+                }
+            }
+            case DOWN -> {
+                VoxelShape slab= VoxelShapes.union(U_N_E_SHP,U_N_W_SHP,U_S_W_SHP,U_S_E_SHP);
+                switch (rot){
+                    case SOUTH -> {return VoxelShapes.union(slab, D_S_W_SHP,D_S_E_SHP);}
+                    case WEST -> {return VoxelShapes.union(slab, D_S_W_SHP,D_N_W_SHP);}
+                    case NORTH -> {return VoxelShapes.union(slab, D_N_W_SHP,D_N_E_SHP);}
+                    default -> {return VoxelShapes.union(slab, D_S_E_SHP,D_N_E_SHP);}
+                }
+            }
+            case WEST -> {
+                VoxelShape slab= VoxelShapes.union(U_N_E_SHP,D_N_E_SHP,D_S_E_SHP,U_S_E_SHP);
+                switch (rot){
+                    case SOUTH -> {return VoxelShapes.union(slab, D_S_W_SHP,D_N_W_SHP);}
+                    case WEST -> {return VoxelShapes.union(slab, U_N_W_SHP,D_N_W_SHP);}
+                    case NORTH -> {return VoxelShapes.union(slab, U_N_W_SHP,U_S_W_SHP);}
+                    default -> {return VoxelShapes.union(slab, U_S_W_SHP,D_S_W_SHP);}
+                }
+            }
+            case EAST -> {
+                VoxelShape slab= VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_S_W_SHP,U_S_W_SHP);
+                switch (rot){
+                    case SOUTH -> {return VoxelShapes.union(slab, D_S_E_SHP,D_N_E_SHP);}
+                    case EAST -> {return VoxelShapes.union(slab, U_S_E_SHP,D_S_E_SHP);}
+                    case NORTH -> {return VoxelShapes.union(slab, U_N_E_SHP,U_S_E_SHP);}
+                    default -> {return VoxelShapes.union(slab, U_N_E_SHP,D_N_E_SHP);}
+                }
+            }
+            case SOUTH -> {
+                VoxelShape slab= VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_N_E_SHP,U_N_E_SHP);
+                switch (rot){
+                    case EAST -> {return VoxelShapes.union(slab, D_S_W_SHP,D_S_E_SHP);}
+                    case SOUTH -> {return VoxelShapes.union(slab, U_S_W_SHP,D_S_W_SHP);}
+                    case WEST -> {return VoxelShapes.union(slab, U_S_E_SHP,U_S_W_SHP);}
+                    default -> {return VoxelShapes.union(slab, U_S_E_SHP,D_S_E_SHP);}
+                }
+            }
+            default -> {
+                VoxelShape slab= VoxelShapes.union(U_S_W_SHP,D_S_W_SHP,D_S_E_SHP,U_S_E_SHP);
+                switch (rot){
+                    case EAST -> {return VoxelShapes.union(slab, D_N_E_SHP,D_N_W_SHP);}
+                    case NORTH -> {return VoxelShapes.union(slab, U_N_E_SHP,D_N_E_SHP);}
+                    case WEST -> {return VoxelShapes.union(slab, U_N_W_SHP,U_N_E_SHP);}
+                    default -> {return VoxelShapes.union(slab, U_N_W_SHP,D_N_W_SHP);}
+                }
             }
         }
-
-        if (dir==Direction.DOWN){
-            if (rot==Direction.SOUTH) {
-                return VoxelShapes.union(U_N_E_SHP,U_N_W_SHP,U_S_W_SHP,U_S_E_SHP, D_S_W_SHP,D_S_E_SHP);
-            }else if (rot==Direction.WEST) {
-                return VoxelShapes.union(U_N_E_SHP,U_N_W_SHP,U_S_W_SHP,U_S_E_SHP, D_S_W_SHP,D_N_W_SHP);
-            }else if (rot==Direction.NORTH) {
-                return VoxelShapes.union(U_N_E_SHP,U_N_W_SHP,U_S_W_SHP,U_S_E_SHP, D_N_W_SHP,D_N_E_SHP);
-            }else {
-                return VoxelShapes.union(U_N_E_SHP,U_N_W_SHP,U_S_W_SHP,U_S_E_SHP, D_S_E_SHP,D_N_E_SHP);
-            }
-        }
-
-        if (dir==Direction.WEST){
-            if (rot==Direction.SOUTH) {
-                return VoxelShapes.union(U_N_E_SHP,D_N_E_SHP,D_S_E_SHP,U_S_E_SHP, D_S_W_SHP,D_N_W_SHP);
-            }else if (rot==Direction.WEST) {
-                return VoxelShapes.union(U_N_E_SHP,D_N_E_SHP,D_S_E_SHP,U_S_E_SHP, U_N_W_SHP,D_N_W_SHP);
-            }else if (rot==Direction.NORTH) {
-                return VoxelShapes.union(U_N_E_SHP,D_N_E_SHP,D_S_E_SHP,U_S_E_SHP, U_N_W_SHP,U_S_W_SHP);
-            }else {
-                return VoxelShapes.union(U_N_E_SHP,D_N_E_SHP,D_S_E_SHP,U_S_E_SHP, U_S_W_SHP,D_S_W_SHP);
-            }
-        }
-
-        if (dir==Direction.EAST){
-            if (rot==Direction.SOUTH) {
-                return VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_S_W_SHP,U_S_W_SHP, D_S_E_SHP,D_N_E_SHP);
-            }else if (rot==Direction.EAST) {
-                return VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_S_W_SHP,U_S_W_SHP, U_S_E_SHP,D_S_E_SHP);
-            }else if (rot==Direction.NORTH) {
-                return VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_S_W_SHP,U_S_W_SHP, U_N_E_SHP,U_S_E_SHP);
-            }else {
-                return VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_S_W_SHP,U_S_W_SHP, U_N_E_SHP,D_N_E_SHP);
-            }
-        }
-
-        if (dir==Direction.SOUTH){
-            if (rot==Direction.EAST) {
-                return VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_N_E_SHP,U_N_E_SHP, D_S_W_SHP,D_S_E_SHP);
-            }else if (rot==Direction.SOUTH) {
-                return VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_N_E_SHP,U_N_E_SHP, U_S_W_SHP,D_S_W_SHP);
-            }else if (rot==Direction.WEST) {
-                return VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_N_E_SHP,U_N_E_SHP, U_S_E_SHP,U_S_W_SHP);
-            }else {
-                return VoxelShapes.union(U_N_W_SHP,D_N_W_SHP,D_N_E_SHP,U_N_E_SHP, U_S_E_SHP,D_S_E_SHP);
-            }
-        }
-
-        if (dir==Direction.NORTH){
-            if (rot==Direction.EAST) {
-                return VoxelShapes.union(U_S_W_SHP,D_S_W_SHP,D_S_E_SHP,U_S_E_SHP, D_N_E_SHP,D_N_W_SHP);
-            }else if (rot==Direction.NORTH) {
-                return VoxelShapes.union(U_S_W_SHP,D_S_W_SHP,D_S_E_SHP,U_S_E_SHP, U_N_E_SHP,D_N_E_SHP);
-            }else if (rot==Direction.WEST) {
-                return VoxelShapes.union(U_S_W_SHP,D_S_W_SHP,D_S_E_SHP,U_S_E_SHP, U_N_W_SHP,U_N_E_SHP);
-            }else {
-                return VoxelShapes.union(U_S_W_SHP,D_S_W_SHP,D_S_E_SHP,U_S_E_SHP, U_N_W_SHP,D_N_W_SHP);
-            }
-        }
-
-
-        return VoxelShapes.fullCube();
-
     }
 
     @Override

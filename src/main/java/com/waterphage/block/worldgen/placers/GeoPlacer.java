@@ -54,16 +54,16 @@ public class GeoPlacer extends PlacementModifier {
     public Stream<BlockPos> getPositions(FeaturePlacementContext context, Random random, BlockPos pos) {
         StructureWorldAccess world = context.getWorld();
         Stream.Builder<BlockPos> builder = Stream.builder();
-        int xo = pos.getX();
-        int zo = pos.getZ();
+        int xo = world.getChunk(pos).getPos().getStartX();
+        int zo = world.getChunk(pos).getPos().getStartZ();
         int yo=0;
         try {
             yo = Integer.parseInt(map);
         } catch (NumberFormatException nfe) {
             for (int j = 0; j < 16; ++j) {
-                int xn = xo-j+7;
+                int xn = xo+j;
                 for (int k = 0; k < 16; ++k) {
-                    int zn = zo-k+7;
+                    int zn = zo+k;
                     Heightmap.Type rule = Heightmap.Type.valueOf(map);
                     yo = Math.max(yo,(world.getTopY(rule, xn, zn) - 1));
                 }
@@ -107,9 +107,9 @@ public class GeoPlacer extends PlacementModifier {
             int shx=Math.round(shift.get(0)*i);
             int shz=Math.round(shift.get(1)*i);;
             for (int j = 0; j < 16; ++j) {
-                int xn = xo-j+7;
+                int xn = xo+j;
                 for (int k = 0; k < 16; ++k) {
-                    int zn = zo-k+7;
+                    int zn = zo+k;
                     if(check.check(xn,zn,shx,shz,yo,i,sp,sp2)){builder.add(new BlockPos(xn,yo-i,zn));}
                 }
             }

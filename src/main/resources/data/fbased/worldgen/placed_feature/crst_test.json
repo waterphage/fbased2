@@ -2,7 +2,7 @@
   "feature": {
     "type": "fbased:fossil",
     "config": {
-      "fossil_structures": [
+      "structures": [
         "fbased:crst_1_1",
         "fbased:crst_1_2",
         "fbased:crst_1_3",
@@ -11,45 +11,79 @@
         "fbased:crst_1_6",
         "fbased:crst_1_7"
       ],
-      "overlay_structures": [
-        "fbased:empty",
-        "fbased:empty",
-        "fbased:empty",
-        "fbased:empty",
-        "fbased:empty",
-        "fbased:empty",
-        "fbased:empty"
-      ],
-      "fossil_processors": [
-        {
-          "processor_type": "minecraft:nop"
-        }
-      ],
-      "overlay_processors": [
+      "processors": [
         {
           "processor_type": "minecraft:nop"
         }
       ]
     }
   },
-  "placement": [
+  "placement":
+  [
     {
-      "type": "minecraft:count",
-      "count": 10
-    },
-    {
-      "type": "minecraft:in_square"
-    },
-    {
-      "type": "minecraft:height_range",
-      "height": {
-        "type": "minecraft:uniform",
-        "min_inclusive": {
-          "absolute": 0
-        },
-        "max_inclusive": {
-          "absolute": 384
+      "type": "fbased:random",
+      "count": {
+        "type": "minecraft:biased_to_bottom",
+        "value": {
+          "min_inclusive": 0,
+          "max_inclusive": 256
         }
+      },
+      "mode": "OCEAN_FLOOR_WG"
+    },
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:not",
+            "predicate": {
+              "type": "minecraft:solid"
+            }
+          },
+          {
+            "type": "minecraft:any_of",
+            "predicates": [
+              {
+                "type": "minecraft:has_sturdy_face",
+                "offset": [
+                  -1,
+                  0,
+                  0
+                ],
+                "direction": "east"
+              },
+              {
+                "type": "minecraft:has_sturdy_face",
+                "offset": [
+                  1,
+                  0,
+                  0
+                ],
+                "direction": "west"
+              },
+              {
+                "type": "minecraft:has_sturdy_face",
+                "offset": [
+                  0,
+                  0,
+                  -1
+                ],
+                "direction": "south"
+              },
+              {
+                "type": "minecraft:has_sturdy_face",
+                "offset": [
+                  0,
+                  0,
+                  1
+                ],
+                "direction": "north"
+              }
+            ]
+          }
+        ]
       }
     }
   ]

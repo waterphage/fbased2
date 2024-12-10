@@ -17,6 +17,7 @@ public interface FbasedPlacers extends PlacementModifierType {
     PlacementModifierType<CheckAngle> FBASED_A5 = register( "angle_g", CheckAngle.MODIFIER_CODEC);
     PlacementModifierType<CheckAngleS> FBASED_A6 = register( "angle_s", CheckAngleS.MODIFIER_CODEC);
     PlacementModifierType<Offset> FBASED_A7 = register( "offset", Offset.MODIFIER_CODEC);
+    PlacementModifierType<RandomH> FBASED_A8 = register( "random", RandomH.MODIFIER_CODEC);
     private static <P extends PlacementModifier> PlacementModifierType<P> register(String id, Codec<P> codec) {
         return Registry.register(Registries.PLACEMENT_MODIFIER_TYPE, new Identifier(Fbased.MOD_ID,id), () -> codec);
     }

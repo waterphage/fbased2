@@ -3,6 +3,7 @@ package com.waterphage.block.worldgen;
 import com.waterphage.Fbased;
 import com.waterphage.block.worldgen.blockstates.ModPredicatesType;
 import com.waterphage.block.worldgen.feature.*;
+import com.waterphage.block.worldgen.function.ConstantDensityFunction;
 import com.waterphage.block.worldgen.placers.FbasedPlacers;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -20,5 +21,6 @@ public class RegDump {
         FbasedPlacers.registerplacers();
         ModRules.registerrules();
         ModPredicatesType.registerpredicates();
+        ConstantDensityFunction.register1();
     }
 }

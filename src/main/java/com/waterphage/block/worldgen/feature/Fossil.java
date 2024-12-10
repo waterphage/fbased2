@@ -50,17 +50,8 @@ public class Fossil extends Feature<Fossil.FossilConfig> {
         );
         StructurePlacementData structurePlacementData = new StructurePlacementData().setRotation(blockRotation).setBoundingBox(blockBox).setRandom(random);
         Vec3i vec3i = structureTemplate.getRotatedSize(blockRotation);
-        BlockPos blockPos2 = blockPos.add(-vec3i.getX() / 2, 0, -vec3i.getZ() / 2);
-        int j = blockPos.getY();
-
-        for(int k = 0; k < vec3i.getX(); ++k) {
-            for(int l = 0; l < vec3i.getZ(); ++l) {
-                j = Math.min(j, structureWorldAccess.getTopY(Heightmap.Type.OCEAN_FLOOR_WG, blockPos2.getX() + k, blockPos2.getZ() + l));
-            }
-        }
-
-        int k = Math.max(j - 15 - random.nextInt(10), structureWorldAccess.getBottomY() + 10);
-        BlockPos blockPos3 = structureTemplate.offsetByTransformedSize(blockPos2.withY(k), BlockMirror.NONE, blockRotation);
+        BlockPos blockPos2 = blockPos.add(-vec3i.getX() / 2, -vec3i.getY() / 2, -vec3i.getZ() / 2);
+        BlockPos blockPos3 = structureTemplate.offsetByTransformedSize(blockPos2, BlockMirror.NONE, blockRotation);
 
         structurePlacementData.clearProcessors();
         fossilConfig.fossilProcessors.value().getList().forEach(structurePlacementData::addProcessor);
@@ -71,34 +62,20 @@ public class Fossil extends Feature<Fossil.FossilConfig> {
     public static class FossilConfig implements FeatureConfig {
         public static final Codec<FossilConfig> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                                Identifier.CODEC.listOf().fieldOf("fossil_structures").forGetter(config -> config.fossilStructures),
-                                Identifier.CODEC.listOf().fieldOf("overlay_structures").forGetter(config -> config.overlayStructures),
-                                StructureProcessorType.REGISTRY_CODEC.fieldOf("fossil_processors").forGetter(config -> config.fossilProcessors),
-                                StructureProcessorType.REGISTRY_CODEC.fieldOf("overlay_processors").forGetter(config -> config.overlayProcessors)
+                                Identifier.CODEC.listOf().fieldOf("structures").forGetter(config -> config.fossilStructures),
+                                StructureProcessorType.REGISTRY_CODEC.fieldOf("processors").forGetter(config -> config.fossilProcessors)
                         )
                         .apply(instance, FossilConfig::new)
         );
         public final List<Identifier> fossilStructures;
-        public final List<Identifier> overlayStructures;
         public final RegistryEntry<StructureProcessorList> fossilProcessors;
-        public final RegistryEntry<StructureProcessorList> overlayProcessors;
 
         public FossilConfig(
                 List<Identifier> fossilStructures,
-                List<Identifier> overlayStructures,
-                RegistryEntry<StructureProcessorList> fossilProcessors,
-                RegistryEntry<StructureProcessorList> overlayProcessors
+                RegistryEntry<StructureProcessorList> fossilProcessors
         ) {
-            if (fossilStructures.isEmpty()) {
-                throw new IllegalArgumentException("Fossil structure lists need at least one entry");
-            } else if (fossilStructures.size() != overlayStructures.size()) {
-                throw new IllegalArgumentException("Fossil structure lists must be equal lengths");
-            } else {
-                this.fossilStructures = fossilStructures;
-                this.overlayStructures = overlayStructures;
-                this.fossilProcessors = fossilProcessors;
-                this.overlayProcessors = overlayProcessors;
-            }
+            this.fossilStructures = fossilStructures;
+            this.fossilProcessors = fossilProcessors;
         }
     }
 }

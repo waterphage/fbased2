@@ -1,5 +1,6 @@
 package com.waterphage.block.models;
 
+import com.ibm.icu.impl.PropsVectors;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
@@ -7,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.math.Direction;
