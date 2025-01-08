@@ -31,11 +31,13 @@ public class Multiple extends Feature<Multiple.MultipleConfig> {
         StructureWorldAccess world = context.getWorld();
         Random random = context.getRandom();
         ChunkGenerator chunkGenerator = context.getGenerator();
+        boolean result = false;
 
         for (MultipleConfig.MultipleEntry entry : config.features) {
-            return entry.generate(world, chunkGenerator, random, pos);
+            result |= entry.generate(world, chunkGenerator, random, pos);
         }
-        return false;
+
+        return result;
     }
 
     public static class MultipleConfig implements FeatureConfig {
@@ -58,7 +60,7 @@ public class Multiple extends Feature<Multiple.MultipleConfig> {
         public static class MultipleEntry {
             public static final Codec<MultipleEntry> CODEC = RecordCodecBuilder.create(
                     instance -> instance.group(
-                            PlacedFeature.REGISTRY_CODEC.fieldOf("entry").forGetter(config -> config.feature)
+                            PlacedFeature.REGISTRY_CODEC.fieldOf("placed_feature").forGetter(config -> config.feature)
                     ).apply(instance, MultipleEntry::new));
 
             public final RegistryEntry<PlacedFeature> feature;
@@ -68,7 +70,7 @@ public class Multiple extends Feature<Multiple.MultipleConfig> {
             }
 
             public boolean generate(StructureWorldAccess world, ChunkGenerator chunkGenerator, Random random, BlockPos pos) {
-                return ((PlacedFeature) this.feature.value()).generate(world, chunkGenerator, random, pos);
+                return ((PlacedFeature) this.feature.value()).generateUnregistered(world, chunkGenerator, random, pos);
             }
         }
     }

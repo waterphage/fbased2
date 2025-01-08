@@ -31,6 +31,7 @@ public class Biome extends Feature<Biome.BiomeConfig> {
         Random random = context.getRandom();
         ChunkGenerator chunkGenerator = context.getGenerator();
         int yi=pos.getY();int xi=pos.getX();int zi=pos.getZ();
+        boolean result=false;
         for (BiomeConfig.BiomeEntry entry : config.features) {
             int yo=yi;
             try {
@@ -39,10 +40,12 @@ public class Biome extends Feature<Biome.BiomeConfig> {
             BlockPos.Mutable pos1 = new BlockPos.Mutable(xi,yo,zi);
             Identifier id = world.getBiome(pos1).getKey().get().getValue();
             if (entry.biome.contains(id)) {
-                return entry.generate(world, chunkGenerator, random, pos);
+                result |= entry.generate(world, chunkGenerator, random, pos);
+                return result;
             }
         }
-        return config.def.generate(world, chunkGenerator, random, pos);
+        result |= config.def.generate(world, chunkGenerator, random, pos);
+        return result;
     }
 
     public static class BiomeConfig implements FeatureConfig {
@@ -68,7 +71,7 @@ public class Biome extends Feature<Biome.BiomeConfig> {
         public static class BiomeEntry {
             public static final Codec<BiomeEntry> CODEC = RecordCodecBuilder.create(
                     instance -> instance.group(
-                            PlacedFeature.REGISTRY_CODEC.fieldOf("entry").forGetter(config -> config.feature),
+                            PlacedFeature.REGISTRY_CODEC.fieldOf("placed_feature").forGetter(config -> config.feature),
                             Identifier.CODEC.listOf().fieldOf("biomes").forGetter(config -> config.biome),
                             Codec.STRING.fieldOf("y").forGetter(config -> config.probe)
                     ).apply(instance, BiomeEntry::new));
@@ -82,13 +85,8 @@ public class Biome extends Feature<Biome.BiomeConfig> {
                 this.biome = biome;
                 this.probe = probe;
             }
-            public BiomeEntry(RegistryEntry<PlacedFeature> feature, List<Identifier> biome) {
-                this.feature = feature;
-                this.biome = biome;
-                this.probe = "";
-            }
             public boolean generate(StructureWorldAccess world, ChunkGenerator chunkGenerator, Random random, BlockPos pos) {
-                return ((PlacedFeature) this.feature.value()).generate(world, chunkGenerator, random, pos);
+                return ((PlacedFeature) this.feature.value()).generateUnregistered(world, chunkGenerator, random, pos);
             }
         }
     }

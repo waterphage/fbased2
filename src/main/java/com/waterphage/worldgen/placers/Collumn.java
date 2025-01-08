@@ -30,13 +30,13 @@ public class Collumn extends PlacementModifier {
     }
 
 
-    public static Collumn of(int spacing2, String map) {
+    private static Collumn of(int spacing2, String map) {
         return new Collumn(spacing2, map);
     }
-    public boolean check2(int i, int f) {
+    private boolean check2(int i, int f) {
         return Math.abs((i) % 2*Math.round(f*Math.pow(0.75F,-0.5F)*0.5F)) < 1;
     }
-    public boolean check(int i, int f) {
+    private boolean check(int i, int f) {
         return Math.abs((i) % f) < 1;
     }
 
