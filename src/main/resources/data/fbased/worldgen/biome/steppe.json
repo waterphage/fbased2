@@ -4,6 +4,8 @@
     ]
   },
   "downfall": 0.4,
+  "temperature": 0.8,
+  "has_precipitation": true,
   "effects": {
     "fog_color": 12638463,
     "mood_sound": {
@@ -47,7 +49,5 @@
     "underground_water_creature": [],
     "water_ambient": [],
     "water_creature": []
-  },
-  "temperature": 0.8,
-  "has_precipitation": true
+  }
 }

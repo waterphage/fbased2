@@ -1,5 +1,7 @@
 accessWidener v2 named
 
+accessible field net/minecraft/world/gen/feature/PlacedFeature placementModifiers Ljava/util/List;
+
 accessible method net/minecraft/world/gen/densityfunction/DensityFunctionTypes holderOf (Lcom/mojang/serialization/MapCodec;)Lnet/minecraft/util/dynamic/CodecHolder;
 accessible method net/minecraft/world/gen/densityfunction/DensityFunctionTypes register (Lnet/minecraft/registry/Registry;Ljava/lang/String;Lnet/minecraft/util/dynamic/CodecHolder;)Lcom/mojang/serialization/Codec;
 
@@ -24,3 +26,4 @@ accessible field net/minecraft/world/gen/surfacebuilder/MaterialRules$MaterialRu
 accessible field net/minecraft/world/gen/surfacebuilder/MaterialRules$MaterialRuleContext chunkNoiseSampler Lnet/minecraft/world/gen/chunk/ChunkNoiseSampler;
 accessible field net/minecraft/world/gen/surfacebuilder/MaterialRules$MaterialRuleContext heightContext Lnet/minecraft/world/gen/HeightContext;
 accessible field net/minecraft/world/gen/surfacebuilder/MaterialRules$MaterialRuleContext noiseConfig Lnet/minecraft/world/gen/noise/NoiseConfig;
+

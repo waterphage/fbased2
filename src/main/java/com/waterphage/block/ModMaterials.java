@@ -103,17 +103,31 @@ public class ModMaterials {
         B52("selenite", 0.267F),
         B53("satinspar", 0.267F),
         B54("anhydrite", 0.467F),
-        B55("alunite", 0.533F)
-                ;
+        B55("alunite", 0.533F);
         public final String name;
         public final Float base;
+        public final Boolean gem;
+        public final Integer transp;
         ;
 
+        Mineral(String name,Float base,Boolean gem,Integer transp) {
+            this.name = name;
+            this.base = base;
+            this.gem = gem;
+            this.transp = transp;
+        }
+        Mineral(String name,Float base,Boolean gem) {
+            this.name = name;
+            this.base = base;
+            this.gem = gem;
+            this.transp = 0;
+        }
         Mineral(String name,Float base) {
             this.name = name;
             this.base = base;
+            this.gem = false;
+            this.transp = 0;
         }
-
     }
 
     public enum Color {

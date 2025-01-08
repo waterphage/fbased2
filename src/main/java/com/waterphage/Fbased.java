@@ -1,7 +1,7 @@
 package com.waterphage;
 
 import com.waterphage.block.*;
-import com.waterphage.block.worldgen.RegDump;
+import com.waterphage.worldgen.RegDump;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.text.Text;

@@ -65,7 +65,6 @@ def update_palette_with_variants(image_path, palette_folder, variants_folder, pa
 
         # Заменяем изображение в папке palette
         tile.save(os.path.join(palette_folder, f"{n}.png"))
-        print(f"Заменено изображение {n}.png")
 
         # Переходим к следующему тайлу
         y += step_y
@@ -82,9 +81,6 @@ if __name__ == "__main__":
     palette_folder = "palette"         # Папка для сохранения тайлов
     variants_folder = "variants"       # Папка с образцами
     palette_txt = "palette.txt"        # Файл палитры
-
-    # Обновляем palette.txt и заменяем изображения
-    update_palette_with_variants(image_path, palette_folder, variants_folder, palette_txt)
 
 from PIL import Image
 import os
@@ -322,19 +318,22 @@ if __name__ == "__main__":
 
 from PIL import Image
 
-def create_full_map(full_map_path, palette_path, image_atlas_path, output_path):
+def create_full_map(full_map_path, palette_path, image_atlas_path, goal_path, output_path, cell_size=16):
     """
-    Вставляет изображение палитры и атласа в изображение full_map.
-    
+    Вставляет палитру, атлас и увеличенное изображение goal в изображение full_map.
+
     :param full_map_path: Путь к исходному изображению full_map.png.
     :param palette_path: Путь к изображению палитры palette.png.
     :param image_atlas_path: Путь к изображению атласа image_atlas.png.
+    :param goal_path: Путь к изображению goal.png.
     :param output_path: Путь для сохранения итогового изображения.
+    :param cell_size: Размер увеличения пикселя (по умолчанию 16x16).
     """
     # Открываем изображения
     full_map = Image.open(full_map_path)
     palette = Image.open(palette_path)
     image_atlas = Image.open(image_atlas_path)
+    goal = Image.open(goal_path)
 
     # Получаем размеры full_map
     full_map_width, full_map_height = full_map.size
@@ -349,16 +348,34 @@ def create_full_map(full_map_path, palette_path, image_atlas_path, output_path):
     # Вставляем атлас в верхний правый угол full_map
     full_map.paste(image_atlas, (full_map_width - atlas_width, 0))
 
+    # Увеличиваем изображение goal
+    #goal_width, goal_height = goal.size
+    #enlarged_goal = Image.new("RGBA", (goal_width * cell_size, goal_height * cell_size))
+    #for y in range(goal_height):
+    #    for x in range(goal_width):
+    #        pixel_color = goal.getpixel((x, y))
+    #        for dy in range(cell_size):
+    #            for dx in range(cell_size):
+    #                enlarged_goal.putpixel((x * cell_size + dx, y * cell_size + dy), pixel_color)
+
+    # Вставляем увеличенное изображение goal под атлас
+    #enlarged_goal_x = full_map_width - atlas_width
+    #enlarged_goal_y = atlas_height+16
+    #full_map.paste(enlarged_goal, (enlarged_goal_x, enlarged_goal_y))
+
     # Сохраняем итоговое изображение
     full_map.save(output_path)
     print(f"Итоговое изображение сохранено: {output_path}")
 
-if __name__ == "__main__":
-    # Пути
-    full_map_path = "full_map.png"        # Исходное изображение full_map
-    palette_path = "palette.png"          # Путь к изображению палитры
-    image_atlas_path = "image_atlas.png"  # Путь к изображению атласа
-    output_path = "final_full_map.png"    # Путь для сохранения итогового изображения
+# Пример вызова функции
+full_map_path = "full_map.png"          # Путь к исходному изображению
+palette_path = "palette.png"            # Путь к изображению палитры
+image_atlas_path = "image_atlas.png"    # Путь к изображению атласа
+goal_path = "goal.png"                  # Путь к изображению goal
+output_path = "final_full_map.png"              # Путь для сохранения результата
+
+# Обновляем palette.txt и заменяем изображения
+update_palette_with_variants(output_path, palette_folder, variants_folder, palette_txt)
 
 # Создаем атлас с метаданными
 create_image_atlas_with_metadata(image_path, palette_folder, palette_txt, atlas_path, output_txt)
@@ -367,4 +384,17 @@ create_image_atlas_with_metadata(image_path, palette_folder, palette_txt, atlas_
 create_palette_image(palette_txt, palette_folder, palette_image_path)
 
 # Создаем итоговое изображение
-create_full_map(full_map_path, palette_path, image_atlas_path, output_path)
+create_full_map(output_path, palette_path, image_atlas_path, goal_path, output_path)
+
+import os
+import subprocess
+import platform
+
+def open_file(file_path):
+    if platform.system() == "Windows":
+        os.startfile(file_path)
+    elif platform.system() == "Darwin":  # macOS
+        subprocess.run(["open", file_path])
+    else:  # Linux
+        subprocess.run(["xdg-open", file_path])
+open_file(output_path)

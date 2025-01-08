@@ -86,6 +86,7 @@ public class ModBlocks {
     private static String minerals(){
         for (ModMaterials.Mineral dir: ModMaterials.Mineral.values()){
             stone(dir.name, dir.base);
+            //registerBlock(dir.name + "_gem", new FbBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(dir.base*5F).resistance(dir.base*0.25F)));
         }
         return null;
     }
