@@ -31,47 +31,27 @@ public class Multiple extends Feature<Multiple.MultipleConfig> {
         StructureWorldAccess world = context.getWorld();
         Random random = context.getRandom();
         ChunkGenerator chunkGenerator = context.getGenerator();
-        boolean result = false;
-
-        for (MultipleConfig.MultipleEntry entry : config.features) {
-            result |= entry.generate(world, chunkGenerator, random, pos);
+        for (RegistryEntry<PlacedFeature> entry : config.features) {
+            entry.value().generateUnregistered(world, chunkGenerator, random, pos);
         }
-
-        return result;
+        return false;
     }
 
     public static class MultipleConfig implements FeatureConfig {
         public static final Codec<MultipleConfig> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
-                        MultipleEntry.CODEC.listOf().fieldOf("features").forGetter(config -> config.features)
+                        PlacedFeature.REGISTRY_CODEC.listOf().fieldOf("features").forGetter(config -> config.features)
                 ).apply(instance, MultipleConfig::new));
 
-        public final List<MultipleEntry> features;
+        public final List<RegistryEntry<PlacedFeature>> features;
 
-        public MultipleConfig(List<MultipleEntry> features) {
+        public MultipleConfig(List<RegistryEntry<PlacedFeature>> features) {
             this.features = features;
         }
 
         @Override
         public Stream<ConfiguredFeature<?, ?>> getDecoratedFeatures() {
-            return features.stream().flatMap(entry -> ((PlacedFeature) entry.feature.value()).getDecoratedFeatures());
-        }
-
-        public static class MultipleEntry {
-            public static final Codec<MultipleEntry> CODEC = RecordCodecBuilder.create(
-                    instance -> instance.group(
-                            PlacedFeature.REGISTRY_CODEC.fieldOf("placed_feature").forGetter(config -> config.feature)
-                    ).apply(instance, MultipleEntry::new));
-
-            public final RegistryEntry<PlacedFeature> feature;
-
-            public MultipleEntry(RegistryEntry<PlacedFeature> feature) {
-                this.feature = feature;
-            }
-
-            public boolean generate(StructureWorldAccess world, ChunkGenerator chunkGenerator, Random random, BlockPos pos) {
-                return ((PlacedFeature) this.feature.value()).generateUnregistered(world, chunkGenerator, random, pos);
-            }
+            return features.stream().flatMap(entry -> entry.value().getDecoratedFeatures());
         }
     }
 }

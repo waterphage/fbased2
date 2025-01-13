@@ -43,7 +43,7 @@ public class Ore extends Feature<Ore.OreConfig> {
             return new OreConfig.Target(test, state);
         }
 
-        public static class Target {
+        private static class Target {
             public static final Codec<OreConfig.Target> CODEC = RecordCodecBuilder.create((instance) -> {
                 return instance.group(RuleTest.TYPE_CODEC.fieldOf("target").forGetter((target) -> {
                     return target.target;

@@ -31,7 +31,6 @@ public class Biome extends Feature<Biome.BiomeConfig> {
         Random random = context.getRandom();
         ChunkGenerator chunkGenerator = context.getGenerator();
         int yi=pos.getY();int xi=pos.getX();int zi=pos.getZ();
-        boolean result=false;
         for (BiomeConfig.BiomeEntry entry : config.features) {
             int yo=yi;
             try {
@@ -40,25 +39,23 @@ public class Biome extends Feature<Biome.BiomeConfig> {
             BlockPos.Mutable pos1 = new BlockPos.Mutable(xi,yo,zi);
             Identifier id = world.getBiome(pos1).getKey().get().getValue();
             if (entry.biome.contains(id)) {
-                result |= entry.generate(world, chunkGenerator, random, pos);
-                return result;
+                return entry.generate(world, chunkGenerator, random, pos);
             }
         }
-        result |= config.def.generate(world, chunkGenerator, random, pos);
-        return result;
+        return config.def.value().generateUnregistered(world, chunkGenerator, random, pos);
     }
 
     public static class BiomeConfig implements FeatureConfig {
         public static final Codec<BiomeConfig> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         BiomeEntry.CODEC.listOf().fieldOf("features").forGetter(config -> config.features),
-                        Multiple.MultipleConfig.MultipleEntry.CODEC.fieldOf("default").forGetter(config -> config.def)
+                        PlacedFeature.REGISTRY_CODEC.fieldOf("default").forGetter(config -> config.def)
                 ).apply(instance, BiomeConfig::new));
 
         public final List<BiomeEntry> features;
-        public final Multiple.MultipleConfig.MultipleEntry def;
+        public final RegistryEntry<PlacedFeature> def;
 
-        public BiomeConfig(List<BiomeEntry> features,Multiple.MultipleConfig.MultipleEntry def) {
+        public BiomeConfig(List<BiomeEntry> features,RegistryEntry<PlacedFeature> def) {
             this.features = features;
             this.def = def;
         }
@@ -68,7 +65,7 @@ public class Biome extends Feature<Biome.BiomeConfig> {
             return features.stream().flatMap(entry -> ((PlacedFeature) entry.feature.value()).getDecoratedFeatures());
         }
 
-        public static class BiomeEntry {
+        private static class BiomeEntry {
             public static final Codec<BiomeEntry> CODEC = RecordCodecBuilder.create(
                     instance -> instance.group(
                             PlacedFeature.REGISTRY_CODEC.fieldOf("placed_feature").forGetter(config -> config.feature),
@@ -86,7 +83,7 @@ public class Biome extends Feature<Biome.BiomeConfig> {
                 this.probe = probe;
             }
             public boolean generate(StructureWorldAccess world, ChunkGenerator chunkGenerator, Random random, BlockPos pos) {
-                return ((PlacedFeature) this.feature.value()).generateUnregistered(world, chunkGenerator, random, pos);
+                return this.feature.value().generateUnregistered(world, chunkGenerator, random, pos);
             }
         }
     }

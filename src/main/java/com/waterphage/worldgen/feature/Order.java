@@ -45,13 +45,10 @@ public class Order extends Multiple {
         Random random = context.getRandom();
         ChunkGenerator chunkGenerator = context.getGenerator();
 
-        for (MultipleConfig.MultipleEntry entry : config.features) {
-            PlacedFeature pl = entry.feature.value();
+        for (RegistryEntry<PlacedFeature> entry : config.features) {
+            PlacedFeature pl = entry.value();
             FeaturePlacementContext fcont = new FeaturePlacementContext(world, chunkGenerator, Optional.ofNullable(pl));
-            boolean success = customGenerate(pl, fcont, random, pos);
-            if (success) {
-                return true;
-            }
+            if (customGenerate(pl, fcont, random, pos)){return true;}
         }
         return false;
     }

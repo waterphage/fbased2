@@ -21,6 +21,7 @@ public class RegDump {
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "disk"), new Disk(Disk.DiskConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "fossil"), new Fossil(Fossil.FossilConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "block"), new Ore(Ore.OreConfig.CODEC));
+        Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "block_s"), new OreS(OreS.OreSConfig.CODEC));
         FbasedPlacers.registerplacers();
         ModRules.registerrules();
         ModPredicatesType.registerpredicates();

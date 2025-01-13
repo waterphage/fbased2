@@ -3,6 +3,7 @@ package com.waterphage.worldgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.waterphage.Fbased;
+import com.waterphage.worldgen.rules.Adder;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -38,6 +39,7 @@ public class ModRules extends MaterialRules {
         Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "geology_s"), GeologyS.CODEC.codec());
         Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "geology_d"), GeologyD.CODEC.codec());
         Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "geology"), Geology.CODEC.codec());
+        Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "adder"), Adder.AdderMaterialRule.CODEC.codec());
     }
 
     static <A> Codec<? extends A> register(Registry<Codec<? extends A>> registry, String id, CodecHolder<? extends A> codecHolder) {
@@ -50,6 +52,7 @@ public class ModRules extends MaterialRules {
         static Codec<? extends MaterialRules.MaterialRule> registerAndGetDefault(Registry<Codec<? extends MaterialRules.MaterialRule>> registry) {
             ModRules.register(registry, "geology_s", ModRules.GeologyS.CODEC);
             ModRules.register(registry, "geology_d", ModRules.GeologyD.CODEC);
+            ModRules.register(registry, "adder", Adder.AdderMaterialRule.CODEC);
             return ModRules.register(registry, "geology", ModRules.Geology.CODEC);
         }
 

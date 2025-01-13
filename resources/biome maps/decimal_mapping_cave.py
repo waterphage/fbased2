@@ -114,13 +114,11 @@ def generate_biome_json_files(image_path, output_folder, section_width,output_fi
     for y in range(height):
         for x in range(section_width):
             layer = 0
-            while (layer < 3):
+            while (layer < 1):
                 bx=x-layer
                 if (bx<0):bx=0
                 match layer:
-                    case 0: ds=0.0; de=0.458
-                    case 1: ds=-0.458; de=0.0
-                    case 2: ds=-2.0; de=-0.458
+                    case 0: ds=0.458; de=1.7
                 layer = layer + 1
 
                 if (x>=5)and(x<=14):
@@ -163,7 +161,7 @@ def generate_biome_json_files(image_path, output_folder, section_width,output_fi
     print(f"Файл {output_file} успешно создан.")
 
 # Пример использования
-image_path = "main.png"  # Путь к вашей карте
+image_path = "cave.png"  # Путь к вашей карте
 output_folder = "out"
 output_file = "out.json"  # Папка для сохранения JSON-файлов
 section_width = 20  # Ширина одной секции (10 пикселей)
