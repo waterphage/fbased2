@@ -22,10 +22,10 @@ import java.util.Random;
 public class ConstantDensityFunction implements DensityFunction {
     private static final MapCodec<ConstantDensityFunction> CONSTANT_CODEC = RecordCodecBuilder.mapCodec(instance ->
             instance.group(
-                    Codec.INT.fieldOf("size").forGetter(ConstantDensityFunction::size),
-                    Codec.INT.fieldOf("sites").forGetter(ConstantDensityFunction::pop),
-                    Codec.DOUBLE.fieldOf("seed").forGetter(ConstantDensityFunction::seed),
-                    Codec.INT.fieldOf("types").forGetter(ConstantDensityFunction::types)
+                    Codec.INT.fieldOf("size").forGetter(ConstantDensityFunction::size), //region size
+                    Codec.INT.fieldOf("sites").forGetter(ConstantDensityFunction::pop), //amount of regions in one cell
+                    Codec.DOUBLE.fieldOf("seed").forGetter(ConstantDensityFunction::seed), //random argument
+                    Codec.INT.fieldOf("types").forGetter(ConstantDensityFunction::types) //amount of types (their values are normalized)
             ).apply(instance, ConstantDensityFunction::new)
     );
 
@@ -46,7 +46,7 @@ public class ConstantDensityFunction implements DensityFunction {
         this.types=types;
     }
 
-    private static class Backup_Fb_1{
+    private static class Backup_Fb_1{ // Well its just backup class. As you said, I just need a unite write call
         public int xr=-9999;
         public int zr=-9999;
         public List<BlockPos> sites=new ArrayList<>();
@@ -56,7 +56,7 @@ public class ConstantDensityFunction implements DensityFunction {
     public double sample(NoisePos pos) {
         int x = pos.blockX();
         int z = pos.blockZ();
-
+        // Sites grid coordinate search
         // Check if the cached region matches the current region
         synchronized (backup) {
             if ((backup.xr != x / size) || (backup.zr != z / size)) {

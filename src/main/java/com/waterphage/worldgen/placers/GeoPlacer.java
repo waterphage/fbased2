@@ -43,13 +43,40 @@ public class GeoPlacer extends PlacementModifier {
     public static GeoPlacer of(int spacing,int spacing2, String map, List<Float> shift, String mesh) {
         return new GeoPlacer(spacing,spacing2, map, shift, mesh);
     }
-    public boolean check2(int i, int f) {
+    private boolean check2(int i, int f) {
         return Math.abs((i) % 2*Math.round(f*Math.pow(0.75F,-0.5F)*0.5F)) < 1;
     }
-    public boolean check(int i, int f) {
+    private boolean check(int i, int f) {
         return Math.abs((i) % f) < 1;
     }
 
+    private boolean grid(int xn,int zn,int shx,int shz,int yo2,int i,int sp,int sp2) {
+        switch (mesh) {
+            case "square":
+                return check(xn+shx, sp) && check(zn+shz, sp)&&check(yo2-i,sp2);
+            case "romb":
+                return check(xn+shx + zn+shz, sp) && check(xn+shx - zn-shz, sp)&&check(yo2-i,sp2);
+            case "square_c":
+                return (check(xn+shx, sp) && check(zn+shz, sp)) || (check((xn+shx + sp), sp) && check((zn+shz + sp), sp))&&check(yo2-i,sp2);
+            case "hex":
+                return (check2(xn+shx, sp) && check(zn+shz, Math.round(sp/2))) || (check2(xn+shx + sp, sp) && check((zn+shz + Math.round(sp/2)), Math.round(sp/2)))&&check(yo2-i,sp2);
+            case "hex_a":
+                return (check2(zn+shz, sp) && check(xn+shx, Math.round(sp/2))) || (check2(zn+shz + sp, sp) && check((xn+shx + Math.round(sp/2)), Math.round(sp/2)))&&check(yo2-i,sp2);
+            default:
+                return true;
+        }
+    }
+
+    private int height(Heightmap.Type rule,int xo,int zo,int yo,StructureWorldAccess world) {
+        for (int j = 0; j < 16; ++j) {
+            int xn = xo+j;
+            for (int k = 0; k < 16; ++k) {
+                int zn = zo+k;
+                yo = Math.max(yo,(world.getTopY(rule, xn, zn) - 1));
+            }
+        }
+        return yo;
+    }
     @Override
     public Stream<BlockPos> getPositions(FeaturePlacementContext context, Random random, BlockPos pos) {
         StructureWorldAccess world = context.getWorld();
@@ -60,46 +87,10 @@ public class GeoPlacer extends PlacementModifier {
         try {
             yo = Integer.parseInt(map);
         } catch (NumberFormatException nfe) {
-            for (int j = 0; j < 16; ++j) {
-                int xn = xo+j;
-                for (int k = 0; k < 16; ++k) {
-                    int zn = zo+k;
-                    Heightmap.Type rule = Heightmap.Type.valueOf(map);
-                    yo = Math.max(yo,(world.getTopY(rule, xn, zn) - 1));
-                }
-            }
+            Heightmap.Type rule = Heightmap.Type.valueOf(map);
+            yo=height(rule,xo,zo,yo,world);
         }
 
-        @FunctionalInterface
-        interface MeshChecker {
-            boolean check(int xn, int zn, int shx, int shz,int yo2, int i, int sp, int sp2);
-        }
-        MeshChecker check;
-        switch (mesh) {
-            case "square":
-                check = (xn, zn, shx, shz, yo2, i, sp, sp2) ->
-                        check(xn+shx, sp) && check(zn+shz, sp)&&check(yo2-i,sp2);
-                break;
-            case "romb":
-                check = (xn, zn, shx, shz, yo2, i, sp, sp2) ->
-                        check(xn+shx + zn+shz, sp) && check(xn+shx - zn-shz, sp)&&check(yo2-i,sp2);
-                break;
-            case "square_c":
-                check = (xn, zn, shx, shz, yo2, i, sp, sp2) ->
-                        (check(xn+shx, sp) && check(zn+shz, sp)) || (check((xn+shx + sp), sp) && check((zn+shz + sp), sp))&&check(yo2-i,sp2);
-                break;
-            case "hex":
-                check = (xn, zn, shx, shz, yo2, i, sp, sp2) ->
-                        (check2(xn+shx, sp) && check(zn+shz, Math.round(sp/2))) || (check2(xn+shx + sp, sp) && check((zn+shz + Math.round(sp/2)), Math.round(sp/2)))&&check(yo2-i,sp2);
-                break;
-            case "hex_a":
-                check = (xn, zn, shx, shz, yo2, i, sp, sp2) ->
-                        (check2(zn+shz, sp) && check(xn+shx, Math.round(sp/2))) || (check2(zn+shz + sp, sp) && check((xn+shx + Math.round(sp/2)), Math.round(sp/2)))&&check(yo2-i,sp2);
-                break;
-            default:
-                check = (xn, zn, shx, shz, yo2, i, sp, sp2) -> true;
-                break;
-        }
 
         int sp = spacing;
         int sp2 = spacing2;
@@ -110,7 +101,7 @@ public class GeoPlacer extends PlacementModifier {
                 int xn = xo+j;
                 for (int k = 0; k < 16; ++k) {
                     int zn = zo+k;
-                    if(check.check(xn,zn,shx,shz,yo,i,sp,sp2)){builder.add(new BlockPos(xn,yo-i,zn));}
+                    if(grid(xn,zn,shx,shz,yo,i,sp,sp2)){builder.add(new BlockPos(xn,yo-i,zn));}
                 }
             }
         }

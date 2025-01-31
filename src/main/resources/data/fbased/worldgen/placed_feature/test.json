@@ -8,7 +8,9 @@
             "type": "fbased:biome",
             "config": {
               "default": "fbased:nothing",
-              "features": []
+              "features": [
+
+              ]
             }
           },
           "placement": []

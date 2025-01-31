@@ -16,9 +16,9 @@ public class GeoPlacerSurf extends PlacementModifier {
 
     public static final Codec<GeoPlacerSurf> MODIFIER_CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
-                            Codec.INT.fieldOf("spacing").forGetter(GeoPlacerSurf::getSpacing),
-                            Codec.STRING.fieldOf("mode").forGetter(GeoPlacerSurf::getMap),
-                            Codec.STRING.fieldOf("mesh").forGetter(GeoPlacerSurf::getMesh)
+                            Codec.INT.fieldOf("spacing").forGetter(placer -> placer.spacing),
+                            Codec.STRING.fieldOf("mode").forGetter(placer -> placer.map),
+                            Codec.STRING.fieldOf("mesh").forGetter(placer -> placer.mesh)
                     )
                     .apply(instance, GeoPlacerSurf::new)
     );
@@ -34,18 +34,6 @@ public class GeoPlacerSurf extends PlacementModifier {
 
     public static GeoPlacerSurf of(int spacing, String map, String mesh) {
         return new GeoPlacerSurf(spacing, map, mesh);
-    }
-
-    public int getSpacing() {
-        return spacing;
-    }
-
-    public String getMap() {
-        return map;
-    }
-
-    public String getMesh() {
-        return mesh;
     }
 
     public boolean check2(int i, int f) {
@@ -69,9 +57,7 @@ public class GeoPlacerSurf extends PlacementModifier {
                 int zn = zo - k + 7;
                 int yo = determineY(world, xn, zn);
 
-                if (shouldPlace(xn, zn)) {
-                    builder.add(new BlockPos(xn, yo, zn));
-                }
+                if (shouldPlace(xn, zn)) {builder.add(new BlockPos(xn, yo, zn));}
             }
         }
 
@@ -89,8 +75,6 @@ public class GeoPlacerSurf extends PlacementModifier {
 
     private boolean shouldPlace(int x, int z) {
         switch (mesh) {
-            case "full":
-                return true;
             case "square":
                 return check(x, spacing) && check(z, spacing);
             case "romb":
@@ -102,7 +86,7 @@ public class GeoPlacerSurf extends PlacementModifier {
             case "hex_a":
                 return (check2(z, spacing) && check(x, Math.round(spacing / 2.0f))) || (check2(z + spacing, spacing) && check(x + Math.round(spacing / 2.0f), Math.round(spacing / 2.0f)));
             default:
-                return false;
+                return true;
         }
     }
 
