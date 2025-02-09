@@ -3,20 +3,35 @@ package com.waterphage.worldgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.waterphage.Fbased;
+import com.waterphage.block.models.TechBlockEntity;
+import com.waterphage.meta.IntPair;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BannerBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.ChestBlockEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ProtoChunk;
+import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.gen.HeightContext;
 import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
 import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
@@ -26,11 +41,10 @@ import net.minecraft.world.gen.noise.NoiseConfig;
 import net.minecraft.world.gen.noise.NoiseRouter;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
+import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.io.IOException;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -39,6 +53,7 @@ import static java.lang.Math.abs;
 public class ModRules extends MaterialRules {
     public static void registerrules() {
         Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "geology_d"), GeologyD.CODEC.codec());
+        Registry.register(Registries.MATERIAL_RULE, new Identifier(Fbased.MOD_ID, "cache"), Cache.CODEC.codec());
     }
 
     static <A> Codec<? extends A> register(Registry<Codec<? extends A>> registry, String id, CodecHolder<? extends A> codecHolder) {
@@ -49,11 +64,82 @@ public class ModRules extends MaterialRules {
         Codec<MaterialRules.MaterialRule> CODEC = Registries.MATERIAL_RULE.getCodec().dispatch(materialRule -> materialRule.codec().codec(), Function.identity());
 
         static Codec<? extends MaterialRules.MaterialRule> registerAndGetDefault(Registry<Codec<? extends MaterialRules.MaterialRule>> registry) {
+            ModRules.register(registry, "cache", ModRules.Cache.CODEC);
             return ModRules.register(registry, "geology_d", ModRules.GeologyD.CODEC);
         }
 
         CodecHolder<? extends MaterialRules.MaterialRule> codec();
     }
+
+    public static ModRules.Cache condition(Integer yT,BlockStateProvider fallback) {
+        return new ModRules.Cache(yT);
+    }
+
+    record Cache(Integer yT) implements MaterialRules.MaterialRule {
+
+        // Codec for serializing and deserializing the rule
+        static final CodecHolder<ModRules.Cache> CODEC = CodecHolder.of(
+                RecordCodecBuilder.mapCodec(
+                        instance -> instance.group(
+                                        Codec.INT.fieldOf("tech_Y").forGetter(ModRules.Cache::yT)
+                                )
+                                .apply(instance, ModRules.Cache::new)
+                )
+        );
+
+        @Override
+        public CodecHolder<? extends MaterialRules.MaterialRule> codec() {
+            return CODEC;
+        }
+
+        private void runy(TechBlockEntity techBlockEntity,int miny,int maxy,int x, int z, Chunk chunk){
+            BlockPos.Mutable pos=new BlockPos.Mutable(x,0,z);
+            for (int y=miny;y<=maxy;y++){
+                pos.setY(y);
+                if(chunk.getBlockState(pos).isSolid()){
+                    if(!chunk.getBlockState(pos.setY(y+1)).isSolid()&&chunk.getBlockState(pos.setY(y-3)).isSolid()){
+                        techBlockEntity.addPair(y,1);
+                    }
+                    if(!chunk.getBlockState(pos.setY(y-1)).isSolid()&&chunk.getBlockState(pos.setY(y+3)).isSolid()){
+                        techBlockEntity.addPair(y,-1);
+                    }
+                }
+            }
+        }
+        public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext context) {
+            Chunk chunk = context.chunk;
+            ChunkPos or = chunk.getPos();
+            int miny=chunk.getBottomY()+1;
+            for (int x=0;x<=15;x++){
+                for (int z=0;z<=15;z++){
+                    BlockPos orb = or.getBlockPos(x, yT, z);
+                    int maxy=chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG).get(x,z);
+                    BlockState key = Registries.BLOCK.get(new Identifier("fbased:surface_cache")).getDefaultState();
+                    chunk.setBlockState(orb, key, false);
+                    BlockEntity data = new TechBlockEntity(orb, key);
+                    if (data instanceof TechBlockEntity techBlockEntity) {
+                        BlockPos.Mutable pos=new BlockPos.Mutable(x,0,z);
+                        for (int y=miny;y<=maxy;y++){
+                            pos.setY(y);
+                            if(chunk.getBlockState(pos).isSolid()){
+                                if(!chunk.getBlockState(pos.setY(y+1)).isSolid()&&chunk.getBlockState(pos.setY(y-3)).isSolid()){
+                                    techBlockEntity.addPair(y,1);
+                                }
+                                if(!chunk.getBlockState(pos.setY(y-1)).isSolid()&&chunk.getBlockState(pos.setY(y+3)).isSolid()){
+                                    techBlockEntity.addPair(y,-1);
+                                }
+                            }
+                        }
+                        NbtCompound nbt = new NbtCompound();
+                        techBlockEntity.writeNbt(nbt);
+                        techBlockEntity.markDirty();
+                    }
+                }
+            }
+            return (x, y, z) -> {return chunk.getBlockState(new BlockPos(x,y,z));};
+        }
+    }
+
     // Function to create a new GeologyD rule
 // This is a factory method to simplify creating instances of the GeologyD class
     public static ModRules.GeologyD condition(String idL, String idO, Integer yT, List<String> idD,
@@ -198,8 +284,6 @@ public class ModRules extends MaterialRules {
             HeightContext height = context.heightContext;
             NoiseConfig noise = context.noiseConfig;
             net.minecraft.util.math.random.Random random = Random.create();
-
-
             Backup backup = new Backup();
             backup.biomeX = fromString(idO);
             backup.biomeZ = fromString(idL);
@@ -220,20 +304,25 @@ public class ModRules extends MaterialRules {
             int matrixX = matrix.get(0), matrixY = matrix.get(1);
             float bedrockStart = bedrockParams.get(0), bedrockGradient = bedrockParams.get(1);
             int bedrockBase = bedrockParams.get(2).intValue(), bedrockHeight = bedrockParams.get(3).intValue();
-
             return (x, y, z) -> {
+
                 if (backup.isPositionChanged(x, z)) {
                     DensityFunction.NoisePos pos = new DensityFunction.NoisePos() {
                         @Override public int blockX() { return x; }
                         @Override public int blockY() { return yT; }
                         @Override public int blockZ() { return z; }
                     };
+
+                    double newDistOs = backup.biomeX.getNoise(noise.getNoiseRouter()).sample(pos);
+                    double newDistLs = backup.biomeZ.getNoise(noise.getNoiseRouter()).sample(pos);
+                    List<Integer> newPoints = calculatePoints(goal, matrixX, matrixY, newDistOs, newDistLs);
+
                     backup.updatePosition(
                             x, z,
                             chunk.sampleHeightmap(Heightmap.Type.OCEAN_FLOOR_WG, x, z),
-                            backup.biomeX.getNoise(noise.getNoiseRouter()).sample(pos),
-                            backup.biomeZ.getNoise(noise.getNoiseRouter()).sample(pos),
-                            calculatePoints(goal, matrixX, matrixY, backup.distOs, backup.distLs)
+                            newDistOs,
+                            newDistLs,
+                            newPoints
                     );
                 }
 
@@ -268,4 +357,6 @@ public class ModRules extends MaterialRules {
             return points;
         }
     }
+
+
 }

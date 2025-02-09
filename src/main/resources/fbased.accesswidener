@@ -1,5 +1,9 @@
 accessWidener v2 named
 
+accessible method net/minecraft/block/entity/BlockEntity writeNbt (Lnet/minecraft/nbt/NbtCompound;)V
+accessible method net/minecraft/block/entity/ChestBlockEntity writeNbt (Lnet/minecraft/nbt/NbtCompound;)V
+accessible method net/minecraft/block/entity/ChestBlockEntity getInvStackList ()Lnet/minecraft/util/collection/DefaultedList;
+
 accessible class net/minecraft/world/gen/surfacebuilder/MaterialRules$BlockStateRule
 
 accessible field net/minecraft/world/gen/feature/PlacedFeature placementModifiers Ljava/util/List;

@@ -1,102 +1,26 @@
 {
   "feature": {
-    "type": "fbased:add",
+    "type": "fbased:surface",
     "config": {
-      "features": [
-        {
-          "feature": {
-            "type": "fbased:biome",
-            "config": {
-              "default": "fbased:nothing",
-              "features": [
-
-              ]
+      "min": 2,
+      "max": 16,
+      "tech_Y": 0,
+      "default": {
+        "feature": {
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:pink_concrete"
+              }
             }
           },
-          "placement": []
-
+          "type": "minecraft:simple_block"
         },
-        {
-          "feature": {
-            "type": "fbased:mul",
-            "config": {
-              "features": [
-                {
-                  "feature": {
-                    "type": "fbased:add",
-                    "config": {
-                      "features": [
-                        {
-                          "feature": {
-                            "type": "fbased:biome",
-                            "config": {
-                              "default":"fbased:cover/barren_g",
-                              "features": []
-                            }
-                          },
-                          "placement": [{"type": "fbased:angle_g", "floor": true, "depth": 5}]
-
-                        },
-                        {
-                          "feature": {
-                            "type": "fbased:biome",
-                            "config": {
-                              "default": "fbased:cover/test",
-                              "features": []
-                            }
-                          },
-                          "placement": []
-                        }
-                      ]}
-                  },
-                  "placement": [{"type": "fbased:light", "mode": "WORLD_SURFACE_WG", "min": -14, "radius": 15}]
-                },
-                {
-                  "feature": {
-                    "type": "fbased:add",
-                    "config": {
-                      "features": [
-                        {
-                          "feature": {
-                            "type": "fbased:biome",
-                            "config": {
-                              "default": "fbased:cover/barren_g",
-                              "features": []
-                            }
-                          },
-                          "placement": []
-                        },
-                        {
-                          "feature": {
-                            "type": "fbased:biome",
-                            "config": {
-                              "default": "fbased:cover/barren_c",
-                              "features": []
-                            }
-                          },
-                          "placement": [{"type": "fbased:angle_g", "floor": true, "depth": 5}]
-
-                        }
-                      ]}
-                  },
-                  "placement": []
-                }
-              ]
-            }
-          },
-          "placement": [{"type": "fbased:angle_s", "floor": true}]
-        }
-      ]
+        "placement": []
+      }
     }
   },
   "placement": [
-    {
-      "type": "fbased:tex_v",
-      "spacing": 0,
-      "spacingY": 0,
-      "mode": "OCEAN_FLOOR_WG",
-      "shift":[0,0],
-      "mesh": "full"
-    }
   ]
 }

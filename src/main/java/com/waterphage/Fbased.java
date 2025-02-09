@@ -1,12 +1,24 @@
 package com.waterphage;
 
+import com.mojang.authlib.GameProfile;
 import com.waterphage.block.*;
+import com.waterphage.block.models.ModBlockEntities;
 import com.waterphage.worldgen.RegDump;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.block.entity.SculkSpreadManager;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
+import net.minecraft.util.SystemDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.waterphage.block.ModKeys.FbBuildMode;
 
@@ -14,9 +26,9 @@ public class Fbased implements ModInitializer {
 	public static final String MOD_ID = "fbased";
 	public static final Logger LOGGER = LoggerFactory.getLogger("fbased");
 	public static Integer fbKeyFlip=0;
-
 	@Override
 	public void onInitialize() {
+
 		ModMaterials.registerModMaterials();
 		ModBlocks.registerModBlocks();
 		ModItems.registerModItems();
@@ -24,9 +36,7 @@ public class Fbased implements ModInitializer {
 		ModTags.registerModTags();
 		ModKeys.registerModKeys();
 		RegDump.registerModChunk();
-
-
-
+		ModBlockEntities.registerBlockEntities();
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (FbBuildMode.wasPressed()) {

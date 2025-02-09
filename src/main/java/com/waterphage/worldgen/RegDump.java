@@ -1,5 +1,6 @@
 package com.waterphage.worldgen;
 
+import com.google.common.cache.Cache;
 import com.waterphage.Fbased;
 import com.waterphage.worldgen.blockstates.ModPredicatesType;
 import com.waterphage.worldgen.feature.*;
@@ -22,6 +23,7 @@ public class RegDump {
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "fossil"), new Fossil(Fossil.FossilConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "block"), new Ore(Ore.OreConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "block_s"), new OreS(OreS.OreSConfig.CODEC));
+        Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "surface"), new Surface(Surface.SurfaceConfig.CODEC));
         FbasedPlacers.registerplacers();
         ModRules.registerrules();
         ModPredicatesType.registerpredicates();

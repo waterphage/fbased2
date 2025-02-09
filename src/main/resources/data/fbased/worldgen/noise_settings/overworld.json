@@ -4285,6 +4285,10 @@
           {"type": "minecraft:simple_state_provider","state": {"Name": "fbased:white_basalt_raw"}},
           {"type": "minecraft:simple_state_provider","state": {"Name": "fbased:black_basalt_raw"}}
         ]
+      },
+      {
+        "type": "fbased:cache",
+        "tech_Y": 0
       }
     ]
   }
