@@ -3,9 +3,11 @@ package com.waterphage.worldgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.waterphage.Fbased;
+import com.waterphage.block.models.TechBlock;
 import com.waterphage.block.models.TechBlockEntity;
 import com.waterphage.meta.IntPair;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -92,16 +94,21 @@ public class ModRules extends MaterialRules {
             return CODEC;
         }
 
-        private void runy(TechBlockEntity techBlockEntity,int miny,int maxy,int x, int z, Chunk chunk){
+        private void runy(BlockState key,int miny,int maxy,int x, int z, Chunk chunk){
             BlockPos.Mutable pos=new BlockPos.Mutable(x,0,z);
+            int i=yT;
             for (int y=miny;y<=maxy;y++){
                 pos.setY(y);
                 if(chunk.getBlockState(pos).isSolid()){
                     if(!chunk.getBlockState(pos.setY(y+1)).isSolid()&&chunk.getBlockState(pos.setY(y-3)).isSolid()){
-                        techBlockEntity.addPair(y,1);
+                        chunk.setBlockState(pos.setY(i),key.with(TechBlock.CACHE,y),false);y+=1;
+                        chunk.setBlockState(pos.setY(i+1),key.with(TechBlock.CACHE,34),false);y+=1;
+                        i+=2;
                     }
                     if(!chunk.getBlockState(pos.setY(y-1)).isSolid()&&chunk.getBlockState(pos.setY(y+3)).isSolid()){
-                        techBlockEntity.addPair(y,-1);
+                        chunk.setBlockState(pos.setY(i),key.with(TechBlock.CACHE,y),false);y+=1;
+                        chunk.setBlockState(pos.setY(i+1),key.with(TechBlock.CACHE,32),false);y+=1;
+                        i+=2;
                     }
                 }
             }
@@ -112,28 +119,9 @@ public class ModRules extends MaterialRules {
             int miny=chunk.getBottomY()+1;
             for (int x=0;x<=15;x++){
                 for (int z=0;z<=15;z++){
-                    BlockPos orb = or.getBlockPos(x, yT, z);
                     int maxy=chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG).get(x,z);
                     BlockState key = Registries.BLOCK.get(new Identifier("fbased:surface_cache")).getDefaultState();
-                    chunk.setBlockState(orb, key, false);
-                    BlockEntity data = new TechBlockEntity(orb, key);
-                    if (data instanceof TechBlockEntity techBlockEntity) {
-                        BlockPos.Mutable pos=new BlockPos.Mutable(x,0,z);
-                        for (int y=miny;y<=maxy;y++){
-                            pos.setY(y);
-                            if(chunk.getBlockState(pos).isSolid()){
-                                if(!chunk.getBlockState(pos.setY(y+1)).isSolid()&&chunk.getBlockState(pos.setY(y-3)).isSolid()){
-                                    techBlockEntity.addPair(y,1);
-                                }
-                                if(!chunk.getBlockState(pos.setY(y-1)).isSolid()&&chunk.getBlockState(pos.setY(y+3)).isSolid()){
-                                    techBlockEntity.addPair(y,-1);
-                                }
-                            }
-                        }
-                        NbtCompound nbt = new NbtCompound();
-                        techBlockEntity.writeNbt(nbt);
-                        techBlockEntity.markDirty();
-                    }
+                    runy(key,miny,maxy,x, z,chunk);
                 }
             }
             return (x, y, z) -> {return chunk.getBlockState(new BlockPos(x,y,z));};

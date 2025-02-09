@@ -4,10 +4,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.waterphage.block.models.TechBlockEntity;
 import com.waterphage.meta.IntPair;
+import com.waterphage.block.models.TechBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.util.Identifier;
@@ -64,6 +66,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         );
         for (IntPair pos:search){
             Map<Integer,Integer>pairs=global.get(pos);
+            if (pairs==null){return false;}
             if(!checklocal(pairs,yo-1,yo+1,m)){return false;}
         }
         return true;
@@ -101,8 +104,13 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             for (int z=-16;z<=31;z++){
                 int xf=x+xi;int zf=z+zi;
                 src.setX(xf).setZ(zf);
-                TechBlockEntity ent= (TechBlockEntity) world.getBlockEntity(src);
-                Map<Integer,Integer>pair=ent.getPairs();
+                Map<Integer,Integer>pair=new HashMap<>();
+                for (int yw=yT;;yw+=2){
+                    if(!world.getBlockState(src.setY(yw)).contains(TechBlock.CACHE)){break;}
+                    int y=world.getBlockState(src.setY(yw)).get(TechBlock.CACHE);
+                    int i=world.getBlockState(src.setY(yw+1)).get(TechBlock.CACHE);
+                    pair.put(y,i-33);
+                }
                 IntPair xz=new IntPair(xf,zf);
                 global.put(xz,pair);
             }
@@ -111,8 +119,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     }
 
     private boolean checkfloor(Map<Integer,Integer>global,int yo,boolean m){
-        int i=global.get(yo);
-        if (Optional.ofNullable(i).filter(val -> (m && val > 0) || (!m && val < 0)).isPresent()) {
+        if (Optional.ofNullable(global.get(yo)).filter(val -> (m && val > 0) || (!m && val < 0)).isPresent()) {
             return true;
         }
         return false;
@@ -154,17 +161,16 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         Map<IntPair,Map<Integer,Integer>>global=global(world,xi,zi,yT);
         globalcaching(global,xi,zi);
         localcaching(global,xi,zi);
-        BlockPos.Mutable pos=new BlockPos.Mutable(0,yT,0);
+        BlockState key = Registries.BLOCK.get(new Identifier("fbased:surface_cache")).getDefaultState();
         for (int x=0;x<=15;x++){
             for (int z=0;z<=15;z++) {
-                pos.setX(xi+x).setZ(zi+z);
-                TechBlockEntity ent= (TechBlockEntity) world.getBlockEntity(pos);
-                Map<Integer,Integer> ydata=global.get(new IntPair(xi+x,zi+x));
-                ent.setPairs(ydata);
-                NbtCompound nbt=new NbtCompound();
-                ent.writeNbt(nbt);
+                Map<Integer,Integer> ydata=global.get(new IntPair(xi+x,zi+z));
+                int yw=yT;
                 for (Map.Entry<Integer, Integer> entry : ydata.entrySet()){
-                    goal.add(new Pair<>(pos,entry.getValue()));
+                    world.setBlockState(new BlockPos(xi+x,yw,zi+z),key.with(TechBlock.CACHE, entry.getKey()),3);
+                    world.setBlockState(new BlockPos(xi+x,yw+1,zi+z),key.with(TechBlock.CACHE, entry.getValue()+33),3);
+                    goal.add(new Pair<>(new BlockPos(xi+x,entry.getKey(),zi+z),entry.getValue()));
+                    yw+=2;
                 }
             }
         }
@@ -179,9 +185,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         ChunkGenerator chunkGenerator = context.getGenerator();
         int xi=origin.getX();int zi=origin.getZ();
         BlockPos.Mutable or = new BlockPos.Mutable();
-
         List<Pair<BlockPos,Integer>>placer=placer(world,xi,zi,config.yT);
-
         for (Pair<BlockPos,Integer> entry:placer){
             BlockPos pos = entry.getLeft();
             int i = entry.getRight();
