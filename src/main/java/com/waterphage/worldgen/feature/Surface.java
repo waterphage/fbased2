@@ -90,7 +90,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     boolean m=i>0;
                     if (Math.abs(i)==1){
                         if(simplech(global,m,xi+x,y,zi+z)){entry.setValue(m?2:-2);}
-                        else {entry.setValue(m?17:-17);}
+                        else {entry.setValue(m?18:-18);}
                     }
                 }
                 global.put(key,surf);
@@ -128,7 +128,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     private int surfacecheck(Map<IntPair,Map<Integer,Integer>>global,int xi,int yo,int zi,boolean m){
         int i=1;
         for (;i<=15;i++){
-            if(!checkfloor(global.get(new IntPair(xi,zi)),yo-i-2,!m)){return i+1;}
+            //if(checkfloor(global.get(new IntPair(xi,zi)),yo-i-2,!m)){return i+1;}
             if(!checklocal(global.get(new IntPair(xi+i,zi)),yo-i-1,yo+i+1,m)){return i+1;}
             if(!checklocal(global.get(new IntPair(xi-i,zi)),yo-i-1,yo+i+1,m)){return i+1;}
             if(!checklocal(global.get(new IntPair(xi,zi-i)),yo-i-1,yo+i+1,m)){return i+1;}
@@ -147,8 +147,9 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     boolean m=i>0;
                     int ic=Math.abs(i);
                     if (ic==2){
-                        entry.setValue(surfacecheck(global,xi+x,y,zi+z,m));
-                    }else if (ic==17){
+                        i=surfacecheck(global,xi+x,y,zi+z,m);
+                        surf.put(y,i);
+                    }else if (ic==18){
                         //entry.setValue(slopecheck(global,xi+x,y,zi+z,i,m));
                     }
                 }
@@ -176,6 +177,42 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         }
         return goal;
     }
+    private BlockState test(int i){
+        BlockState block=Registries.BLOCK.get(new Identifier("minecraft:cobblestone")).getDefaultState();
+        switch (i){
+            case 2:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:black_concrete")).getDefaultState();
+            case 3:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:brown_concrete")).getDefaultState();
+            case 4:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:red_concrete")).getDefaultState();
+            case 5:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:orange_concrete")).getDefaultState();
+            case 6:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:yellow_concrete")).getDefaultState();
+            case 7:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:lime_concrete")).getDefaultState();
+            case 8:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:green_concrete")).getDefaultState();
+            case 9:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:cyan_concrete")).getDefaultState();
+            case 10:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:blue_concrete")).getDefaultState();
+            case 11:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:purple_concrete")).getDefaultState();
+            case 12:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:magenta_concrete")).getDefaultState();
+            case 14:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:pink_concrete")).getDefaultState();
+            case 15:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:white_concrete")).getDefaultState();
+            case 16:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:light_gray_concrete")).getDefaultState();
+            case 17:
+                return block=Registries.BLOCK.get(new Identifier("minecraft:gray_concrete")).getDefaultState();
+        }
+        return block;
+    }
     @Override
     public boolean generate(FeatureContext<SurfaceConfig> context) {
         SurfaceConfig config = context.getConfig();
@@ -189,9 +226,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         for (Pair<BlockPos,Integer> entry:placer){
             BlockPos pos = entry.getLeft();
             int i = entry.getRight();
-            if (i>=config.min&&i<=config.max){
-                config.defaultFeature.value().generateUnregistered(world, chunkGenerator, random,pos);
-            }
+            world.setBlockState(pos,test(i),3);
+            //config.defaultFeature.value().generateUnregistered(world, chunkGenerator, random,pos);
         }
         return true;
     }
