@@ -129,6 +129,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         );
         for (IntPair pos:search){
             Map<Integer,Integer>pairs=global.get(pos);
+            if(pairs==null){continue;}
             for(int yl=y-1;yl<=y+1;yl++){
                 Integer i=pairs.get(yl);
                 if(i==null){continue;}
@@ -220,7 +221,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             Map<BlockPos,List<BlockPos>> edge,
             boolean m){
         int i=m?17:-17;
-        while (!edge.isEmpty()){
+        for (int k=0;k<16;k++){
             Set<BlockPos> cache=new HashSet<>();
             for (List<BlockPos> neighbours:edge.values()){cache.addAll(neighbours);}
             for (BlockPos pos:cache){
@@ -236,7 +237,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 }else {
                     edge.put(pos,map.get(pos));
                 }
-                int n=m?(i>3?i-1:3):(i<-3?i+1:3);i=n;
+                i=m?17-k:-17+k;
             }
         }
     }
@@ -359,7 +360,10 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         for (Pair<BlockPos,Integer> entry:placer){
             BlockPos pos = entry.getLeft();
             int i = entry.getRight();
-            test(Math.abs(i),pos,world);
+            if(pos.getY()>40){
+                test(Math.abs(i),pos,world);
+            }
+
 
             //config.defaultFeature.value().generateUnregistered(world, chunkGenerator, random,pos);
         }
