@@ -116,7 +116,7 @@ public class ModRules extends MaterialRules {
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext context) {
             Chunk chunk = context.chunk;
             ChunkPos or = chunk.getPos();
-            int miny=chunk.getBottomY()+1;
+            int miny=chunk.getBottomY()+2;
             for (int x=0;x<=15;x++){
                 for (int z=0;z<=15;z++){
                     int maxy=chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG).get(x,z);

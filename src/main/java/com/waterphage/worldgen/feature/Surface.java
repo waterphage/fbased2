@@ -2,59 +2,57 @@ package com.waterphage.worldgen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.waterphage.block.models.TechBlockEntity;
 import com.waterphage.meta.IntPair;
 import com.waterphage.block.models.TechBlock;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.structure.rule.RuleTest;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Surface extends Feature<Surface.SurfaceConfig> {
-
     public Surface(Codec<SurfaceConfig> codec) {
         super(codec);
     }
 
     //Generates features based on the biome and configuration conditions.
     public static class SurfaceConfig implements FeatureConfig {
+
         public static final Codec<SurfaceConfig> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         Codec.INT.fieldOf("tech_Y").forGetter(config -> config.yT),
                         Codec.INT.fieldOf("min").forGetter(config -> config.min),
-                        Codec.INT.fieldOf("max").forGetter(config -> config.max),
-                        PlacedFeature.REGISTRY_CODEC.fieldOf("default").forGetter(config -> config.defaultFeature)
-                ).apply(instance, SurfaceConfig::new)
-        );
+                        Codec.INT.fieldOf("max").forGetter(config -> config.max)
+                        //Identifier.CODEC.listOf().fieldOf("biomes").forGetter(config -> config.biomes),
+                        //Codec.unboundedMap(Codec.INT,
+                                        //Codec.unboundedMap(Codec.BOOL, PlacedFeature.REGISTRY_CODEC))
+                                //.fieldOf("features")
+                                //.forGetter(config -> config.features)
+                ).apply(instance, SurfaceConfig::new));
         private Integer min;
         private Integer yT;
         private Integer max;
-        private RegistryEntry<PlacedFeature> defaultFeature;
-        SurfaceConfig(Integer yT,Integer min, Integer max,RegistryEntry<PlacedFeature> defaultFeature) {
+        private List<Identifier> biomes;
+        private Map<Integer,Map<Boolean, RegistryEntry<PlacedFeature>>> features;
+
+        SurfaceConfig(Integer yT,Integer min, Integer max
+                      //List<Identifier> biomes,Map<Integer,Map<Boolean,RegistryEntry<PlacedFeature>>> features
+        ) {
             this.yT=yT;
             this.max = max;
             this.min = min;
-            this.defaultFeature=defaultFeature;
+            this.biomes = biomes;
+            this.features=features;
         }
     }
     private boolean simplech(Map<IntPair,Map<Integer,Integer>>global,boolean m,int xf,int yo,int zf){
@@ -117,51 +115,153 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         }
         return global;
     }
-
-    private boolean checkfloor(Map<Integer,Integer>global,int yo,boolean m){
-        if (Optional.ofNullable(global.get(yo)).filter(val -> (m && val > 0) || (!m && val < 0)).isPresent()) {
-            return true;
-        }
-        return false;
-    }
-
-    private int surfacecheck(Map<IntPair,Map<Integer,Integer>>global,int xi,int yo,int zi,boolean m){
-        int i=1;
-        for (;i<=15;i++){
-            //if(checkfloor(global.get(new IntPair(xi,zi)),yo-i-2,!m)){return i+1;}
-            if(!checklocal(global.get(new IntPair(xi+i,zi)),yo-i-1,yo+i+1,m)){return i+1;}
-            if(!checklocal(global.get(new IntPair(xi-i,zi)),yo-i-1,yo+i+1,m)){return i+1;}
-            if(!checklocal(global.get(new IntPair(xi,zi-i)),yo-i-1,yo+i+1,m)){return i+1;}
-            if(!checklocal(global.get(new IntPair(xi,zi+i)),yo-i-1,yo+i+1,m)){return i+1;}
-        }
-        return i+1;
-    }
-    private void localcaching(Map<IntPair,Map<Integer,Integer>>global,int xi,int zi){
-        for (int x=0;x<=15;x++){
-            for (int z=0;z<=15;z++) {
-                IntPair key=new IntPair(xi+x,zi+z);
-                Map<Integer,Integer> surf=global.get(key);
-                for (Map.Entry<Integer, Integer> entry : surf.entrySet()){
-                    int y=entry.getKey();
-                    int i=entry.getValue();
-                    boolean m=i>0;
-                    int ic=Math.abs(i);
-                    if (ic==2){
-                        i=surfacecheck(global,xi+x,y,zi+z,m);
-                        surf.put(y,i);
-                    }else if (ic==18){
-                        //entry.setValue(slopecheck(global,xi+x,y,zi+z,i,m));
-                    }
+    private void getsmooth(
+            Map<BlockPos,List<BlockPos>>map,
+            Map<BlockPos,List<BlockPos>>edgeS,
+            Map<BlockPos,List<BlockPos>>edgeW,
+            Map<IntPair,Map<Integer,Integer>>global,Integer x,Integer y,int z,boolean m){
+        List<BlockPos> local=new ArrayList<>();
+        List<IntPair> search = Arrays.asList(
+                new IntPair(x-1,z),
+                new IntPair(x+1,z),
+                new IntPair(x,z-1),
+                new IntPair(x,z+1)
+        );
+        for (IntPair pos:search){
+            Map<Integer,Integer>pairs=global.get(pos);
+            for(int yl=y-1;yl<=y+1;yl++){
+                Integer i=pairs.get(yl);
+                if(i==null){continue;}
+                if(m?i>=2&&i<=17:i<=-2&&i>=-17){local.add(new BlockPos(pos.first(),yl,pos.second()));}
+                else if(m?i>17:i<-17){
+                    edgeW.put(new BlockPos(x,y,z),new ArrayList<>());
                 }
-                global.put(key,surf);
             }
         }
+        map.put(new BlockPos(x,y,z),local);
+        if (local.size()<4){edgeS.put(new BlockPos(x,y,z),local);}
+    }
+    private void getsteep(
+            Map<BlockPos,List<BlockPos>>map,
+            Map<IntPair,Map<Integer,Integer>>global,Integer x,Integer y,int z,boolean m
+    ) {
+        List<BlockPos> local = new ArrayList<>();
+        List<IntPair> search = Arrays.asList(
+                new IntPair(x - 1, z),
+                new IntPair(x + 1, z),
+                new IntPair(x, z - 1),
+                new IntPair(x, z + 1)
+        );
+        for (IntPair pos : search) {
+            Map<Integer, Integer> pairs = global.get(pos);
+            if (pairs == null) {continue;}
+            Optional<Integer> minY = pairs.entrySet().stream()
+                    .filter(e -> e.getKey() >= y && (m ? e.getValue() > 17 : e.getValue() < 17)) // Условия: y >= targetY и i > 17
+                    .map(Map.Entry::getKey) // Только y
+                    .min(Integer::compareTo); // Берем минимальный y
+            if (minY.isPresent()) {
+                local.add(new BlockPos(pos.first(),minY.get(),pos.second()));
+            }
+        }
+        map.put(new BlockPos(x,y,z),local);
+    }
+    Map<String,Map<BlockPos,List<BlockPos>>> neighbours(Map<IntPair,Map<Integer,Integer>>global){
+
+        Map<String,Map<BlockPos,List<BlockPos>>> map=new HashMap<>();
+        Map<BlockPos,List<BlockPos>> neighboursSF=new HashMap<>();
+        Map<BlockPos,List<BlockPos>> edgeSF=new HashMap<>();
+        Map<BlockPos,List<BlockPos>> neighboursSC=new HashMap<>();
+        Map<BlockPos,List<BlockPos>> edgeSC=new HashMap<>();
+
+        Map<BlockPos,List<BlockPos>> neighboursWF=new HashMap<>();
+        Map<BlockPos,List<BlockPos>> edgeWF=new HashMap<>();
+        Map<BlockPos,List<BlockPos>> neighboursWC=new HashMap<>();
+        Map<BlockPos,List<BlockPos>> edgeWC=new HashMap<>();
+
+        for(Map.Entry<IntPair,Map<Integer,Integer>> XZ:global.entrySet()){
+            IntPair xz=XZ.getKey();
+            Integer x=xz.first();
+            Integer z=xz.second();
+            Map<Integer,Integer> positions=XZ.getValue();
+            for (Map.Entry<Integer,Integer> point:positions.entrySet()){
+                int y=point.getKey();
+                int i=point.getValue();
+                if(i>17){
+                    getsteep(neighboursWF,global,x,y,z,true);
+                }else if(i>=1){
+                    getsmooth(neighboursSF,edgeSF,edgeWF,global,x,y,z,true);
+                }else if(i>-18){
+                    getsmooth(neighboursSC,edgeSC,edgeWC,global,x,y,z,false);
+                }else{
+                    getsteep(neighboursWC,global,x,y,z,false);
+                }
+            }
+        }
+        for (BlockPos pos:edgeWF.keySet()){
+            edgeWF.put(pos,neighboursWF.get(pos));
+        }
+        for (BlockPos pos:edgeWC.keySet()){
+            edgeWC.put(pos,neighboursWC.get(pos));
+        }
+        map.put("neighbours_s_f",neighboursSF);
+        map.put("neighbours_s_c",neighboursSC);
+        map.put("neighbours_w_f",neighboursWF);
+        map.put("neighbours_w_c",neighboursWC);
+
+        map.put("edge_s_f",edgeSF);
+        map.put("edge_s_c",edgeSC);
+        map.put("edge_w_f",edgeWF);
+        map.put("edge_w_c",edgeWC);
+        return map;
+    }
+    private void writesurface(
+            Map<IntPair,Map<Integer,Integer>>global,
+            Map<BlockPos,List<BlockPos>> map,
+            Map<BlockPos,List<BlockPos>> edge,
+            boolean m){
+        int i=m?17:-17;
+        while (!edge.isEmpty()){
+            Set<BlockPos> cache=new HashSet<>();
+            for (List<BlockPos> neighbours:edge.values()){cache.addAll(neighbours);}
+            for (BlockPos pos:cache){
+                if (edge.keySet().contains(pos)){
+                    edge.remove(pos);
+                    IntPair xz=new IntPair(pos.getX(),pos.getZ());
+                    int n=global.get(xz).get(pos.getY());
+                    if(m?n<i:n>i){
+                        Map<Integer,Integer> point=global.get(xz);
+                        point.put(pos.getY(),i);
+                        global.put(xz,point);
+                    }
+                }else {
+                    edge.put(pos,map.get(pos));
+                }
+                int n=m?(i>3?i-1:3):(i<-3?i+1:3);i=n;
+            }
+        }
+    }
+    private void localcaching(Map<IntPair,Map<Integer,Integer>>global,
+                              Map<String,Map<BlockPos,List<BlockPos>>> neighbours,
+                              int xi,int zi){
+        Map<BlockPos,List<BlockPos>> neighboursSF=neighbours.get("neighbours_s_f");
+        Map<BlockPos,List<BlockPos>> neighboursSC=neighbours.get("neighbours_s_c");
+        Map<BlockPos,List<BlockPos>> neighboursWF=neighbours.get("neighbours_w_f");
+        Map<BlockPos,List<BlockPos>> neighboursWC=neighbours.get("neighbours_w_c");
+
+        Map<BlockPos,List<BlockPos>> edgeSF=neighbours.get("edge_s_f");
+        Map<BlockPos,List<BlockPos>> edgeSC=neighbours.get("edge_s_c");
+        Map<BlockPos,List<BlockPos>> edgeWF=neighbours.get("edge_w_f");
+        Map<BlockPos,List<BlockPos>> edgeWC=neighbours.get("edge_w_c");
+
+        writesurface(global,neighboursSF,edgeSF,true);
+        writesurface(global,neighboursSC,edgeSC,false);
     }
     private List<Pair<BlockPos,Integer>>placer(StructureWorldAccess world,int xi,int zi,int yT){
         List<Pair<BlockPos,Integer>>goal=new ArrayList<>();
         Map<IntPair,Map<Integer,Integer>>global=global(world,xi,zi,yT);
         globalcaching(global,xi,zi);
-        localcaching(global,xi,zi);
+        Map<String,Map<BlockPos,List<BlockPos>>> neighbours=neighbours(global);
+        localcaching(global,neighbours,xi,zi);
         BlockState key = Registries.BLOCK.get(new Identifier("fbased:surface_cache")).getDefaultState();
         for (int x=0;x<=15;x++){
             for (int z=0;z<=15;z++) {
@@ -177,41 +277,74 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         }
         return goal;
     }
-    private BlockState test(int i){
-        BlockState block=Registries.BLOCK.get(new Identifier("minecraft:cobblestone")).getDefaultState();
+    private void test(int i,BlockPos pos,StructureWorldAccess world){
+        BlockState block;
         switch (i){
             case 2:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:black_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:black_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 3:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:brown_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:brown_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 4:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:red_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:red_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 5:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:orange_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:orange_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 6:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:yellow_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:yellow_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 7:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:lime_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:lime_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 8:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:green_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:green_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 9:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:cyan_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:cyan_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 10:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:blue_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:light_blue_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 11:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:purple_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:blue_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 12:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:magenta_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:purple_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
+            case 13:
+                block=Registries.BLOCK.get(new Identifier("minecraft:magenta_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 14:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:pink_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:pink_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 15:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:white_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:white_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 16:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:light_gray_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:light_gray_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
             case 17:
-                return block=Registries.BLOCK.get(new Identifier("minecraft:gray_concrete")).getDefaultState();
+                block=Registries.BLOCK.get(new Identifier("minecraft:gray_concrete")).getDefaultState();
+                world.setBlockState(pos,block,3);
+                return;
         }
-        return block;
     }
     @Override
     public boolean generate(FeatureContext<SurfaceConfig> context) {
@@ -226,7 +359,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         for (Pair<BlockPos,Integer> entry:placer){
             BlockPos pos = entry.getLeft();
             int i = entry.getRight();
-            world.setBlockState(pos,test(i),3);
+            test(Math.abs(i),pos,world);
+
             //config.defaultFeature.value().generateUnregistered(world, chunkGenerator, random,pos);
         }
         return true;
