@@ -1,5 +1,7 @@
 accessWidener v2 named
 
+accessible method net/minecraft/block/entity/BlockEntityType create (Ljava/lang/String;Lnet/minecraft/block/entity/BlockEntityType$Builder;)Lnet/minecraft/block/entity/BlockEntityType;
+
 accessible method net/minecraft/block/entity/BlockEntity writeNbt (Lnet/minecraft/nbt/NbtCompound;)V
 accessible method net/minecraft/block/entity/ChestBlockEntity writeNbt (Lnet/minecraft/nbt/NbtCompound;)V
 accessible method net/minecraft/block/entity/ChestBlockEntity getInvStackList ()Lnet/minecraft/util/collection/DefaultedList;

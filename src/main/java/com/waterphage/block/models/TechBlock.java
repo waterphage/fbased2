@@ -10,17 +10,15 @@ import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class TechBlock extends Block {
-    public static final IntProperty CACHE = IntProperty.of("int", 0, 384);
+public class TechBlock extends BlockWithEntity implements BlockEntityProvider {
 
     public TechBlock(Settings settings) {
         super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(CACHE, 0));
     }
 
+    @Nullable
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(CACHE);
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new TechBlockEntity(pos, state);
     }
-
 }

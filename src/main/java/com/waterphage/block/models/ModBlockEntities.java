@@ -13,10 +13,10 @@ public class ModBlockEntities {
 
     // Метод регистрации, который следует вызвать при инициализации мода
     public static void registerBlockEntities() {
-        /*TECH_BLOCK_ENTITY = Registry.register(
+        TECH_BLOCK_ENTITY = Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
                 new Identifier(Fbased.MOD_ID, "tech_block_entity"),
                 BlockEntityType.Builder.create(TechBlockEntity::new, ModBlocks.T1).build(null)
-        );*/
+        );
     }
 }
