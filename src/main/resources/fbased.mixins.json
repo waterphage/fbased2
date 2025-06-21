@@ -3,7 +3,11 @@
 	"package": "com.waterphage.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ExampleMixin"
+		"ExampleMixin",
+		"ProtoChunkMixin",
+		"ChunkMixin",
+		"WorldChunkMixin",
+		"ChunkSerializerMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

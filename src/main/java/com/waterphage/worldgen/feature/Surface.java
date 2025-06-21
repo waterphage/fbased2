@@ -3,6 +3,7 @@ package com.waterphage.worldgen.feature;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.waterphage.block.models.TechBlockEntity;
+import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.IntPair;
 import com.waterphage.block.models.TechBlock;
 import net.minecraft.block.BlockState;
@@ -12,8 +13,11 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
@@ -26,8 +30,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Surface extends Feature<Surface.SurfaceConfig> {
 
     private static String MODE;
-    private static Map<IntPair,Map<Integer,Integer>> GLOBAL =new HashMap<>();
-    private static Map<IntPair,TreeMap<Integer,Integer>> GLOBALS =new HashMap<>();
+    private static Map<IntPair,TreeMap<Integer,Integer>> GLOBAL =new HashMap<>();
     private static Map<BlockPos,List<BlockPos>> mapSF=new HashMap<>();
     private static Map<BlockPos,List<BlockPos>> inSF=new HashMap<>();
     private static Map<BlockPos,List<BlockPos>> outSF=new HashMap<>();
@@ -98,7 +101,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         for (int x=-16;x<=31;x++){
             for (int z=-16;z<=31;z++) {
                 IntPair key=new IntPair(xi+x,zi+z);
-                Map<Integer,Integer> surf=GLOBAL.get(key);
+                TreeMap<Integer,Integer> surf=GLOBAL.get(key);
+                if (surf == null) continue;
                 for (Map.Entry<Integer, Integer> entry : surf.entrySet()){
                     int y=entry.getKey();
                     int i=entry.getValue();
@@ -112,23 +116,30 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             }
         }
     }
-    private Map<IntPair,Map<Integer,Integer>> global(StructureWorldAccess world,int xi,int zi,int yT){
-        Map<IntPair,Map<Integer,Integer>>global=new HashMap<>();
-        for (int x=-16;x<=31;x++){
-            for (int z=-16;z<=31;z++){
-                int xf=x+xi;int zf=z+zi;
-                BlockPos src=new BlockPos(xf,yT,zf);
-                TechBlockEntity ent= (TechBlockEntity) world.getBlockEntity(src);
-                Map<Integer,Integer>pair=ent.getPairs();
-                IntPair xz=new IntPair(xf,zf);
-                global.put(xz,pair);
+    public static Map<IntPair, TreeMap<Integer, Integer>> global(StructureWorldAccess world, int centerChunkX, int centerChunkZ) {
+        Map<IntPair, TreeMap<Integer, Integer>> global = new HashMap<>();
+
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                int chunkX = centerChunkX + dx;
+                int chunkZ = centerChunkZ + dz;
+                ChunkPos pos = new ChunkPos(chunkX, chunkZ);
+                Chunk chunk = world.getChunk(chunkX, chunkZ, ChunkStatus.EMPTY, false);
+
+                if (!(chunk instanceof ChunkExtension ext)) continue;
+
+                Map<IntPair, TreeMap<Integer, Integer>> local = ext.getCustomMap();
+                for (Map.Entry<IntPair, TreeMap<Integer, Integer>> entry : local.entrySet()) {
+                    // putIfAbsent to avoid overwriting existing
+                    global.putIfAbsent(entry.getKey(), new TreeMap<>(entry.getValue()));
+                }
             }
         }
 
         return global;
     }
     private boolean inside(IntPair XZ, int yl,boolean m) {
-        TreeMap<Integer, Integer> levels = GLOBALS.get(XZ);
+        TreeMap<Integer, Integer> levels = GLOBAL.get(XZ);
         if (levels == null || levels.isEmpty()) {
             return false;
         }
@@ -218,11 +229,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         map.put(new BlockPos(x,y,z),local);
     }
     void neighbours(){
-        for(Map.Entry<IntPair, Map<Integer, Integer>> XZ:GLOBAL.entrySet()) {
-            TreeMap<Integer, Integer> sorted = new TreeMap<>(XZ.getValue());
-            GLOBALS.put(XZ.getKey(),sorted);
-        }
-        for(Map.Entry<IntPair, Map<Integer, Integer>> XZ:GLOBAL.entrySet()) {
+        for(Map.Entry<IntPair, TreeMap<Integer, Integer>> XZ:GLOBAL.entrySet()) {
             TreeMap<Integer, Integer> sorted = new TreeMap<>(XZ.getValue());
             IntPair xz = XZ.getKey();
             Integer x = xz.first();
@@ -254,7 +261,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         for (int n = 15; n > 0; --n) {
             for (BlockPos point : use) {
                 IntPair XZ = new IntPair(point.getX(), point.getZ());
-                Map<Integer, Integer> floor = GLOBAL.get(XZ);
+                TreeMap<Integer, Integer> floor = GLOBAL.get(XZ);
                 if (floor == null) continue;
                 int yl = point.getY();
                 int val = floor.get(yl);
@@ -277,7 +284,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         for (int n = 15; n > 0; --n) {
             for (BlockPos point : use) {
                 IntPair XZ = new IntPair(point.getX(), point.getZ());
-                Map<Integer, Integer> floor = GLOBAL.get(XZ);
+                TreeMap<Integer, Integer> floor = GLOBAL.get(XZ);
                 if (floor == null) continue;
                 int yl = point.getY();
                 int val = floor.get(yl);
@@ -305,21 +312,17 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     }
     private List<Pair<BlockPos,Integer>>placer(StructureWorldAccess world,int xi,int zi,int yT){
         List<Pair<BlockPos,Integer>>goal=new ArrayList<>();
-        GLOBAL=global(world,xi,zi,yT);
+        ChunkPos chunkPos = world.getChunk(new BlockPos(xi,yT,zi)).getPos();
+        int chunkX = chunkPos.x;
+        int chunkZ = chunkPos.z;
+        GLOBAL=global(world,chunkX,chunkZ);
         globalcaching(xi,zi);
         neighbours();
-        BlockState key = Registries.BLOCK.get(new Identifier("fbased:surface_cache")).getDefaultState();
-        BlockPos.Mutable pos=new BlockPos.Mutable(0,yT,0);
         for (int x=0;x<=15;x++){
             for (int z=0;z<=15;z++) {
-                pos.setX(xi+x).setZ(zi+z);
-                TechBlockEntity ent= (TechBlockEntity) world.getBlockEntity(pos);
-                Map<Integer,Integer> ydata=GLOBAL.get(new IntPair(xi+x,zi+x));
-                ent.setPairs(ydata);
-                NbtCompound nbt=new NbtCompound();
-                ent.writeNbt(nbt);
+                Map<Integer,Integer> ydata=GLOBAL.get(new IntPair(xi+x,zi+z));
                 for (Map.Entry<Integer, Integer> entry : ydata.entrySet()){
-                    goal.add(new Pair<>(pos,entry.getValue()));
+                    goal.add(new Pair<>(new BlockPos(xi+x,entry.getKey(),zi+z), entry.getValue()));
                 }
             }
         }
@@ -465,30 +468,10 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         int xi=origin.getX();int zi=origin.getZ();
         BlockPos.Mutable or = new BlockPos.Mutable();
         List<Pair<BlockPos,Integer>>placer=placer(world,xi,zi,config.yT);
-        for (int x=xi;x<xi+16;x++){
-            for (int z=zi;z<zi+16;z++){
-                Map<Integer,Integer> point=GLOBAL.get(new IntPair(x,z));
-                for (Integer y:point.keySet()){
-                    if (y>40) {
-                        BlockPos pos = new BlockPos(x, y, z);
-                        if (inSF.get(pos) != null) {
-                            world.setBlockState(pos, blockB("minecraft:yellow_concrete"), 3);
-                        } else if (outSF.get(pos) != null) {
-                            world.setBlockState(pos, blockB("minecraft:pink_concrete"), 3);
-                        } else if (mapSF.get(pos) != null) {
-                            world.setBlockState(pos, blockB("minecraft:black_concrete"), 3);
-                        }
-                    }
-                }
-            }
-        }
-
         for (Pair<BlockPos,Integer> entry:placer){
             BlockPos pos = entry.getLeft();
             int i = entry.getRight();
-            if(pos.getY()>40){
-                test(Math.abs(i),pos,world);
-            }
+            test(Math.abs(i),pos,world);
             //config.defaultFeature.value().generateUnregistered(world, chunkGenerator, random,pos);
         }
         cleancache();
@@ -499,7 +482,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     }
     private void cleancache(){
         GLOBAL.clear();
-        GLOBALS.clear();
         mapSF.clear();
         inSF.clear();
         outSF.clear();

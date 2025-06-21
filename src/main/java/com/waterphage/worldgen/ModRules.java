@@ -5,6 +5,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.waterphage.Fbased;
 import com.waterphage.block.models.TechBlock;
 import com.waterphage.block.models.TechBlockEntity;
+import com.waterphage.meta.ChunkExtension;
+import com.waterphage.meta.CustomChunkData;
 import com.waterphage.meta.IntPair;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -94,43 +96,52 @@ public class ModRules extends MaterialRules {
             return CODEC;
         }
 
-        private void runy(TechBlockEntity techBlockEntity,int miny,int maxy,int x, int z, Chunk chunk){
-            BlockPos.Mutable pos=new BlockPos.Mutable(x,0,z);
-            for (int y=miny;y<=maxy;y++){
-                pos.setY(y);
-                if(chunk.getBlockState(pos).isSolid()){
-                    if(!chunk.getBlockState(pos.setY(y+1)).isSolid()&&chunk.getBlockState(pos.setY(y-3)).isSolid()){
-                        techBlockEntity.addPair(y,1);
+        private void runy(Map<IntPair, TreeMap<Integer, Integer>> chunkData, int miny, int maxy, BlockPos orb, Chunk chunk) {
+            int x = orb.getX();
+            int z = orb.getZ();
+            for (int y = miny; y <= maxy; y++) {
+                BlockPos pos = new BlockPos(x, y, z);
+                BlockState state = chunk.getBlockState(pos);
+                if (state.isSolid()) {
+                    boolean airAbove = !chunk.getBlockState(pos.up()).isSolid();
+                    boolean solidBelow3 = chunk.getBlockState(pos.down(3)).isSolid();
+                    boolean airBelow = !chunk.getBlockState(pos.down()).isSolid();
+                    boolean solidAbove3 = chunk.getBlockState(pos.up(3)).isSolid();
+
+                    if (airAbove && solidBelow3) {
+                        chunkData.computeIfAbsent(new IntPair(x, z), __ -> new TreeMap<>()).put(y, 1);
                     }
-                    if(!chunk.getBlockState(pos.setY(y-1)).isSolid()&&chunk.getBlockState(pos.setY(y+3)).isSolid()){
-                        techBlockEntity.addPair(y,-1);
+                    if (airBelow && solidAbove3) {
+                        chunkData.computeIfAbsent(new IntPair(x, z), __ -> new TreeMap<>()).put(y, -1);
                     }
                 }
             }
         }
+
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext context) {
             Chunk chunk = context.chunk;
-            ChunkPos or = chunk.getPos();
-            int miny=chunk.getBottomY()+1;
-            for (int x=0;x<=15;x++){
-                for (int z=0;z<=15;z++){
-                    BlockPos orb = or.getBlockPos(x, yT, z);
-                    int maxy=chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG).get(x,z);
-                    BlockState key = Registries.BLOCK.get(new Identifier("fbased:surface_cache")).getDefaultState();
-                    chunk.setBlockState(orb, key, false);
-                    TechBlockEntity data = new TechBlockEntity(orb, key);
-                    runy(data,miny,maxy,x, z,chunk);
-                    NbtCompound nbt = new NbtCompound();
-                    data.writeNbt(nbt);
-                    data.markDirty();
-                    chunk.setBlockEntity(data);
+            ChunkPos chunkPos = chunk.getPos();
+            int miny = chunk.getBottomY() + 1;
+
+            // Используем временное хранилище в чанке через миксин
+            if (!(chunk instanceof ChunkExtension ext)) {
+
+                return (x, y, z) -> chunk.getBlockState(new BlockPos(x, y, z)); // fallback
+            }
+            Map<IntPair, TreeMap<Integer, Integer>> chunkData = ext.getCustomMap();
+            for (int x = 0; x <= 15; x++) {
+                for (int z = 0; z <= 15; z++) {
+                    BlockPos orb = chunkPos.getBlockPos(x, yT, z);
+                    int maxy = chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG).get(x, z);
+                    runy(chunkData, miny, maxy, orb, chunk);
                 }
             }
-            return (x, y, z) -> {return chunk.getBlockState(new BlockPos(x,y,z));};
+            ext.setCustomMap(chunkData);
+            chunk.setNeedsSaving(true);
+            chunk.needsSaving();
+            return (x, y, z) -> chunk.getBlockState(new BlockPos(x, y, z));
         }
     }
-
-
 
     // Function to create a new GeologyD rule
 // This is a factory method to simplify creating instances of the GeologyD class
