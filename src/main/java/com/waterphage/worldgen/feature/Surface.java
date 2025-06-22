@@ -274,7 +274,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     }
     // 1.3.1.1
     private boolean wallch(int x,int z,int yl,boolean m) { // checks for wall
-        int dy=0; // I tried many combinations of positions at y and xz. All of them sucks
+        int dy=m?-1:1; // I tried many combinations of positions at y and xz. All of them sucks
         List<IntPair> search = Arrays.asList(
                 new IntPair(x-1,z),
                 new IntPair(x+1,z),
@@ -339,7 +339,11 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 int val = floor.get(yl);
                 if (MODE=="blend"){
                     floor.put(yl, m ? val+n : val-n);
-                } else{
+                }if (MODE=="none"){
+                    floor.put(yl,m?34-val:34-val);
+                }
+
+                else{
                     if((m?17-val:val-17)<n){
                         floor.put(yl,m?17+n:-17-n);
                     }
@@ -387,7 +391,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         wall.clear();
         wall.putAll(updated);
     }
-    // 1.3.4 Steep calcutaions. Not sure if it's workking as intended since i lost track.
+    // 1.3.4 Steep calcutaions. Not sure if it's workking as intended since I lost track.
 
     private void calcsteep(Map<BlockPos,List<BlockPos>> wall,Map<BlockPos,List<BlockPos>> edgei,boolean m){
         Map<BlockPos,List<BlockPos>> edge=new HashMap<>(edgei);
@@ -402,7 +406,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 int ys=start.getY();
                 Integer isi=Math.abs(ydata.get(ys));
                 if (isi==null)continue;
-                Integer is=isi<33?16:isi-33;// I decided formulas on a go. It only looks good. To tired to fully calculate this crap.
+                Integer is=isi<33?33-isi:isi-33;// I decided formulas on a go. It only looks good. Too tired to fully calculate this crap.
 
                 for(BlockPos neig:wall.get(start)){
                     if(neig==null)continue;
@@ -660,8 +664,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 world.setBlockState(pos.add(0,10,0),snow,3);
                 world.setBlockState(pos.add(0,11,0),snow,3);
                 world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
                 return;
             case 21:
                 world.setBlockState(pos,ice,3);
@@ -676,10 +678,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 world.setBlockState(pos.add(0,9,0),snow,3);
                 world.setBlockState(pos.add(0,10,0),snow,3);
                 world.setBlockState(pos.add(0,11,0),snow,3);
-                world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
-                world.setBlockState(pos.add(0,15,0),snow,3);
                 return;
             case 22:
                 world.setBlockState(pos,dirt,3);
@@ -693,11 +691,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 world.setBlockState(pos.add(0,8,0),ice,3);
                 world.setBlockState(pos.add(0,9,0),snow,3);
                 world.setBlockState(pos.add(0,10,0),snow,3);
-                world.setBlockState(pos.add(0,11,0),snow,3);
-                world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
-                world.setBlockState(pos.add(0,15,0),snow,3);
                 return;
             case 23:
                 world.setBlockState(pos,ice,3);
@@ -709,13 +702,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 world.setBlockState(pos.add(0,6,0),ice,3);
                 world.setBlockState(pos.add(0,7,0),ice,3);
                 world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),snow,3);
-                world.setBlockState(pos.add(0,11,0),snow,3);
-                world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
-                world.setBlockState(pos.add(0,15,0),dirt,3);
+                world.setBlockState(pos.add(0,9,0),snow,3);
                 return;
             case 24:
                 world.setBlockState(pos,ice,3);
@@ -726,14 +713,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 world.setBlockState(pos.add(0,5,0),ice,3);
                 world.setBlockState(pos.add(0,6,0),ice,3);
                 world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),snow,3);
-                world.setBlockState(pos.add(0,11,0),snow,3);
-                world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),dirt,3);
-                world.setBlockState(pos.add(0,15,0),dirt,3);
+                world.setBlockState(pos.add(0,8,0),snow,3);
                 return;
             case 25:
                 world.setBlockState(pos,ice,3);
@@ -743,15 +723,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 world.setBlockState(pos.add(0,4,0),ice,3);
                 world.setBlockState(pos.add(0,5,0),ice,3);
                 world.setBlockState(pos.add(0,6,0),ice,3);
-                world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),ice,3);
-                world.setBlockState(pos.add(0,11,0),snow,3);
-                world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
-                world.setBlockState(pos.add(0,15,0),dirt,3);
+                world.setBlockState(pos.add(0,7,0),dirt,3);
                 return;
             case 26:
                 world.setBlockState(pos,ice,3);
@@ -760,16 +732,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 world.setBlockState(pos.add(0,3,0),ice,3);
                 world.setBlockState(pos.add(0,4,0),ice,3);
                 world.setBlockState(pos.add(0,5,0),ice,3);
-                world.setBlockState(pos.add(0,6,0),ice,3);
-                world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),ice,3);
-                world.setBlockState(pos.add(0,11,0),snow,3);
-                world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
-                world.setBlockState(pos.add(0,15,0),snow,3);
+                world.setBlockState(pos.add(0,6,0),snow,3);
                 return;
             case 27:
                 world.setBlockState(pos,dirt,3);
@@ -777,107 +740,32 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 world.setBlockState(pos.add(0,2,0),ice,3);
                 world.setBlockState(pos.add(0,3,0),ice,3);
                 world.setBlockState(pos.add(0,4,0),ice,3);
-                world.setBlockState(pos.add(0,5,0),ice,3);
-                world.setBlockState(pos.add(0,6,0),ice,3);
-                world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),ice,3);
-                world.setBlockState(pos.add(0,11,0),ice,3);
-                world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
-                world.setBlockState(pos.add(0,15,0),snow,3);
+                world.setBlockState(pos.add(0,5,0),dirt,3);
                 return;
             case 28:
                 world.setBlockState(pos,ice,3);
                 world.setBlockState(pos.add(0,1,0),ice,3);
                 world.setBlockState(pos.add(0,2,0),ice,3);
                 world.setBlockState(pos.add(0,3,0),ice,3);
-                world.setBlockState(pos.add(0,4,0),ice,3);
-                world.setBlockState(pos.add(0,5,0),ice,3);
-                world.setBlockState(pos.add(0,6,0),ice,3);
-                world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),ice,3);
-                world.setBlockState(pos.add(0,11,0),ice,3);
-                world.setBlockState(pos.add(0,12,0),snow,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
-                world.setBlockState(pos.add(0,15,0),snow,3);
+                world.setBlockState(pos.add(0,4,0),dirt,3);
                 return;
             case 29:
                 world.setBlockState(pos,ice,3);
                 world.setBlockState(pos.add(0,1,0),ice,3);
                 world.setBlockState(pos.add(0,2,0),ice,3);
-                world.setBlockState(pos.add(0,3,0),ice,3);
-                world.setBlockState(pos.add(0,4,0),ice,3);
-                world.setBlockState(pos.add(0,5,0),ice,3);
-                world.setBlockState(pos.add(0,6,0),ice,3);
-                world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),ice,3);
-                world.setBlockState(pos.add(0,11,0),ice,3);
-                world.setBlockState(pos.add(0,12,0),ice,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),snow,3);
-                world.setBlockState(pos.add(0,15,0),dirt,3);
+                world.setBlockState(pos.add(0,3,0),snow,3);
                 return;
             case 30:
                 world.setBlockState(pos,ice,3);
                 world.setBlockState(pos.add(0,1,0),ice,3);
-                world.setBlockState(pos.add(0,2,0),ice,3);
-                world.setBlockState(pos.add(0,3,0),ice,3);
-                world.setBlockState(pos.add(0,4,0),ice,3);
-                world.setBlockState(pos.add(0,5,0),ice,3);
-                world.setBlockState(pos.add(0,6,0),ice,3);
-                world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),ice,3);
-                world.setBlockState(pos.add(0,11,0),ice,3);
-                world.setBlockState(pos.add(0,12,0),ice,3);
-                world.setBlockState(pos.add(0,13,0),snow,3);
-                world.setBlockState(pos.add(0,14,0),dirt,3);
-                world.setBlockState(pos.add(0,15,0),dirt,3);
+                world.setBlockState(pos.add(0,2,0),dirt,3);
                 return;
             case 31:
                 world.setBlockState(pos,ice,3);
-                world.setBlockState(pos.add(0,1,0),ice,3);
-                world.setBlockState(pos.add(0,2,0),ice,3);
-                world.setBlockState(pos.add(0,3,0),ice,3);
-                world.setBlockState(pos.add(0,4,0),ice,3);
-                world.setBlockState(pos.add(0,5,0),ice,3);
-                world.setBlockState(pos.add(0,6,0),ice,3);
-                world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),ice,3);
-                world.setBlockState(pos.add(0,11,0),ice,3);
-                world.setBlockState(pos.add(0,12,0),ice,3);
-                world.setBlockState(pos.add(0,13,0),ice,3);
-                world.setBlockState(pos.add(0,14,0),dirt,3);
-                world.setBlockState(pos.add(0,15,0),dirt,3);
+                world.setBlockState(pos.add(0,1,0),dirt,3);
                 return;
             case 32:
-                world.setBlockState(pos,ice,3);
-                world.setBlockState(pos.add(0,1,0),ice,3);
-                world.setBlockState(pos.add(0,2,0),ice,3);
-                world.setBlockState(pos.add(0,3,0),ice,3);
-                world.setBlockState(pos.add(0,4,0),ice,3);
-                world.setBlockState(pos.add(0,5,0),ice,3);
-                world.setBlockState(pos.add(0,6,0),ice,3);
-                world.setBlockState(pos.add(0,7,0),ice,3);
-                world.setBlockState(pos.add(0,8,0),ice,3);
-                world.setBlockState(pos.add(0,9,0),ice,3);
-                world.setBlockState(pos.add(0,10,0),ice,3);
-                world.setBlockState(pos.add(0,11,0),ice,3);
-                world.setBlockState(pos.add(0,12,0),ice,3);
-                world.setBlockState(pos.add(0,13,0),ice,3);
-                world.setBlockState(pos.add(0,14,0),ice,3);
-                world.setBlockState(pos.add(0,15,0),dirt,3);
+                world.setBlockState(pos,dirt,3);
                 return;
             case 48:
                 world.setBlockState(pos,dirt,3);

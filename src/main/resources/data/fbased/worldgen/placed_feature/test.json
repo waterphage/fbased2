@@ -5,7 +5,7 @@
       "min": 2,
       "max": 16,
       "tech_Y": 0,
-      "edge_mode": "blend",
+      "edge_mode": "none",
       "default": {
         "feature": {
           "config": {
