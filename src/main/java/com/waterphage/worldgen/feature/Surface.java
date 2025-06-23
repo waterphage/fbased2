@@ -6,16 +6,22 @@ import com.waterphage.block.models.TechBlockEntity;
 import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.IntPair;
 import com.waterphage.block.models.TechBlock;
+import com.waterphage.meta.IntPairBase;
+import com.waterphage.meta.IntPairM;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.math.random.RandomSplitter;
 import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.gen.chunk.ChunkGenerator;
@@ -31,16 +37,36 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     public Surface(Codec<SurfaceConfig> codec) {
         super(codec);
     }
-
-    //Generates features based on the biome and configuration conditions.
+    public record BiomeValue(int out, int in, float chance) {}
+    public record BiomeKey(String orig, String neig) {
+        public static BiomeKey fromString(String str) {
+            String[] parts = str.split(",");
+            return new BiomeKey(parts[0], parts.length > 1 ? parts[1] : "");
+        }
+        public String asString() {
+            return orig + "," + neig;
+        }
+    }
+    public static final Codec<BiomeKey> FB_BIOME_KEY_CODEC = Codec.STRING.xmap(
+            BiomeKey::fromString,
+            BiomeKey::asString
+    );
+    public static final Codec<BiomeValue> FB_BIOME_VALUE_CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                    Codec.INT.fieldOf("out").forGetter(BiomeValue::out),
+                    Codec.INT.fieldOf("in").forGetter(BiomeValue::in),
+                    Codec.FLOAT.fieldOf("chance").forGetter(BiomeValue::chance)
+            ).apply(instance, BiomeValue::new)
+    );
+    public static final Codec<Map<BiomeKey, BiomeValue>> FB_BIOME_MAP_CODEC = Codec.unboundedMap(FB_BIOME_KEY_CODEC, FB_BIOME_VALUE_CODEC);
     public static class SurfaceConfig implements FeatureConfig {
-
         public static final Codec<SurfaceConfig> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
                         Codec.INT.fieldOf("tech_Y").forGetter(config -> config.yT),
                         Codec.INT.fieldOf("min").forGetter(config -> config.min),
                         Codec.INT.fieldOf("max").forGetter(config -> config.max),
-                        Codec.STRING.fieldOf("edge_mode").forGetter(config -> config.mode)
+                        Codec.STRING.fieldOf("edge_mode").forGetter(config -> config.mode),
+                        FB_BIOME_MAP_CODEC.fieldOf("biome_relations").forGetter(config -> config.biome)
                         //Identifier.CODEC.listOf().fieldOf("biomes").forGetter(config -> config.biomes),
                         //Codec.unboundedMap(Codec.INT,
                                         //Codec.unboundedMap(Codec.BOOL, PlacedFeature.REGISTRY_CODEC))
@@ -51,84 +77,103 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         private Integer yT;
         private Integer max;
         private String mode;
-        private List<Identifier> biomes;
+        private Map<BiomeKey,BiomeValue> biome;
         private Map<Integer,Map<Boolean, RegistryEntry<PlacedFeature>>> features;
 
-        SurfaceConfig(Integer yT,Integer min, Integer max,String mode
+        SurfaceConfig(Integer yT,Integer min, Integer max,String mode,Map<BiomeKey,BiomeValue>biome
                       //List<Identifier> biomes,Map<Integer,Map<Boolean,RegistryEntry<PlacedFeature>>> features
         ) {
             this.yT=yT;
             this.max = max;
             this.min = min;
             this.mode=mode;
-            this.biomes = biomes;
+            this.biome = biome;
             this.features=features;
         }
+
+        public Map<BiomeKey, BiomeValue> biome() {
+            return this.biome;
+        }
     }
+    private class SurfCont {
+        private StructureWorldAccess w;
+        private Random r;
+        private Map<BiomeKey,BiomeValue> biomemap;
+        private Map<IntPair,TreeMap<Integer,Integer>> global = new HashMap<>();
+        private Map<BlockPos,List<BlockPos>> mapSF = new HashMap<>();
+        private Map<BlockPos,List<BlockPos>> inSF = new HashMap<>();
+        private Map<BlockPos,List<BlockPos>> outSF = new HashMap<>();
+        private Map<BlockPos,List<BlockPos>> wallF = new HashMap<>();
+        private Map<BlockPos,List<BlockPos>> mapSC = new HashMap<>();
+        private Map<BlockPos,List<BlockPos>> inSC = new HashMap<>();
+        private Map<BlockPos,List<BlockPos>> outSC = new HashMap<>();
+        private Map<BlockPos,List<BlockPos>> wallC = new HashMap<>();
+        private int xi;
+        private int zi;
+        private int yT;
+        private List<BlockPos>chunks;
 
-    // Global objects since referencing them individually was tiresome. Not much time wasted
-    private static StructureWorldAccess WORLD; // Outdated
-    private static Map<IntPair,TreeMap<Integer,Integer>> GLOBAL =new HashMap<>(); // Main surface data Mar(x,z)Treemap(y,i)
-    private static Map<BlockPos,List<BlockPos>> mapSF=new HashMap<>(); // Smooth floor neighbours
-    private static Map<BlockPos,List<BlockPos>> inSF=new HashMap<>();  // Inner smooth floor edge
-    private static Map<BlockPos,List<BlockPos>> outSF=new HashMap<>(); // Outer smooth floor edge
-    private static Map<BlockPos,List<BlockPos>> wallF=new HashMap<>(); // Steep floor neigbours
-    private static Map<BlockPos,List<BlockPos>> mapSC=new HashMap<>(); // Smooth ceiling neighbours
-    private static Map<BlockPos,List<BlockPos>> inSC=new HashMap<>();  // Inner smooth ceiling edge
-    private static Map<BlockPos,List<BlockPos>> outSC=new HashMap<>(); // Outer smooth ceiling edge
-    private static Map<BlockPos,List<BlockPos>> wallC=new HashMap<>(); // Steep ceiling neigbours
-
+        RandomSplitter splitter;
+        private float random(BlockPos pos){
+            return this.splitter.split(pos).nextFloat();
+        }
+        private SurfCont(FeatureContext<SurfaceConfig> ctx) {
+            this.w = ctx.getWorld();
+            this.r = ctx.getRandom();
+            this.splitter=this.r.nextSplitter();
+            SurfaceConfig config=ctx.getConfig();
+            this.biomemap = config.biome();
+            BlockPos.Mutable origin=ctx.getOrigin().mutableCopy();
+            this.xi=origin.getX();this.zi=origin.getZ();
+            this.yT=config.yT;
+            this.chunks=new ArrayList<>();
+            chunks.add(origin);
+            chunks.add(origin.set(-16,0,-16));
+            chunks.add(origin.set(16,0,-16));
+            chunks.add(origin.set(-16,0,16));
+            chunks.add(origin.set(16,0,16));
+            chunks.add(origin.set(-16,0,0));
+            chunks.add(origin.set(16,0,0));
+            chunks.add(origin.set(0,0,-16));
+            chunks.add(origin.set(0,0,16));
+        }
+    }
     // 0 Main method
     @Override
     public boolean generate(FeatureContext<SurfaceConfig> context) {
-        SurfaceConfig config = context.getConfig();
-        BlockPos origin = context.getOrigin();
-        WORLD = context.getWorld();
-        Random random = context.getRandom();
-        ChunkGenerator chunkGenerator = context.getGenerator();
-        int xi=origin.getX();int zi=origin.getZ();
-        BlockPos.Mutable or = new BlockPos.Mutable();
-        List<Pair<BlockPos,Integer>>placer=placer(xi,zi,config.yT);// 1 holds all math stores placement positions and their indexes
+
+        SurfCont ctx=new SurfCont(context);
+        List<Pair<BlockPos,Integer>>placer=placer(ctx);// 1 holds all math stores placement positions and their indexes
+
         for (Pair<BlockPos,Integer> entry:placer){
             BlockPos.Mutable pos = entry.getLeft().mutableCopy();
             int i = entry.getRight();
-            test(i,pos,random);// 2 Temporary filler
+            test(i,pos,ctx);// 2 Temporary filler
             //config.defaultFeature.value().generateUnregistered(world, chunkGenerator, random,pos); - feature placement reminder
         }
-        cleancache();// 0.1 data cleanup
         return true;
     }
-    // 0.1 data cleanup Storing data makes reading too long. Maybe there are better ways than cleaning everything every new chunk, but it just a lot of shit code that would barely save anything.
-    private void cleancache(){
-        GLOBAL.clear();
-        mapSF.clear();
-        inSF.clear();
-        outSF.clear();
-        mapSC.clear();
-        inSC.clear();
-        outSC.clear();
-    };
     // 1 Placement positions calculation
-    private List<Pair<BlockPos,Integer>>placer(int xi,int zi,int yT){
+    private List<Pair<BlockPos,Integer>>placer(SurfCont ctx){
         List<Pair<BlockPos,Integer>>goal=new ArrayList<>();
-        ChunkPos chunkPos = WORLD.getChunk(new BlockPos(xi,yT,zi)).getPos();
+        ChunkPos chunkPos = ctx.w.getChunk(new BlockPos(ctx.xi,ctx.yT,ctx.zi)).getPos();
         int chunkX = chunkPos.x;
         int chunkZ = chunkPos.z;
-        GLOBAL=global(chunkX,chunkZ); // 1.1 Surface data reading
-        globalcaching(xi,zi); // 1.2 Steep / Smooth terrain division
-        neighbours(); // 1.3 Edge calculation
+        ctx.global=global(chunkX,chunkZ,ctx); // 1.1 Surface data reading
+        globalcaching(ctx); // 1.2 Steep / Smooth terrain division
+        neighbours(ctx); // 1.3 Edge calculation
         for (int x=0;x<=15;x++){
             for (int z=0;z<=15;z++) {
-                Map<Integer,Integer> ydata=GLOBAL.get(new IntPair(xi+x,zi+z)); //reading updated surface data
+                Map<Integer,Integer> ydata=ctx.global.get(new IntPair(ctx.xi+x,ctx.zi+z)); //reading updated surface data
                 for (Map.Entry<Integer, Integer> entry : ydata.entrySet()){
-                    goal.add(new Pair<>(new BlockPos(xi+x,entry.getKey(),zi+z), entry.getValue())); // converting to placement positions format
+                    goal.add(new Pair<>(new BlockPos(ctx.xi+x,entry.getKey(),ctx.zi+z), entry.getValue())); // converting to placement positions format
                 }
             }
         }
         return goal;
     }
     // 1.1 Yes, I read data from chunk. It's dark vibecoding magic I'm too afraid to understand how it works. It was pain, alot of pain.
-    public static Map<IntPair, TreeMap<Integer, Integer>> global(int centerChunkX, int centerChunkZ) {
+    public static Map<IntPair, TreeMap<Integer, Integer>> global(int centerChunkX, int centerChunkZ,SurfCont ctx) {
         Map<IntPair, TreeMap<Integer, Integer>> global = new HashMap<>();
 
         for (int dx = -1; dx <= 1; dx++) {
@@ -136,53 +181,75 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 int chunkX = centerChunkX + dx;
                 int chunkZ = centerChunkZ + dz;
                 ChunkPos pos = new ChunkPos(chunkX, chunkZ);
-                Chunk chunk = WORLD.getChunk(chunkX, chunkZ, ChunkStatus.EMPTY, false);
+                Chunk chunk = ctx.w.getChunk(chunkX, chunkZ, ChunkStatus.EMPTY, false);
 
                 if (!(chunk instanceof ChunkExtension ext)) continue;
 
                 Map<IntPair, TreeMap<Integer, Integer>> local = ext.getCustomMap(); // I use Treemap to have strict order of y-levels. At least I hope it works this way.
                 for (Map.Entry<IntPair, TreeMap<Integer, Integer>> entry : local.entrySet()) {
-                    // putIfAbsent to avoid overwriting existing
-                    global.putIfAbsent(entry.getKey(), new TreeMap<>(entry.getValue()));
+                    global.put(entry.getKey(), new TreeMap<>(entry.getValue()));
+                }
+                if (ext.getFBstatus()) {
+                    Map<String, Map<BlockPos, List<BlockPos>>> grids = ext.getExtraGrids();
+                    for (String type : grids.keySet()) {
+                        Map<BlockPos, List<BlockPos>> mesh=new HashMap<>();
+                        switch (type) {
+                            case "mapSF": mesh=ctx.mapSF;
+                            case "outSF": mesh=ctx.outSF;
+                            case "inSF": mesh=ctx.inSF;
+                            case "wallF": mesh=ctx.wallF;
+                            case "mapSC": mesh=ctx.mapSC;
+                            case "outSC": mesh=ctx.outSC;
+                            case "inSC": mesh=ctx.inSC;
+                            case "wallC": mesh=ctx.wallC;}
+                        Map<BlockPos, List<BlockPos>> init = grids.get(type);
+                        if (init == null || init.isEmpty()) continue;
+                        ctx.chunks.remove(chunk.getPos().getBlockPos(0, chunk.getBottomY(), 0));
+                        for (Map.Entry<BlockPos, List<BlockPos>> entry : grids.get(type).entrySet()) {
+                            mesh.put(entry.getKey(), entry.getValue());
+                        }
+                    }
                 }
             }
         }
         return global;
     }
     // 1.2 Smooth and steep terrain determination
-    private void globalcaching(int xi,int zi){
+    private void globalcaching(SurfCont ctx){
+
         for (int x=-16;x<=31;x++){
             for (int z=-16;z<=31;z++) {
-                IntPair key=new IntPair(xi+x,zi+z);
-                TreeMap<Integer,Integer> surf=GLOBAL.get(key);
+                int xf=ctx.xi+x;int zf=ctx.zi+z;
+                IntPair key=new IntPair(xf,zf);
+                TreeMap<Integer,Integer> surf=ctx.global.get(key);
                 if (surf == null) continue;
                 for (Map.Entry<Integer, Integer> entry : surf.entrySet()){
                     int y=entry.getKey();
                     int i=entry.getValue();
                     boolean m=i>0;
                     if (Math.abs(i)==1){
-                        if(simplech(m,xi+x,y,zi+z)){entry.setValue(m?17:-17);} // 1.2.1 checking for smooth terrain 2-16 - outer edge, 17 - filling, 18-32 - inner edge
+                        if(simplech(m,xf,y,zf,ctx)){entry.setValue(m?17:-17);} // 1.2.1 checking for smooth terrain 2-16 - outer edge, 17 - filling, 18-32 - inner edge
                         else {
-                            if(m){wallF.put(new BlockPos(xi+x,y,zi+z),new ArrayList<>());} // pointed out wall tiles. Should probably make the same with smooth tiles,
-                            else {wallC.put(new BlockPos(xi+x,y,zi+z),new ArrayList<>());}
+                            if(m){ctx.wallF.put(new BlockPos(xf,y,zf),new ArrayList<>());} // pointed out wall tiles. Should probably make the same with smooth tiles,
+                            else {ctx.wallC.put(new BlockPos(xf,y,zf),new ArrayList<>());}
                             entry.setValue(m?33:-33); // steep terrain code. After long thought, not the best ide to place it here since surface must go like: outer edge -> filling -> inner edge -> wall
                         }
                     }
                 }
-                GLOBAL.put(key,surf);
+                ctx.global.put(key,surf);
             }
         }
     }
     // 1.2.1 Smooth terrain check. This part makes + pattern. They are best to make nice transitions, tested before
-    private boolean simplech(boolean m,int xf,int yo,int zf){
-        List<IntPair> search = Arrays.asList( // + pattern. I doesn't matter (in local sence) if positions aren't loaded.
+    private boolean simplech(boolean m,int xf,int yo,int zf,SurfCont ctx){
+        List<IntPair> search = Arrays.asList( // + pattern. It doesn't matter (in local sence) if positions aren't loaded.
                 new IntPair(xf-1,zf),
                 new IntPair(xf+1,zf),
                 new IntPair(xf,zf-1),
                 new IntPair(xf,zf+1)
         );
         for (IntPair pos:search){
-            Map<Integer,Integer>pairs=GLOBAL.get(pos);
+            Map<Integer,Integer>pairs=ctx.global.get(pos);
             if (pairs==null){return false;}
             if(!checklocal(pairs,yo-1,yo+1,m)){return false;} // 1.2.1.1 checing for surface instead of air
         }
@@ -198,9 +265,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 });
     }
     //1.3 Edge detection and calculation
-    void neighbours(){
-        for(Map.Entry<IntPair, TreeMap<Integer, Integer>> XZ:GLOBAL.entrySet()) { // I think this can be optimized if I pointed out all their positions earlier
-            TreeMap<Integer, Integer> sorted = new TreeMap<>(XZ.getValue());
+    void neighbours(SurfCont ctx){
+        for(Map.Entry<IntPair, TreeMap<Integer, Integer>> XZ:ctx.global.entrySet()) { // I think this can be optimized if I pointed out all their positions earlier
             IntPair xz = XZ.getKey();
             Integer x = xz.first();
             Integer z = xz.second();
@@ -209,26 +275,28 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 int y = point.getKey();
                 int i = point.getValue();
                 if (i>1&&i<33){
-                    getsmooth(mapSF,outSF,inSF,x,y,z,true); //1.3.1 calculating neighbours mesh and edges
+                    getsmooth(ctx,ctx.mapSF,ctx.outSF,ctx.inSF,ctx.wallF,x,y,z,true); //1.3.1 calculating neighbours mesh and edges
                 }
                 if (i<-1&&i>-33){
-                    getsmooth(mapSC,outSC,inSC,x,y,z,false);
+                    getsmooth(ctx,ctx.mapSC,ctx.outSC,ctx.inSC,ctx.wallC,x,y,z,false);
                 }
             }
         }
-        calcsmooth(mapSF,outSF,inSF,true); // 1.3.2 determining smooth values
-        calcsmooth(mapSC,outSC,inSC,false);
-        getsteep(wallF,true); // 1.3.3 calculating steep mesh. If adjustment wall tile higher (or lover) that node - it's it neighbour
-        getsteep(wallC,false);
-        calcsteep(wallF,inSF,true); // 1.3.4 I made something, not entirely sure if it works. You saw why
-        calcsteep(wallC,inSC,false);
+        calcsmooth(ctx,ctx.mapSF,ctx.outSF,ctx.inSF,true); // 1.3.2 determining smooth values
+        calcsmooth(ctx,ctx.mapSC,ctx.outSC,ctx.inSC,false);
+        getsteep(ctx,ctx.wallF,true); // 1.3.3 calculating steep mesh. If adjustment wall tile higher (or lover) that node - it's it neighbour
+        getsteep(ctx,ctx.wallC,false);
+        calcsteep(ctx,ctx.wallF,ctx.inSF,true); // 1.3.4 I made something, not entirely sure if it works. You saw why
+        calcsteep(ctx,ctx.wallC,ctx.inSC,false);
 
     }
     // 1.3.1 Smooth mesh
     private void getsmooth(
+            SurfCont ctx,
             Map<BlockPos,List<BlockPos>>map,
             Map<BlockPos,List<BlockPos>>edgeS,
             Map<BlockPos,List<BlockPos>>edgeW,
+            Map<BlockPos,List<BlockPos>>wall,
             Integer x,Integer y,Integer z,
             boolean m){
         List<BlockPos> local=new ArrayList<>();
@@ -239,7 +307,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 new IntPair(x,z+1)
         ); // Should probably move it out since I'm using it too often
         for (IntPair pos:search){
-            Map<Integer,Integer>pairs=GLOBAL.get(pos);
+            Map<Integer,Integer>pairs=ctx.global.get(pos);
             if(pairs==null){continue;}
             for(int yl=y-1;yl<=y+1;yl++){ // Same principle as simplecheck
                 Integer i=pairs.get(yl);
@@ -247,17 +315,17 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 if(m?i>=2&&i<=32:i<=-2&&i>=-32){local.add(new BlockPos(pos.first(),yl,pos.second()));}
             }
         }
+        BlockPos org=new BlockPos(x,y,z);
+        biomeBorder(ctx,org,local,edgeS,edgeW);
         if (local.size()<4){ // Pretty simple criteria
-            if (wallch(x,z,y,m)){ // 1.3.1.1 Checking for wall to find inner edge
-                if(m){wallF.put(new BlockPos(x,y,z),new ArrayList<>());} // It easier to impregnate to wall mesh that dancing around maps
-                else {wallC.put(new BlockPos(x,y,z),new ArrayList<>());}
-                edgeW.put(new BlockPos(x,y,z),local);} // inner edge
-            if (wallch2(x,z,y,m)){
-                if(m){wallF.put(new BlockPos(x,y,z),new ArrayList<>());} // It easier to impregnate to wall mesh that dancing around maps
-                else {wallC.put(new BlockPos(x,y,z),new ArrayList<>());}
-                edgeS.put(new BlockPos(x,y,z),local);} // outer edge
+            wall.put(org,new ArrayList<>()); // It easier to impregnate to wall mesh that dancing around maps
+            if(wallch2(ctx,x,z,y,m)){
+                edgeS.put(org,local); // outer edge
+            }
+            if (wallch(ctx,x,z,y,m)){ // 1.3.1.1 Checking for wall to find inner edge
+                edgeW.put(org,local);} // inner edge
         }
-        if (Math.random() < 0.58095) { // making X neighbours to make edge round
+        if (ctx.random(org) < 0.58095) { // making X neighbours to make edge round
             search = Arrays.asList( // I'm using this only here
                     new IntPair(x-1,z-1),
                     new IntPair(x-1,z+1),
@@ -265,17 +333,27 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     new IntPair(x+1,z+1)
             );
             for (IntPair pos:search){ //diamond pattern cooler on slopes, and it's already eating my time, so only one y-level
-                Map<Integer,Integer>pairs=GLOBAL.get(pos);
+                Map<Integer,Integer>pairs=ctx.global.get(pos);
                 if(pairs==null){continue;}
                 Integer i=pairs.get(y);
                 if(i==null){continue;}
                 if(m?i>=2&&i<=32:i<=-2&&i>=-32){local.add(new BlockPos(pos.first(),y,pos.second()));}
             }
         }
-        map.put(new BlockPos(x,y,z),local);
+        map.put(org,local);
+    }
+    private void biomeBorder(SurfCont ctx,BlockPos org,List<BlockPos>local,Map<BlockPos,List<BlockPos>>edgeS,Map<BlockPos,List<BlockPos>>edgeW){
+
+        /*String orgB=ctx.w.getRegistryManager().get(RegistryKeys.BIOME).getId(ctx.w.getBiome(org).value()).toString();
+        for (BlockPos neig:local){
+            String neigB=ctx.w.getRegistryManager().get(RegistryKeys.BIOME).getId(ctx.w.getBiome(neig).value()).toString();
+            if (orgB.equals(neigB)){
+                edgeS.put(org,local);
+                return;}
+        }*/
     }
     // 1.3.1.1
-    private boolean wallch(int x,int z,int yl,boolean m) { // checks for wall
+    private boolean wallch(SurfCont ctx,int x,int z,int yl,boolean m) { // checks for wall
         int dy=m?-1:1; // I tried many combinations of positions at y and xz. All of them sucks
         List<IntPair> search = Arrays.asList(
                 new IntPair(x-1,z),
@@ -284,13 +362,13 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 new IntPair(x,z+1)
         );
         for(IntPair point:search){
-            if(inside(point,yl+dy,m)){return true;} // 1.3.1.1.1 looking for steep floor
+            if(inside(ctx,point,yl+dy,m)){return true;} // 1.3.1.1.1 looking for steep floor
         }
         return false;
     }
     // 1.3.1.1.1 looking for steep floor
-    private boolean inside(IntPair XZ, int yl,boolean m) {
-        TreeMap<Integer, Integer> levels = GLOBAL.get(XZ);
+    private boolean inside(SurfCont ctx,IntPair XZ, int yl,boolean m) {
+        TreeMap<Integer, Integer> levels = ctx.global.get(XZ);
         if (levels == null || levels.isEmpty()) {
             return false;
         }
@@ -300,7 +378,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         if (i==null) {return false;}
         return m?i>32:i<-32;
     }
-    private boolean wallch2(int x,int z,int yl,boolean m) {
+    private boolean wallch2(SurfCont ctx,int x,int z,int yl,boolean m) {
         int dy=m?-4:4;
         List<IntPair> search = Arrays.asList(
                 new IntPair(x-2,z),
@@ -309,12 +387,12 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 new IntPair(x,z+2)
         );
         for(IntPair point:search){
-            if(!inside2(point,yl+dy,m)){return true;}
+            if(!inside2(ctx,point,yl+dy,m)){return true;}
         }
         return false;
     }
-    private boolean inside2(IntPair XZ, int yl,boolean m) {
-        TreeMap<Integer, Integer> levels = GLOBAL.get(XZ);
+    private boolean inside2(SurfCont ctx,IntPair XZ, int yl,boolean m) {
+        TreeMap<Integer, Integer> levels = ctx.global.get(XZ);
         if (levels == null || levels.isEmpty()) {
             return false;
         }
@@ -325,7 +403,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         return m?i>0:i<-0;
     }
     // 1.3.2 determining i-values for smooth mesh
-    private void calcsmooth(
+    private void calcsmooth(SurfCont ctx,
             Map<BlockPos, List<BlockPos>> mapS,
             Map<BlockPos, List<BlockPos>> outS,
             Map<BlockPos, List<BlockPos>> inS,
@@ -336,12 +414,12 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         for (int n = 15; n > 0; --n) {// outer edge
             for (BlockPos point : use) {
                 IntPair XZ = new IntPair(point.getX(), point.getZ());
-                TreeMap<Integer, Integer> floor = GLOBAL.get(XZ);
+                TreeMap<Integer, Integer> floor = ctx.global.get(XZ);
                 if (floor == null) continue;
                 int yl = point.getY();
                 int val = floor.get(yl);
                 floor.put(yl,m?17-n:-17+n); // outer edge law
-                GLOBAL.put(XZ, floor);
+                ctx.global.put(XZ, floor);
             }
 
             ban.addAll(use);
@@ -360,11 +438,11 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             for (BlockPos point : use) {
                 if (point == null) continue;
                 IntPair XZ = new IntPair(point.getX(), point.getZ());
-                TreeMap<Integer, Integer> floor = GLOBAL.get(XZ);
+                TreeMap<Integer, Integer> floor = ctx.global.get(XZ);
                 if (floor == null) continue;
                 Integer yl = point.getY();
                 Integer val = floor.get(yl);
-                if((m?17-val:val-17)<n){floor.put(yl,m?34-val:-34+val);GLOBAL.put(XZ, floor);}
+                if((m?17-val:val-17)<n){floor.put(yl,m?34-val:-34+val);ctx.global.put(XZ, floor);}
             }
 
             ban.addAll(use);
@@ -378,8 +456,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             use = next;
         }
     }
-    // 1.3.3 Calculatind sttep mesh
-    private void getsteep(Map<BlockPos,List<BlockPos>> wall,boolean m){
+    // 1.3.3 Calculatind steep mesh
+    private void getsteep(SurfCont ctx,Map<BlockPos,List<BlockPos>> wall,boolean m){
         Map<BlockPos, List<BlockPos>> updated = new HashMap<>();
         for (BlockPos point:wall.keySet()){
             int x=point.getX();int z= point.getZ();int y=point.getY();
@@ -391,7 +469,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             );
             List<BlockPos> neighbours=new ArrayList<>();
             for (IntPair pos:search){
-                TreeMap<Integer,Integer>pairs=GLOBAL.get(pos);
+                TreeMap<Integer,Integer>pairs=ctx.global.get(pos);
                 if (pairs==null) continue;
                 Integer yw=m?pairs.higherKey(y):pairs.lowerKey(y);
                 if(yw==null) continue;
@@ -408,7 +486,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     }
     // 1.3.4 Steep calcutaions. Not sure if it's workking as intended since I lost track.
 
-    private void calcsteep(Map<BlockPos,List<BlockPos>> wall,Map<BlockPos,List<BlockPos>> edgei,boolean m){
+    private void calcsteep(SurfCont ctx,Map<BlockPos,List<BlockPos>> wall,Map<BlockPos,List<BlockPos>> edgei,boolean m){
         Map<BlockPos,List<BlockPos>> edge=new HashMap<>(edgei);
         List<BlockPos> ban=new ArrayList<>();
         for (int n=16;n>0;--n){//push calculation further
@@ -416,7 +494,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             ban.addAll(edge.keySet());
             Map<BlockPos,List<BlockPos>> upd=new HashMap<>();
             for (BlockPos start:edge.keySet()){// main cycle
-                Map<Integer,Integer>ydata=GLOBAL.get(new IntPair(start.getX(),start.getZ()));
+                Map<Integer,Integer>ydata=ctx.global.get(new IntPair(start.getX(),start.getZ()));
                 if (ydata==null)continue;
                 int ys=start.getY();
                 Integer isi=Math.abs(ydata.get(ys));
@@ -428,16 +506,16 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     int yn=neig.getY();
                     int dy=m?neig.getY()-ys:ys-neig.getY();
                     IntPair XZn=new IntPair(neig.getX(),neig.getZ());
-                    Integer it=GLOBAL.get(XZn).get(yn);
+                    Integer it=ctx.global.get(XZn).get(yn);
                     if (it==null)continue;
                     Integer i=Math.abs(it)-33;
 
                     if (is-dy>i){
-                        TreeMap <Integer,Integer>ydata2=GLOBAL.get(XZn);
+                        TreeMap <Integer,Integer>ydata2=ctx.global.get(XZn);
                         int ifin=(m?1:-1)*(is-dy+33);
 
                         ydata2.put(yn,ifin);
-                        GLOBAL.put(XZn,ydata2);
+                        ctx.global.put(XZn,ydata2);
                         upd.put(neig,wall.get(neig));
                     }
                 }
@@ -448,385 +526,385 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             }
         }
     }
-    void layer(BlockPos.Mutable pos, BlockState ice, BlockState snow, int i) {
+    void layer(SurfCont ctx,BlockPos.Mutable pos, BlockState ice, BlockState snow, int i) {
         for (int y = 14; y >= 0; y--) {
             BlockPos posi = pos.add(0, y - i, 0);
-            if (!WORLD.isValidForSetBlock(posi)) return;
-            WORLD.setBlockState(posi, y == 14 ? snow : ice, 3);
+            if (!ctx.w.isValidForSetBlock(posi)) return;
+            ctx.w.setBlockState(posi, y == 14 ? snow : ice, 3);
         }
     }
     // 2 Cool glacier thing for testing.
-    private void test(int i,BlockPos.Mutable pos,Random random) {
+    private void test(int i,BlockPos.Mutable pos,SurfCont ctx) {
         BlockState snow = Registries.BLOCK.get(new Identifier("minecraft:snow_block")).getDefaultState();
         BlockState ice = Registries.BLOCK.get(new Identifier("minecraft:packed_ice")).getDefaultState();
         BlockState dirt = Registries.BLOCK.get(new Identifier("minecraft:coarse_dirt")).getDefaultState();
         int n=0;
         switch (i) {
             case 2:
-                WORLD.setBlockState(pos, dirt, 3);
+                ctx.w.setBlockState(pos, dirt, 3);
                 return;
             case 3:
-                WORLD.setBlockState(pos, dirt, 3);
+                ctx.w.setBlockState(pos, dirt, 3);
                 return;
             case 4:
-                WORLD.setBlockState(pos, dirt, 3);
+                ctx.w.setBlockState(pos, dirt, 3);
                 return;
             case 5:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), dirt, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
                 return;
             case 6:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), dirt, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
                 return;
             case 7:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
                 return;
             case 8:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
                 return;
             case 9:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
                 return;
             case 10:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
                 return;
             case 11:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
                 return;
             case 12:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 13, 0), ice, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
                 return;
             case 13:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 13, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 14, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 14, 0), snow, 3);
                 return;
             case 14:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 13, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 14, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 14, 0), snow, 3);
                 return;
             case 15:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 13, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 14, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 15, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 14, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 15, 0), snow, 3);
                 return;
             case 16:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 13, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 14, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 15, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 14, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 15, 0), snow, 3);
                 return;
             case 17:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 13, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 14, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 15, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 14, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 15, 0), snow, 3);
                 return;
             case 18:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 13, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 14, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 14, 0), snow, 3);
                 return;
             case 19:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 13, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), snow, 3);
                 return;
             case 20:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 12, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), snow, 3);
                 return;
             case 21:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), dirt, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 11, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), snow, 3);
                 return;
             case 22:
-                WORLD.setBlockState(pos, dirt, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 10, 0), snow, 3);
+                ctx.w.setBlockState(pos, dirt, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), snow, 3);
                 return;
             case 23:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 9, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), snow, 3);
                 return;
             case 24:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 8, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), snow, 3);
                 return;
             case 25:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 7, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), snow, 3);
                 return;
             case 26:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 6, 0), snow, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), snow, 3);
                 return;
             case 27:
-                WORLD.setBlockState(pos, dirt, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 5, 0), dirt, 3);
+                ctx.w.setBlockState(pos, dirt, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), dirt, 3);
                 return;
             case 28:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 4, 0), dirt, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), dirt, 3);
                 return;
             case 29:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 3, 0), dirt, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), dirt, 3);
                 return;
             case 30:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), ice, 3);
-                WORLD.setBlockState(pos.add(0, 2, 0), dirt, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), dirt, 3);
                 return;
             case 31:
-                WORLD.setBlockState(pos, ice, 3);
-                WORLD.setBlockState(pos.add(0, 1, 0), dirt, 3);
+                ctx.w.setBlockState(pos, ice, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
                 return;
             case 32:
-                WORLD.setBlockState(pos, dirt, 3);
+                ctx.w.setBlockState(pos, dirt, 3);
                 return;
             case 48:
-                layer(pos,ice,snow,n);
+                layer(ctx,pos,ice,snow,n);
                 return;
             case 47:
-                n=1;layer(pos,ice,snow,n);
+                n=1;layer(ctx,pos,ice,snow,n);
                 return;
             case 46:
-                n=2;layer(pos,ice,snow,n);
+                n=2;layer(ctx,pos,ice,snow,n);
                 return;
             case 45:
-                n=3;layer(pos,ice,snow,n);
+                n=3;layer(ctx,pos,ice,snow,n);
                 return;
             case 44:
-                n=4;layer(pos,ice,snow,n);
+                n=4;layer(ctx,pos,ice,snow,n);
                 return;
             case 43:
-                n=5;layer(pos,ice,snow,n);
+                n=5;layer(ctx,pos,ice,snow,n);
                 return;
             case 42:
-                n=6;layer(pos,ice,snow,n);
+                n=6;layer(ctx,pos,ice,snow,n);
                 return;
             case 41:
-                n=7;layer(pos,ice,snow,n);
+                n=7;layer(ctx,pos,ice,snow,n);
                 return;
             case 40:
-                n=8;layer(pos,ice,snow,n);
+                n=8;layer(ctx,pos,ice,snow,n);
                 return;
             case 39:
-                n=9;layer(pos,ice,snow,n);
+                n=9;layer(ctx,pos,ice,snow,n);
                 return;
             case 38:
-                n=10;layer(pos,ice,snow,n);
+                n=10;layer(ctx,pos,ice,snow,n);
                 return;
             case 37:
-                n=11;layer(pos,ice,snow,n);
+                n=11;layer(ctx,pos,ice,snow,n);
                 return;
             case 36:
-                n=12;layer(pos,ice,snow,n);
+                n=12;layer(ctx,pos,ice,snow,n);
                 return;
             case 35:
-                n=13;layer(pos,ice,snow,n);
+                n=13;layer(ctx,pos,ice,snow,n);
                 return;
             case 34:
-                n=14;layer(pos,ice,snow,n);
+                n=14;layer(ctx,pos,ice,snow,n);
                 return;
         }
     }

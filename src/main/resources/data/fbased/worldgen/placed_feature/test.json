@@ -6,6 +6,18 @@
       "max": 16,
       "tech_Y": 0,
       "edge_mode": "none",
+      "biome_relations":{
+        "minecraft:plains,minecraft:forest": {
+          "out": 1,
+          "in": 2,
+          "chance": 0.75
+        },
+        "minecraft:desert,minecraft:savanna": {
+          "out": 3,
+          "in": 4,
+          "chance": 0.5
+        }
+      },
       "default": {
         "feature": {
           "config": {

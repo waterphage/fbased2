@@ -3,6 +3,7 @@ package com.waterphage.mixin;
 import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.IntPair;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.UpgradeData;
@@ -16,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -42,5 +44,28 @@ public class WorldChunkMixin implements ChunkExtension{
         if ((Object) this instanceof ChunkExtension self && protoChunk instanceof ChunkExtension proto) {
             self.setCustomMap(proto.getCustomMap());
         }
+    }
+
+    @Unique
+    private Map<String, Map<BlockPos, List<BlockPos>>> extraGrids = new HashMap<>();
+
+    @Override
+    public Map<String, Map<BlockPos, List<BlockPos>>> getExtraGrids() {
+        return extraGrids;
+    }
+
+    @Override
+    public void setExtraGrids(Map<String, Map<BlockPos, List<BlockPos>>> grids) {
+        this.extraGrids = grids;
+    }
+    @Unique
+    public boolean calculatedFB=false;
+    @Override
+    public void markAsCalculatedFB(){
+        calculatedFB=true;
+    }
+    @Override
+    public boolean getFBstatus(){
+        return calculatedFB;
     }
 }
