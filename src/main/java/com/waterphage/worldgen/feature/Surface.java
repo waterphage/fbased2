@@ -5,6 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
 import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.IntPair;
+import com.waterphage.worldgen.placers.Offset;
 import net.minecraft.block.BlockState;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
@@ -23,6 +24,7 @@ import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Surface extends Feature<Surface.SurfaceConfig> {
     public Surface(Codec<SurfaceConfig> codec) {
@@ -533,6 +535,14 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         if(index==null)return;
         RegistryEntry<PlacedFeature> feature=index.get(i);
         if(feature==null)return;
-        feature.value().getDecoratedFeatures();
+        int x= pos.getX()- ctx.xi;int z= pos.getZ()- ctx.zi;int y= pos.getY()-ctx.w.getBottomY();
+        PlacedFeature original = new PlacedFeature(
+                feature.value().feature(),
+                Stream.concat(
+                        Stream.of(Offset.of(List.of(x, y, z))),
+                        feature.value().placementModifiers.stream()
+                ).toList()
+        );
+        original.getDecoratedFeatures();
     }
 }
