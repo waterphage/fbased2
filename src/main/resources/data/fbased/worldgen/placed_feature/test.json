@@ -5,17 +5,18 @@
       "min": 2,
       "max": 16,
       "tech_Y": 0,
-      "edge_mode": "none",
       "biome_relations":{
-        "minecraft:plains,minecraft:forest": {
-          "out": 1,
-          "in": 2,
-          "chance": 0.75
+        "fbased:steppe,fbased:steppe": {
+          "out_p": 15,"in_p": 15,"out_c": 196,"in_c": 160
         },
-        "minecraft:desert,minecraft:savanna": {
-          "out": 3,
-          "in": 4,
-          "chance": 0.5
+        "fbased:steppe,shadow": {
+          "out_p": 5,"in_p": 15,"out_c": 1.0,"in_c": 1.0
+        },
+        "fbased:steppe,fbased:steppe2": {
+          "out_p": 15,"in_p": 0,"out_c": 1.0,"in_c": 9999
+        },
+        "fbased:steppe2,fbased:steppe2": {
+          "out_p": 15,"in_p": 0,"out_c": 160,"in_c": 9999
         }
       },
       "default": {

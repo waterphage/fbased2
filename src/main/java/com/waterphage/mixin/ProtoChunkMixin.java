@@ -30,29 +30,4 @@ public class ProtoChunkMixin implements ChunkExtension {
     public void setCustomMap(Map<IntPair, TreeMap<Integer, Integer>> map) {
         this.customMap = map;
     }
-
-    @Unique
-    private Map<String, Map<BlockPos, List<BlockPos>>> extraGrids = new HashMap<>();
-
-    @Override
-    public Map<String, Map<BlockPos, List<BlockPos>>> getExtraGrids() {
-        return extraGrids;
-    }
-
-    @Override
-    public void setExtraGrids(Map<String, Map<BlockPos, List<BlockPos>>> grids) {
-        this.extraGrids = grids;
-    }
-
-    @Unique
-    public boolean calculatedFB=false;
-
-    @Override
-    public void markAsCalculatedFB() {
-        calculatedFB=true;
-    }
-    @Override
-    public boolean getFBstatus(){
-        return calculatedFB;
-    }
 }

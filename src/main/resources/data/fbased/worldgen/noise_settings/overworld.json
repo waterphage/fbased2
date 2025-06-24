@@ -48,9 +48,9 @@
             "argument": {
               "type": "fbased:domains",
               "size": 1024,
-              "sites": 1,
+              "sites": 256,
               "seed": 12345.6789,
-              "types": 256
+              "types": 2
             }
           },
           "argument2": 0.00784313725

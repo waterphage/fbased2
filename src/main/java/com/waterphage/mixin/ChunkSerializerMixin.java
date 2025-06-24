@@ -43,32 +43,6 @@ public class ChunkSerializerMixin {
             }
         }
         ext.setCustomMap(map);
-        if (nbt.contains("ExtraGrids", NbtElement.COMPOUND_TYPE)) {
-            NbtCompound grids = nbt.getCompound("ExtraGrids");
-            Map<String, Map<BlockPos, List<BlockPos>>> extra = new HashMap<>();
-
-            for (String gridName : grids.getKeys()) {
-                Map<BlockPos, List<BlockPos>> map2 = new HashMap<>();
-                NbtCompound grid = grids.getCompound(gridName);
-                for (String key : grid.getKeys()) {
-                    String[] parts = key.split(",");
-                    BlockPos base = new BlockPos(
-                            Integer.parseInt(parts[0]),
-                            Integer.parseInt(parts[1]),
-                            Integer.parseInt(parts[2])
-                    );
-                    List<BlockPos> list = new ArrayList<>();
-                    NbtList arr = grid.getList(key, NbtElement.COMPOUND_TYPE);
-                    for (NbtElement el : arr) {
-                        NbtCompound tag = (NbtCompound) el;
-                        list.add(new BlockPos(tag.getInt("x"), tag.getInt("y"), tag.getInt("z")));
-                    }
-                    map2.put(base, list);
-                }
-                extra.put(gridName, map2);
-            }
-            ext.setExtraGrids(extra);
-        }
     }
 
     @Inject(method = "serialize", at = @At("RETURN"))
@@ -88,24 +62,5 @@ public class ChunkSerializerMixin {
             surface.put(entry.getKey().first() + "," + entry.getKey().second(), inner);
         }
         root.put("SurfaceCustom", surface);
-
-        NbtCompound grids = new NbtCompound();
-        for (Map.Entry<String, Map<BlockPos, List<BlockPos>>> gridEntry : ext.getExtraGrids().entrySet()) {
-            NbtCompound gridTag = new NbtCompound();
-            for (Map.Entry<BlockPos, List<BlockPos>> posEntry : gridEntry.getValue().entrySet()) {
-                NbtList list = new NbtList();
-                for (BlockPos p : posEntry.getValue()) {
-                    NbtCompound pt = new NbtCompound();
-                    pt.putInt("x", p.getX());
-                    pt.putInt("y", p.getY());
-                    pt.putInt("z", p.getZ());
-                    list.add(pt);
-                }
-                gridTag.put(posEntry.getKey().getX() + "," + posEntry.getKey().getY() + "," + posEntry.getKey().getZ(), list);
-            }
-            grids.put(gridEntry.getKey(), gridTag);
-        }
-        root.put("ExtraGrids", grids);
-        ext.markAsCalculatedFB();
     }
 }
