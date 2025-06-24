@@ -10,16 +10,16 @@
           "out_p": 15,"in_p": 8,"out_c": 196,"in_c": 160
         },
         "fbased:steppe,shadow": {
-          "out_p": 15,"in_p": 15,"out_c": 2,"in_c": 1
+          "out_p": 14,"in_p": 15,"out_c": 2,"in_c": 1
         },
         "fbased:steppe2,shadow": {
-          "out_p": 15,"in_p": 15,"out_c": 2,"in_c": 1
+          "out_p": 14,"in_p": 15,"out_c": 2,"in_c": 1
         },
         "fbased:steppe,fbased:steppe2": {
           "out_p": 15,"in_p": 8,"out_c": 2,"in_c": 1
         },
         "fbased:steppe2,fbased:steppe2": {
-          "out_p": 15,"in_p": 15,"out_c": 160,"in_c": 144
+          "out_p": 14,"in_p": 15,"out_c": 160,"in_c": 144
         }
       },
       "default": {

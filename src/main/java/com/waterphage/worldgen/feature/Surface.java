@@ -2,16 +2,11 @@ package com.waterphage.worldgen.feature;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.waterphage.block.models.TechBlockEntity;
+import com.mojang.serialization.codecs.UnboundedMapCodec;
 import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.IntPair;
-import com.waterphage.block.models.TechBlock;
-import com.waterphage.meta.IntPairBase;
-import com.waterphage.meta.IntPairM;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
@@ -19,18 +14,15 @@ import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.math.random.RandomSplitter;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Surface extends Feature<Surface.SurfaceConfig> {
     public Surface(Codec<SurfaceConfig> codec) {
@@ -45,6 +37,9 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     Codec.FLOAT.fieldOf("in_c").forGetter(BiomeValue::chance2)
             ).apply(instance, BiomeValue::new)
     );
+    public static final UnboundedMapCodec<Integer, RegistryEntry<PlacedFeature>> FB_INDEX_FEATURE_CODEC = Codec.unboundedMap(Codec.INT, PlacedFeature.REGISTRY_CODEC);
+    public static final UnboundedMapCodec<String, Map<Integer, RegistryEntry<PlacedFeature>>> FB_BIOME_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING, FB_INDEX_FEATURE_CODEC);
+
     public static final Codec<Map<String, BiomeValue>> FB_BIOME_MAP_CODEC = Codec.unboundedMap(Codec.STRING, FB_BIOME_VALUE_CODEC);
     public static class SurfaceConfig implements FeatureConfig {
         public static final Codec<SurfaceConfig> CODEC = RecordCodecBuilder.create(
@@ -52,29 +47,25 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                         Codec.INT.fieldOf("tech_Y").forGetter(config -> config.yT),
                         Codec.INT.fieldOf("min").forGetter(config -> config.min),
                         Codec.INT.fieldOf("max").forGetter(config -> config.max),
-                        FB_BIOME_MAP_CODEC.fieldOf("biome_relations").forGetter(config -> config.biome)
-                        //Identifier.CODEC.listOf().fieldOf("biomes").forGetter(config -> config.biomes),
-                        //Codec.unboundedMap(Codec.INT,
-                        //Codec.unboundedMap(Codec.BOOL, PlacedFeature.REGISTRY_CODEC))
-                        //.fieldOf("features")
-                        //.forGetter(config -> config.features)
+                        FB_BIOME_MAP_CODEC.fieldOf("biome_relations").forGetter(config -> config.biome),
+                        FB_BIOME_FEATURE_CODEC.fieldOf("biome_features").forGetter(config -> config.feature)
                 ).apply(instance, SurfaceConfig::new));
         private Integer min;
         private Integer yT;
         private Integer max;
         private String mode;
         private Map<String,BiomeValue> biome;
-        private Map<Integer,Map<Boolean, RegistryEntry<PlacedFeature>>> features;
+        private Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature;
 
-        SurfaceConfig(Integer yT,Integer min, Integer max,Map<String,BiomeValue>biome
-                      //List<Identifier> biomes,Map<Integer,Map<Boolean,RegistryEntry<PlacedFeature>>> features
+        SurfaceConfig(Integer yT,Integer min, Integer max,Map<String,BiomeValue>biome,
+                      Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature
         ) {
             this.yT=yT;
             this.max = max;
             this.min = min;
             this.mode=mode;
             this.biome = biome;
-            this.features=features;
+            this.feature=feature;
         }
 
         public Map<String, BiomeValue> biome() {
@@ -94,7 +85,9 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         private Map<BlockPos,List<BlockPos>> inSC = new HashMap<>();
         private Map<BlockPos,List<BlockPos>> outSC = new HashMap<>();
         private Map<BlockPos,List<BlockPos>> wallC = new HashMap<>();
-        private Map<Integer,List<BlockPos>> biome = new HashMap<>();
+        private Map<Integer,List<BlockPos>> biomeO = new HashMap<>();
+        private Map<Integer,List<BlockPos>> biomeI = new HashMap<>();
+        private Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> Ftypes;
         private int xi;
         private int zi;
         private int yT;
@@ -109,6 +102,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             this.r = ctx.getRandom();
             SurfaceConfig config=ctx.getConfig();
             this.biomemap = config.biome();
+            this.Ftypes=config.feature;
             BlockPos.Mutable origin=ctx.getOrigin().mutableCopy();
             this.xi=origin.getX();this.zi=origin.getZ();
             this.yT=config.yT;
@@ -298,13 +292,13 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     }
     private void biomeBorder(SurfCont ctx,BlockPos org,List<BlockPos>local){
         String orgB=ctx.w.getRegistryManager().get(RegistryKeys.BIOME).getId(ctx.w.getBiome(org).value()).toString();
-        lightcheck(ctx,org,local,orgB);
+        if(lightcheck(ctx,org,local,orgB))return;
         for (BlockPos neig:local){
             String neigB=ctx.w.getRegistryManager().get(RegistryKeys.BIOME).getId(ctx.w.getBiome(neig).value()).toString();
             String id=orgB+","+neigB;
             BiomeValue biom=ctx.biomemap.get(id);if(biom==null)continue;float rand=ctx.random(org);
-            if(rand<1.0/biom.chance){writeB(org,ctx.biome,Math.round(biom.out*rand*biom.chance));continue;}
-            if(rand<1.0/biom.chance2){writeB(org,ctx.biome,-Math.round(biom.in*rand*biom.chance2));}
+            if(rand<1.0/biom.chance){writeB(org,ctx.biomeO,Math.round(biom.out*rand*biom.chance));}
+            if(rand<1.0/biom.chance2){writeB(org,ctx.biomeI,Math.round(biom.in*rand*biom.chance2));}
         }
     }
     private boolean lightcheck(SurfCont ctx,BlockPos org,List<BlockPos>local,String orgB){
@@ -318,8 +312,9 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             String key=orgB+",shadow";
             BiomeValue biom=ctx.biomemap.get(key);
             if(biom==null)return false;float rand=ctx.random(org);
-            if(rand<1.0/biom.chance){writeB(org,ctx.biome,Math.round(biom.out*rand*biom.chance));return true;}
-            if(rand<1.0/biom.chance2){writeB(org,ctx.biome,-Math.round(biom.in*rand*biom.chance2));return true;}
+            if(rand<1.0/biom.chance){writeB(org,ctx.biomeO,Math.round(biom.out*rand*biom.chance));}
+            if(rand<1.0/biom.chance2){writeB(org,ctx.biomeI,Math.round(biom.in*rand*biom.chance2));}
+            return true;
         }
         return false;
     }
@@ -383,10 +378,10 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                             Map<BlockPos, List<BlockPos>> inS,
                             boolean m
     ) {
-        Set<BlockPos> ban = new HashSet<>();
+        Set<BlockPos> next = new HashSet<>();
         Set<BlockPos> use = new HashSet<>(outS.keySet());
         for (int n = 15; n > 0; --n) {// outer edge
-            List<BlockPos> list = ctx.biome.get(n);
+            List<BlockPos> list = ctx.biomeO.get(n);
             if (list != null) {for (BlockPos pos : list) {if (mapS.containsKey(pos)) {use.add(pos);}}
             }
             for (BlockPos point : use) {
@@ -398,22 +393,15 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 if(Math.abs(17-val)>n)continue;
                 floor.put(yl,m?17-n:-17+n); // outer edge law
                 ctx.global.put(XZ, floor);
+                next.addAll(mapS.get(point));
             }
-
-            ban.addAll(use);
-
-            Set<BlockPos> next = new HashSet<>();
-            for (BlockPos pos : use) {
-                List<BlockPos> neighbors = mapS.get(pos);
-                if (neighbors != null) next.addAll(neighbors);
-            }
-            next.removeAll(ban);
-            use = next;
+            use.clear();
+            use.addAll(next);
+            next.clear();
         }
-        ban = new HashSet<>();
         use = new HashSet<>(inS.keySet());
         for (int n = 15; n > 0; --n) { // inner edge
-            List<BlockPos> list = ctx.biome.get(-n);
+            List<BlockPos> list = ctx.biomeI.get(n);
             if (list != null) {for (BlockPos pos : list) {if (mapS.containsKey(pos)) {use.add(pos);}}}
             for (BlockPos point : use) {
                 if (point == null) continue;
@@ -422,18 +410,15 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 if (floor == null) continue;
                 Integer yl = point.getY();
                 Integer val = floor.get(yl);
-                if((m?17-val:val-17)<n){floor.put(yl,m?34-val:-34+val);ctx.global.put(XZ, floor);}
+                if(Math.abs(val)>17)continue;
+                if(17-Math.abs(val)>n-1)continue;
+                floor.put(yl,m?34-val:-34+val);
+                ctx.global.put(XZ, floor);
+                next.addAll(mapS.get(point));
             }
-
-            ban.addAll(use);
-
-            Set<BlockPos> next = new HashSet<>();
-            for (BlockPos pos : use) {
-                List<BlockPos> neighbors = mapS.get(pos);
-                if (neighbors != null) next.addAll(neighbors);
-            }
-            next.removeAll(ban);
-            use = next;
+            use.clear();
+            use.addAll(next);
+            next.clear();
         }
     }
     // 1.3.3 Calculatind steep mesh
@@ -480,10 +465,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
 
     private void calcsteep(SurfCont ctx,Map<BlockPos,List<BlockPos>> wall,Map<BlockPos,List<BlockPos>> edgei,boolean m){
         Map<BlockPos,List<BlockPos>> edge=new HashMap<>(edgei);
-        List<BlockPos> ban=new ArrayList<>();
         for (int n=16;n>0;--n){//push calculation further
             if (edge.isEmpty())return;
-            ban.addAll(edge.keySet());
             Map<BlockPos,List<BlockPos>> upd=new HashMap<>();
             for (BlockPos start:edge.keySet()){// main cycle
                 Map<Integer,Integer>ydata=ctx.global.get(new IntPair(start.getX(),start.getZ()));
@@ -502,20 +485,16 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     Integer it=ctx.global.get(XZn).get(yn);
                     if (it==null)continue;
                     Integer i=it<33?Math.abs(it-17):it-33;
-                    if (is-dy>i){
-                        TreeMap <Integer,Integer>ydata2=ctx.global.get(XZn);
-                        int ifin=(m?1:-1)*(is-dy+33);
-
-                        ydata2.put(yn,ifin);
-                        ctx.global.put(XZn,ydata2);
-                        upd.put(neig,wall.get(neig));
-                    }
+                    if (is-dy<i)continue;
+                    TreeMap <Integer,Integer>ydata2=ctx.global.get(XZn);
+                    int ifin=(m?1:-1)*(is-dy+33);
+                    ydata2.put(yn,ifin);
+                    ctx.global.put(XZn,ydata2);
+                    upd.put(neig,wall.get(neig));
                 }
             }
+            edge.clear();
             edge.putAll(upd);
-            for (BlockPos b:ban){
-                edge.remove(b);
-            }
         }
     }
     private void set(SurfCont ctx,BlockPos pos, BlockState ice, int x,int y,int z) {
@@ -549,398 +528,11 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     }
     // 2 Cool glacier thing for testing.
     private void test(int i,BlockPos pos,SurfCont ctx) {
-        BlockState ice = Registries.BLOCK.get(new Identifier("minecraft:packed_ice")).getDefaultState();
-        BlockState snow = Registries.BLOCK.get(new Identifier("minecraft:pink_concrete")).getDefaultState();
-        BlockState snow2 = Registries.BLOCK.get(new Identifier("minecraft:yellow_concrete")).getDefaultState();
-        BlockState dirt = Registries.BLOCK.get(new Identifier("minecraft:coarse_dirt")).getDefaultState();
-        int n=0;int yh=0;
-        switch (i) {
-            case 2:
-                ctx.w.setBlockState(pos, dirt, 3);
-                return;
-            case 3:
-                ctx.w.setBlockState(pos, dirt, 3);
-                return;
-            case 4:
-                ctx.w.setBlockState(pos, dirt, 3);
-                return;
-            case 5:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
-                return;
-            case 6:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
-                return;
-            case 7:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                return;
-            case 8:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                return;
-            case 9:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                return;
-            case 10:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                return;
-            case 11:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                return;
-            case 12:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
-                return;
-            case 13:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 14, 0), snow, 3);
-                return;
-            case 14:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 14, 0), snow, 3);
-                return;
-            case 15:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 14, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 15, 0), snow, 3);
-                return;
-            case 16:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 14, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 15, 0), snow, 3);
-                return;
-            case 17:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 14, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 15, 0), snow, 3);
-                return;
-            case 18:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 14, 0), snow2, 3);
-                return;
-            case 19:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), snow2, 3);
-                return;
-            case 20:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), snow2, 3);
-                return;
-            case 21:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), snow2, 3);
-                return;
-            case 22:
-                ctx.w.setBlockState(pos, dirt, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), snow2, 3);
-                return;
-            case 23:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), snow2, 3);
-                return;
-            case 24:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), snow2, 3);
-                return;
-            case 25:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), snow2, 3);
-                return;
-            case 26:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), snow2, 3);
-                return;
-            case 27:
-                ctx.w.setBlockState(pos, dirt, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), snow2, 3);
-                return;
-            case 28:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), snow2, 3);
-                return;
-            case 29:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), snow2, 3);
-                return;
-            case 30:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), snow2, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), snow2, 3);
-                return;
-            case 31:
-                ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), snow2, 3);
-                return;
-            case 32:
-                ctx.w.setBlockState(pos, dirt, 3);
-                return;
-            case 48:
-                n=14;
-                stick(ctx,pos,ice,0,n-2);
-                head(ctx,pos,ice,snow,n);
-                return;
-            case 47:
-                n=13;
-                stick(ctx,pos,ice,0,n-2);
-                head(ctx,pos,ice,snow,n);
-                return;
-            case 46:
-                n=12;
-                stick(ctx,pos,ice,0,n-2);
-                head(ctx,pos,ice,snow,n);
-                return;
-            case 45:
-                n=11;
-                stick(ctx,pos,ice,2,n-2);
-                head(ctx,pos,ice,snow,n);
-                return;
-            case 44:
-                n=10;
-                stick(ctx,pos,ice,4,n-2);
-                head(ctx,pos,ice,snow,n);
-                return;
-            case 43:
-                n=9;
-                stick(ctx,pos,ice,5,n-2);
-                head(ctx,pos,ice,snow,n);
-                return;
-            case 42:
-                n=8;
-                stick(ctx,pos,ice,5,n-2);
-                head(ctx,pos,ice,snow,n);
-                return;
-            case 41:
-                n=7;
-                stick(ctx,pos,ice,6,n-2);
-                head(ctx,pos,ice,snow,n);
-                return;
-            case 40:
-                n=6;
-                head(ctx,pos,ice,dirt,n);
-                return;
-            case 39:
-                n=5;
-                head(ctx,pos,ice,dirt,n);
-                return;
-            case 38:
-                n=4;
-                head(ctx,pos,ice,dirt,n);
-                return;
-            case 37:
-                n=3;
-                head(ctx,pos,ice,dirt,n);
-                return;
-            case 36:
-                head(ctx,pos,ice,dirt,2);
-                return;
-            case 35:
-                head(ctx,pos,ice,dirt,1);
-                return;
-            case 34:
-                head(ctx,pos,ice,dirt,0);
-                return;
-        }
+        String biome=ctx.w.getRegistryManager().get(RegistryKeys.BIOME).getId(ctx.w.getBiome(pos).value()).toString();
+        Map<Integer,RegistryEntry<PlacedFeature>> index=ctx.Ftypes.get(biome);
+        if(index==null)return;
+        RegistryEntry<PlacedFeature> feature=index.get(i);
+        if(feature==null)return;
+        feature.value().getDecoratedFeatures();
     }
 }
