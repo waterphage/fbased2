@@ -99,14 +99,14 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         private int zi;
         private int yT;
 
-        RandomSplitter splitter;
         private float random(BlockPos pos){
-            return this.splitter.split(pos).nextFloat();
+            long seed = pos.asLong()^this.w.getSeed();
+            java.util.Random random = new java.util.Random(seed);
+            return random.nextFloat();
         }
         private SurfCont(FeatureContext<SurfaceConfig> ctx) {
             this.w = ctx.getWorld();
             this.r = ctx.getRandom();
-            this.splitter=this.r.nextSplitter();
             SurfaceConfig config=ctx.getConfig();
             this.biomemap = config.biome();
             BlockPos.Mutable origin=ctx.getOrigin().mutableCopy();
@@ -303,8 +303,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             String neigB=ctx.w.getRegistryManager().get(RegistryKeys.BIOME).getId(ctx.w.getBiome(neig).value()).toString();
             String id=orgB+","+neigB;
             BiomeValue biom=ctx.biomemap.get(id);if(biom==null)continue;float rand=ctx.random(org);
-            if(ctx.random(org)< Math.pow(biom.chance,-1)){writeB(org,ctx.biome,biom.out);}
-            if(ctx.random(org)< Math.pow(biom.chance2,-1)){writeB(org,ctx.biome,biom.in);}
+            if(rand<1.0/biom.chance){writeB(org,ctx.biome,Math.round(biom.out*rand*biom.chance));continue;}
+            if(rand<1.0/biom.chance2){writeB(org,ctx.biome,-Math.round(biom.in*rand*biom.chance2));}
         }
     }
     private boolean lightcheck(SurfCont ctx,BlockPos org,List<BlockPos>local,String orgB){
@@ -318,8 +318,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             String key=orgB+",shadow";
             BiomeValue biom=ctx.biomemap.get(key);
             if(biom==null)return false;float rand=ctx.random(org);
-            if(ctx.random(org)< Math.pow(biom.chance,-1)){writeB(org,ctx.biome,Math.round(biom.out*rand/biom.chance));return true;}
-            if(ctx.random(org)< Math.pow(biom.chance2,-1)){writeB(org,ctx.biome,-Math.round(biom.in*rand/biom.chance2));return true;}
+            if(rand<1.0/biom.chance){writeB(org,ctx.biome,Math.round(biom.out*rand*biom.chance));return true;}
+            if(rand<1.0/biom.chance2){writeB(org,ctx.biome,-Math.round(biom.in*rand*biom.chance2));return true;}
         }
         return false;
     }
@@ -395,6 +395,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 if (floor == null) continue;
                 int yl = point.getY();
                 int val = floor.get(yl);
+                if(Math.abs(17-val)>n)continue;
                 floor.put(yl,m?17-n:-17+n); // outer edge law
                 ctx.global.put(XZ, floor);
             }
@@ -535,7 +536,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         set(ctx,pos,dirt,0,yh,1);
         set(ctx,pos,ice,1,yh,-1);
         set(ctx,pos,ice,1,yh,1);
-        set(ctx,pos,ice,-1,yh,1);
+        set(ctx,pos,ice,-1,yh,-1);
         set(ctx,pos,ice,-1,yh,1);
         set(ctx,pos,ice,-2,yh,0);
         set(ctx,pos,ice,2,yh,0);
@@ -549,7 +550,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     // 2 Cool glacier thing for testing.
     private void test(int i,BlockPos pos,SurfCont ctx) {
         BlockState ice = Registries.BLOCK.get(new Identifier("minecraft:packed_ice")).getDefaultState();
-        BlockState snow = Registries.BLOCK.get(new Identifier("minecraft:snow_block")).getDefaultState();
+        BlockState snow = Registries.BLOCK.get(new Identifier("minecraft:pink_concrete")).getDefaultState();
+        BlockState snow2 = Registries.BLOCK.get(new Identifier("minecraft:yellow_concrete")).getDefaultState();
         BlockState dirt = Registries.BLOCK.get(new Identifier("minecraft:coarse_dirt")).getDefaultState();
         int n=0;int yh=0;
         switch (i) {
@@ -738,8 +740,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 12, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), snow, 3);
-                ctx.w.setBlockState(pos.add(0, 14, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 14, 0), snow2, 3);
                 return;
             case 19:
                 ctx.w.setBlockState(pos, ice, 3);
@@ -754,8 +756,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 11, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), snow, 3);
-                ctx.w.setBlockState(pos.add(0, 13, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 13, 0), snow2, 3);
                 return;
             case 20:
                 ctx.w.setBlockState(pos, ice, 3);
@@ -769,8 +771,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 10, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), snow, 3);
-                ctx.w.setBlockState(pos.add(0, 12, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 12, 0), snow2, 3);
                 return;
             case 21:
                 ctx.w.setBlockState(pos, ice, 3);
@@ -783,8 +785,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 9, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), snow, 3);
-                ctx.w.setBlockState(pos.add(0, 11, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 11, 0), snow2, 3);
                 return;
             case 22:
                 ctx.w.setBlockState(pos, dirt, 3);
@@ -796,8 +798,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 8, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), snow, 3);
-                ctx.w.setBlockState(pos.add(0, 10, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 10, 0), snow2, 3);
                 return;
             case 23:
                 ctx.w.setBlockState(pos, ice, 3);
@@ -808,8 +810,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 7, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), snow, 3);
-                ctx.w.setBlockState(pos.add(0, 9, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 9, 0), snow2, 3);
                 return;
             case 24:
                 ctx.w.setBlockState(pos, ice, 3);
@@ -819,8 +821,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 6, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), snow, 3);
-                ctx.w.setBlockState(pos.add(0, 8, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 8, 0), snow2, 3);
                 return;
             case 25:
                 ctx.w.setBlockState(pos, ice, 3);
@@ -829,8 +831,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 5, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), snow, 3);
-                ctx.w.setBlockState(pos.add(0, 7, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 7, 0), snow2, 3);
                 return;
             case 26:
                 ctx.w.setBlockState(pos, ice, 3);
@@ -838,38 +840,38 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 4, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), dirt, 3);
-                ctx.w.setBlockState(pos.add(0, 6, 0), snow, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 6, 0), snow2, 3);
                 return;
             case 27:
                 ctx.w.setBlockState(pos, dirt, 3);
                 ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 3, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), dirt, 3);
-                ctx.w.setBlockState(pos.add(0, 5, 0), dirt, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 5, 0), snow2, 3);
                 return;
             case 28:
                 ctx.w.setBlockState(pos, ice, 3);
                 ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
                 ctx.w.setBlockState(pos.add(0, 2, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), dirt, 3);
-                ctx.w.setBlockState(pos.add(0, 4, 0), dirt, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 4, 0), snow2, 3);
                 return;
             case 29:
                 ctx.w.setBlockState(pos, ice, 3);
                 ctx.w.setBlockState(pos.add(0, 1, 0), ice, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), dirt, 3);
-                ctx.w.setBlockState(pos.add(0, 3, 0), dirt, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 3, 0), snow2, 3);
                 return;
             case 30:
                 ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
-                ctx.w.setBlockState(pos.add(0, 2, 0), dirt, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), snow2, 3);
+                ctx.w.setBlockState(pos.add(0, 2, 0), snow2, 3);
                 return;
             case 31:
                 ctx.w.setBlockState(pos, ice, 3);
-                ctx.w.setBlockState(pos.add(0, 1, 0), dirt, 3);
+                ctx.w.setBlockState(pos.add(0, 1, 0), snow2, 3);
                 return;
             case 32:
                 ctx.w.setBlockState(pos, dirt, 3);
