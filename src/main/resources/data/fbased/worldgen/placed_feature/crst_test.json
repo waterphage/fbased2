@@ -3,13 +3,13 @@
     "type": "fbased:fossil",
     "config": {
       "structures": [
-        "fbased:crst_1_1",
-        "fbased:crst_1_2",
-        "fbased:crst_1_3",
-        "fbased:crst_1_4",
-        "fbased:crst_1_5",
-        "fbased:crst_1_6",
-        "fbased:crst_1_7"
+        "fbased:icos_1_1",
+        "fbased:icos_1_2",
+        "fbased:icos_1_3",
+        "fbased:icos_1_4",
+        "fbased:icos_1_5",
+        "fbased:icos_1_6",
+        "fbased:icos_1_7"
       ],
       "processors": [
         {

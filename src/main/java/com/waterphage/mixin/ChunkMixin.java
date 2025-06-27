@@ -7,10 +7,7 @@ import net.minecraft.world.chunk.Chunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Mixin(Chunk.class)
 public class ChunkMixin implements ChunkExtension {
@@ -26,6 +23,18 @@ public class ChunkMixin implements ChunkExtension {
     @Override
     public void setCustomMap(Map<IntPair, TreeMap<Integer, Integer>> map) {
         this.customMap = map;
+    }
+    @Unique
+    private Map<String,Double> noise = new HashMap<>();
+
+    @Override
+    public Map<String,Double> getNoise() {
+        return noise;
+    }
+
+    @Override
+    public void setNoise(Map<String,Double> map) {
+        this.noise = map;
     }
 }
 

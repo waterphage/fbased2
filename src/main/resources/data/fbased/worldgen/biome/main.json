@@ -21,6 +21,7 @@
   },
   "features": [
     [
+      "fbased:crst_test",
       "fbased:test"
     ],
     [],
@@ -35,7 +36,6 @@
     [],
     [],
     [
-      "minecraft:freeze_top_layer"
 ]
   ],
   "spawn_costs": {},

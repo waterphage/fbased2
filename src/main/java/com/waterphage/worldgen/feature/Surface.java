@@ -18,6 +18,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
@@ -39,7 +40,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     Codec.FLOAT.fieldOf("in_c").forGetter(BiomeValue::chance2)
             ).apply(instance, BiomeValue::new)
     );
-    public static final UnboundedMapCodec<Integer, RegistryEntry<PlacedFeature>> FB_INDEX_FEATURE_CODEC = Codec.unboundedMap(Codec.INT, PlacedFeature.REGISTRY_CODEC);
+    public static final UnboundedMapCodec<Integer, RegistryEntry<PlacedFeature>> FB_INDEX_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING.xmap(Integer::parseInt, Object::toString), PlacedFeature.REGISTRY_CODEC);
     public static final UnboundedMapCodec<String, Map<Integer, RegistryEntry<PlacedFeature>>> FB_BIOME_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING, FB_INDEX_FEATURE_CODEC);
 
     public static final Codec<Map<String, BiomeValue>> FB_BIOME_MAP_CODEC = Codec.unboundedMap(Codec.STRING, FB_BIOME_VALUE_CODEC);
@@ -55,7 +56,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         private Integer min;
         private Integer yT;
         private Integer max;
-        private String mode;
         private Map<String,BiomeValue> biome;
         private Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature;
 
@@ -65,7 +65,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             this.yT=yT;
             this.max = max;
             this.min = min;
-            this.mode=mode;
             this.biome = biome;
             this.feature=feature;
         }
@@ -113,7 +112,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     // 0 Main method
     @Override
     public boolean generate(FeatureContext<SurfaceConfig> context) {
-
         SurfCont ctx=new SurfCont(context);
         List<Pair<BlockPos,Integer>>placer=placer(ctx);// 1 holds all math stores placement positions and their indexes
 
@@ -186,18 +184,20 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                         }
                     }
                 }
-                ctx.global.put(key,surf);
             }
         }
     }
+    private static List<IntPair> search (int x,int z){
+        return Arrays.asList(
+                new IntPair(x-1,z),
+                new IntPair(x+1,z),
+                new IntPair(x,z-1),
+                new IntPair(x,z+1)
+        );
+    }
     // 1.2.1 Smooth terrain check. This part makes + pattern. They are best to make nice transitions, tested before
     private boolean simplech(boolean m,int xf,int yo,int zf,SurfCont ctx){
-        List<IntPair> search = Arrays.asList( // + pattern. It doesn't matter (in local sence) if positions aren't loaded.
-                new IntPair(xf-1,zf),
-                new IntPair(xf+1,zf),
-                new IntPair(xf,zf-1),
-                new IntPair(xf,zf+1)
-        );
+        List<IntPair> search = search(xf,zf);
         for (IntPair pos:search){
             TreeMap<Integer,Integer>pairs=ctx.global.get(pos);
             if (pairs==null){return false;}
@@ -246,12 +246,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             Integer x,Integer y,Integer z,
             boolean m){
         List<BlockPos> local=new ArrayList<>();
-        List<IntPair> search = Arrays.asList(
-                new IntPair(x-1,z),
-                new IntPair(x+1,z),
-                new IntPair(x,z-1),
-                new IntPair(x,z+1)
-        ); // Should probably move it out since I'm using it too often
+        List<IntPair> search = search(x,z);
         for (IntPair pos:search){
             TreeMap<Integer,Integer>pairs=ctx.global.get(pos);
             if(pairs==null){continue;}
@@ -309,11 +304,11 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         if(ypair==null)return false;Integer ym=ypair.higherKey(yo);if(ym==null)return false;
         for (BlockPos neig:local){
             int xn=neig.getX();int zn=neig.getZ();int yn=neig.getY();
-            ypair=ctx.global.get(new IntPair(xn,zn));if(ypair==null)return false;
-            ym=ypair.higherKey(yn);if(ym!=null)return false;
+            ypair=ctx.global.get(new IntPair(xn,zn));if(ypair==null)continue;
+            ym=ypair.higherKey(yn);if(ym!=null)continue;
             String key=orgB+",shadow";
             BiomeValue biom=ctx.biomemap.get(key);
-            if(biom==null)return false;float rand=ctx.random(org);
+            if(biom==null)continue;float rand=ctx.random(org);
             if(rand<1.0/biom.chance){writeB(org,ctx.biomeO,Math.round(biom.out*rand*biom.chance));}
             if(rand<1.0/biom.chance2){writeB(org,ctx.biomeI,Math.round(biom.in*rand*biom.chance2));}
             return true;
@@ -326,12 +321,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     // 1.3.1.1
     private boolean wallch(SurfCont ctx,int x,int z,int yl,boolean m) { // checks for wall
         int dy=m?-1:1; // I tried many combinations of positions at y and xz. All of them sucks
-        List<IntPair> search = Arrays.asList(
-                new IntPair(x-1,z),
-                new IntPair(x+1,z),
-                new IntPair(x,z-1),
-                new IntPair(x,z+1)
-        );
+        List<IntPair> search = search(x,z);
         for(IntPair point:search){
             if(inside(ctx,point,yl+dy,m)){return true;} // 1.3.1.1.1 looking for steep floor
         }
@@ -371,7 +361,47 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         if (yf==null){return false;}
         Integer i = levels.get(yf);
         if (i==null) {return false;}
-        return m?i>0:i<-0;
+        return m?i>0:i<0;
+    }
+    private void edgeUpdate(Set<BlockPos> initial, Map<Integer, List<BlockPos>> biomeMap, boolean m, SurfCont ctx, Map<BlockPos, List<BlockPos>> mapS,int i) {
+        Set<BlockPos> use = new HashSet<>(initial);
+        Set<BlockPos> next = new HashSet<>();
+
+        for (int n = 15; n > 0; --n) {
+            List<BlockPos> list = biomeMap.get(n);
+            if (list != null) {
+                for (BlockPos pos : list) {
+                    if (mapS.containsKey(pos)) use.add(pos);
+                }
+            }
+
+            for (BlockPos point : use) {
+                if (point == null) continue;
+                IntPair XZ = new IntPair(point.getX(), point.getZ());
+                TreeMap<Integer, Integer> floor = ctx.global.get(XZ);
+                if (floor == null) continue;
+                int yl = point.getY();
+                Integer val = floor.get(yl);
+                if (val == null) continue;
+                switch(i){
+                    case 0:
+                        if (Math.abs(17 - val) > n) continue;
+                        floor.put(yl, m ? 17 - n : -17 + n);break;
+                    case 1:
+                        if (Math.abs(val) > 17 || 17 - Math.abs(val) > n - 1) continue;
+                        floor.put(yl, m ? 34 - val : -34 + val);break;
+                    case 2:
+                        if (Math.abs(val) > 17) continue;
+                        floor.put(yl, m ? 34 - val : -34 + val);break;
+                }
+                next.addAll(mapS.get(point));
+            }
+
+            Set<BlockPos> temp = use;
+            use = next;
+            next = temp;
+            next.clear();
+        }
     }
     // 1.3.2 determining i-values for smooth mesh
     private void calcsmooth(SurfCont ctx,
@@ -381,59 +411,16 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                             boolean m
     ) {
         Set<BlockPos> next = new HashSet<>();
-        Set<BlockPos> use = new HashSet<>(outS.keySet());
-        for (int n = 15; n > 0; --n) {// outer edge
-            List<BlockPos> list = ctx.biomeO.get(n);
-            if (list != null) {for (BlockPos pos : list) {if (mapS.containsKey(pos)) {use.add(pos);}}
-            }
-            for (BlockPos point : use) {
-                IntPair XZ = new IntPair(point.getX(), point.getZ());
-                TreeMap<Integer, Integer> floor = ctx.global.get(XZ);
-                if (floor == null) continue;
-                int yl = point.getY();
-                int val = floor.get(yl);
-                if(Math.abs(17-val)>n)continue;
-                floor.put(yl,m?17-n:-17+n); // outer edge law
-                ctx.global.put(XZ, floor);
-                next.addAll(mapS.get(point));
-            }
-            use.clear();
-            use.addAll(next);
-            next.clear();
-        }
-        use = new HashSet<>(inS.keySet());
-        for (int n = 15; n > 0; --n) { // inner edge
-            List<BlockPos> list = ctx.biomeI.get(n);
-            if (list != null) {for (BlockPos pos : list) {if (mapS.containsKey(pos)) {use.add(pos);}}}
-            for (BlockPos point : use) {
-                if (point == null) continue;
-                IntPair XZ = new IntPair(point.getX(), point.getZ());
-                TreeMap<Integer, Integer> floor = ctx.global.get(XZ);
-                if (floor == null) continue;
-                Integer yl = point.getY();
-                Integer val = floor.get(yl);
-                if(Math.abs(val)>17)continue;
-                if(17-Math.abs(val)>n-1)continue;
-                floor.put(yl,m?34-val:-34+val);
-                ctx.global.put(XZ, floor);
-                next.addAll(mapS.get(point));
-            }
-            use.clear();
-            use.addAll(next);
-            next.clear();
-        }
+        edgeUpdate(outS.keySet(), ctx.biomeO, m, ctx, mapS,0);
+        edgeUpdate(inS.keySet(), Collections.emptyMap(), m, ctx, mapS,1);
+        edgeUpdate(Collections.emptySet(),ctx.biomeI, m, ctx, mapS,2);
     }
     // 1.3.3 Calculatind steep mesh
     private void getsteep(SurfCont ctx,Map<BlockPos,List<BlockPos>> wall,boolean m){
         Map<BlockPos, List<BlockPos>> updated = new HashMap<>();
         for (BlockPos point:wall.keySet()){
             int x=point.getX();int z= point.getZ();int y=point.getY();
-            List<IntPair> search = Arrays.asList(
-                    new IntPair(x-1,z),
-                    new IntPair(x+1,z),
-                    new IntPair(x,z-1),
-                    new IntPair(x,z+1)
-            );
+            List<IntPair> search = search(x,z);
             List<BlockPos> neighbours=new ArrayList<>();
             List<IntPair> scrap=new ArrayList<>();
             for (IntPair pos:search){
@@ -491,42 +478,12 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     TreeMap <Integer,Integer>ydata2=ctx.global.get(XZn);
                     int ifin=(m?1:-1)*(is-dy+33);
                     ydata2.put(yn,ifin);
-                    ctx.global.put(XZn,ydata2);
                     upd.put(neig,wall.get(neig));
                 }
             }
             edge.clear();
             edge.putAll(upd);
         }
-    }
-    private void set(SurfCont ctx,BlockPos pos, BlockState ice, int x,int y,int z) {
-        BlockPos set=new BlockPos(pos.getX()+x,pos.getY()+y,pos.getZ()+z);
-        if(ctx.w.getBlockState(set).isAir())
-            ctx.w.setBlockState(set, ice, 3);
-    }
-    private void stick(SurfCont ctx,BlockPos pos, BlockState ice,int ymin,int ymax){
-        for(int y=ymin;y<=ymax;y++){
-            set(ctx,pos,ice,0,y,0);
-        }
-    }
-    private void head(SurfCont ctx,BlockPos pos, BlockState ice,BlockState dirt,int yh){
-        set(ctx,pos,dirt,0,yh,0);
-        set(ctx,pos,dirt,-1,yh,0);
-        set(ctx,pos,dirt,1,yh,0);
-        set(ctx,pos,dirt,0,yh,-1);
-        set(ctx,pos,dirt,0,yh,1);
-        set(ctx,pos,ice,1,yh,-1);
-        set(ctx,pos,ice,1,yh,1);
-        set(ctx,pos,ice,-1,yh,-1);
-        set(ctx,pos,ice,-1,yh,1);
-        set(ctx,pos,ice,-2,yh,0);
-        set(ctx,pos,ice,2,yh,0);
-        set(ctx,pos,ice,0,yh,-2);
-        set(ctx,pos,ice,0,yh,2);
-        set(ctx,pos,ice,-1,yh-1,0);
-        set(ctx,pos,ice,1,yh-1,0);
-        set(ctx,pos,ice,0,yh-1,-1);
-        set(ctx,pos,ice,0,yh-1,1);
     }
     // 2 Cool glacier thing for testing.
     private void test(int i,BlockPos pos,SurfCont ctx) {
@@ -535,14 +492,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         if(index==null)return;
         RegistryEntry<PlacedFeature> feature=index.get(i);
         if(feature==null)return;
-        int x= pos.getX()- ctx.xi;int z= pos.getZ()- ctx.zi;int y= pos.getY()-ctx.w.getBottomY();
-        PlacedFeature original = new PlacedFeature(
-                feature.value().feature(),
-                Stream.concat(
-                        Stream.of(Offset.of(List.of(x, y, z))),
-                        feature.value().placementModifiers.stream()
-                ).toList()
-        );
-        original.getDecoratedFeatures();
+        ChunkGenerator generator = ctx.w.toServerWorld().getChunkManager().getChunkGenerator();
+        feature.value().generate(ctx.w, generator, ctx.r, pos);
     }
 }

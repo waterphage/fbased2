@@ -1,5 +1,13 @@
 accessWidener v2 named
 
+accessible field net/minecraft/world/gen/chunk/placement/StructurePlacement frequencyReductionMethod Lnet/minecraft/world/gen/chunk/placement/StructurePlacement$FrequencyReductionMethod;
+accessible field net/minecraft/world/gen/chunk/placement/StructurePlacement frequency F
+accessible field net/minecraft/world/gen/chunk/placement/StructurePlacement salt I
+accessible field net/minecraft/world/gen/chunk/placement/StructurePlacement exclusionZone Ljava/util/Optional;
+accessible method net/minecraft/world/gen/chunk/placement/StructurePlacementType register (Ljava/lang/String;Lcom/mojang/serialization/Codec;)Lnet/minecraft/world/gen/chunk/placement/StructurePlacementType;
+
+
+
 accessible method net/minecraft/block/entity/BlockEntityType create (Ljava/lang/String;Lnet/minecraft/block/entity/BlockEntityType$Builder;)Lnet/minecraft/block/entity/BlockEntityType;
 
 accessible method net/minecraft/block/entity/BlockEntity writeNbt (Lnet/minecraft/nbt/NbtCompound;)V

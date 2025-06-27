@@ -75,16 +75,19 @@ public class ModRules extends MaterialRules {
         CodecHolder<? extends MaterialRules.MaterialRule> codec();
     }
 
-    public static ModRules.Cache condition(Integer yT,BlockStateProvider fallback) {
-        return new ModRules.Cache(yT);
+    public static ModRules.Cache condition(NoiseType bX, NoiseType bZ, NoiseType bE,Integer yT) {
+        return new ModRules.Cache(bX,bZ,bE,yT);
     }
 
-    record Cache(Integer yT) implements MaterialRules.MaterialRule {
+    record Cache(NoiseType bX, NoiseType bZ, NoiseType bE, Integer yT) implements MaterialRules.MaterialRule {
 
         // Codec for serializing and deserializing the rule
         static final CodecHolder<ModRules.Cache> CODEC = CodecHolder.of(
                 RecordCodecBuilder.mapCodec(
                         instance -> instance.group(
+                                        NoiseType.CODEC.fieldOf("biome_x").forGetter(ModRules.Cache::bX),
+                                        NoiseType.CODEC.fieldOf("biome_z").forGetter(ModRules.Cache::bZ),
+                                        NoiseType.CODEC.fieldOf("domain").forGetter(ModRules.Cache::bE),
                                         Codec.INT.fieldOf("tech_Y").forGetter(ModRules.Cache::yT)
                                 )
                                 .apply(instance, ModRules.Cache::new)
@@ -117,7 +120,9 @@ public class ModRules extends MaterialRules {
                 }
             }
         }
-
+        public static double safe(double value) {
+            return Double.isFinite(value) ? value : 0.0;
+        }
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext context) {
             Chunk chunk = context.chunk;
             ChunkPos chunkPos = chunk.getPos();
@@ -128,6 +133,7 @@ public class ModRules extends MaterialRules {
 
                 return (x, y, z) -> chunk.getBlockState(new BlockPos(x, y, z)); // fallback
             }
+            NoiseRouter router=context.noiseConfig.getNoiseRouter();
             Map<IntPair, TreeMap<Integer, Integer>> chunkData = ext.getCustomMap();
             for (int x = 0; x <= 15; x++) {
                 for (int z = 0; z <= 15; z++) {
@@ -137,6 +143,28 @@ public class ModRules extends MaterialRules {
                 }
             }
             ext.setCustomMap(chunkData);
+            Map<String,Double> noiseData=new HashMap<>();
+            BlockPos orb = chunkPos.getBlockPos(Math.toIntExact(Math.round(Math.random()*15)), yT, Math.toIntExact(Math.round(Math.random()*15)));
+            DensityFunction.NoisePos nps=new DensityFunction.NoisePos() {
+                @Override
+                public int blockX() {
+                    return orb.getX();
+                }
+
+                @Override
+                public int blockY() {
+                    return yT;
+                }
+
+                @Override
+                public int blockZ() {
+                    return orb.getZ();
+                }
+            };
+            noiseData.put(bX.name(), safe(bX.getNoise(router).sample(nps)));
+            noiseData.put(bZ.name(), safe(bZ.getNoise(router).sample(nps)));
+            noiseData.put(bE.name(), safe(bE.getNoise(router).sample(nps)));
+            ext.setNoise(noiseData);
             chunk.setNeedsSaving(true);
             chunk.needsSaving();
             return (x, y, z) -> chunk.getBlockState(new BlockPos(x, y, z));
@@ -145,7 +173,7 @@ public class ModRules extends MaterialRules {
 
     // Function to create a new GeologyD rule
 // This is a factory method to simplify creating instances of the GeologyD class
-    public static ModRules.GeologyD condition(String idL, String idO, Integer yT, List<String> idD,
+    public static ModRules.GeologyD condition(NoiseType idL, NoiseType idO, Integer yT, List<String> idD,
                                               List<Float> scaleOffsets, List<Float> scaleWidths,
                                               List<Integer> matrix, List<List<Integer>> goal,
                                               List<Float> bedrockParams, List<BlockStateProvider> rockTypes) {
@@ -186,6 +214,28 @@ public class ModRules extends MaterialRules {
 
         // Abstract method to be implemented by all noise types
         public abstract DensityFunction getNoise(NoiseRouter params);
+        public static final Codec<NoiseType> CODEC = Codec.STRING.xmap(NoiseType::fromString, Enum::name);
+        // Map a string to its corresponding NoiseType enum value
+        private static NoiseType fromString(String name) {
+            return switch (name.toLowerCase()) {
+                case "temperature" -> NoiseType.TEMP;
+                case "humidity" -> NoiseType.HUM;
+                case "continentalness" -> NoiseType.CONT;
+                case "erosion" -> NoiseType.EROS;
+                case "depth" -> NoiseType.DEPT;
+                case "ridges" -> NoiseType.WERD;
+                case "barrier" -> NoiseType.BARR;
+                case "fluid_level_floodedness" -> NoiseType.FLOD;
+                case "fluid_level_spread" -> NoiseType.SPRD;
+                case "lava" -> NoiseType.LAVA;
+                case "initial_density_without_jaggedness" -> NoiseType.INIT;
+                case "final_density" -> NoiseType.FIN;
+                case "vein_ridged" -> NoiseType.VRID;
+                case "vein_toggle" -> NoiseType.VTOG;
+                case "vein_gap" -> NoiseType.VGAP;
+                default -> throw new IllegalArgumentException("Unknown noise type: " + name);
+            };
+        }
     }
 
     // Helper class to store and manage intermediate state for block generation
@@ -194,8 +244,6 @@ public class ModRules extends MaterialRules {
         private int zPrev = -9999;
         private int yMax;
         private List<Integer> points = new ArrayList<>();
-        private NoiseType biomeX;
-        private NoiseType biomeZ;
         private double distOs;
         private double distLs;
 
@@ -223,28 +271,6 @@ public class ModRules extends MaterialRules {
         }
     }
 
-    // Map a string to its corresponding NoiseType enum value
-    private static NoiseType fromString(String name) {
-        return switch (name.toLowerCase()) {
-            case "temperature" -> NoiseType.TEMP;
-            case "humidity" -> NoiseType.HUM;
-            case "continentalness" -> NoiseType.CONT;
-            case "erosion" -> NoiseType.EROS;
-            case "depth" -> NoiseType.DEPT;
-            case "ridges" -> NoiseType.WERD;
-            case "barrier" -> NoiseType.BARR;
-            case "fluid_level_floodedness" -> NoiseType.FLOD;
-            case "fluid_level_spread" -> NoiseType.SPRD;
-            case "lava" -> NoiseType.LAVA;
-            case "initial_density_without_jaggedness" -> NoiseType.INIT;
-            case "final_density" -> NoiseType.FIN;
-            case "vein_ridged" -> NoiseType.VRID;
-            case "vein_toggle" -> NoiseType.VTOG;
-            case "vein_gap" -> NoiseType.VGAP;
-            default -> throw new IllegalArgumentException("Unknown noise type: " + name);
-        };
-    }
-
     // Wraps a coordinate into a specific range, ensuring values stay within bounds
     private static int wrapCoordinate(int coord, int size) {
         if (coord < 0) return -coord - 1;
@@ -253,7 +279,7 @@ public class ModRules extends MaterialRules {
     }
 
     // Main record defining the GeologyD terrain rule
-    record GeologyD(String idL, String idO, Integer yT, List<String> idD, List<Float> scaleOffsets,
+    record GeologyD(NoiseType idL, NoiseType idO, Integer yT, List<String> idD, List<Float> scaleOffsets,
                     List<Float> scaleWidths, List<Integer> matrix, List<List<Integer>> goal,
                     List<Float> bedrockParams, List<BlockStateProvider> rockTypes) implements MaterialRules.MaterialRule {
 
@@ -261,8 +287,8 @@ public class ModRules extends MaterialRules {
         static final CodecHolder<ModRules.GeologyD> CODEC = CodecHolder.of(
                 RecordCodecBuilder.mapCodec(
                         instance -> instance.group(
-                                        Codec.STRING.fieldOf("biome_noise_z").forGetter(ModRules.GeologyD::idL),
-                                        Codec.STRING.fieldOf("biome_noise_x").forGetter(ModRules.GeologyD::idO),
+                                        NoiseType.CODEC.fieldOf("biome_noise_z").forGetter(ModRules.GeologyD::idL),
+                                        NoiseType.CODEC.fieldOf("biome_noise_x").forGetter(ModRules.GeologyD::idO),
                                         Codec.INT.fieldOf("tech_Y").forGetter(ModRules.GeologyD::yT),
                                         Codec.STRING.listOf().fieldOf("local_noise").forGetter(ModRules.GeologyD::idD),
                                         Codec.FLOAT.listOf().fieldOf("offset").forGetter(ModRules.GeologyD::scaleOffsets),
@@ -284,12 +310,11 @@ public class ModRules extends MaterialRules {
         // Main method for applying the terrain rule
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext context) {
             Chunk chunk = context.chunk;
+
             HeightContext height = context.heightContext;
             NoiseConfig noise = context.noiseConfig;
             net.minecraft.util.math.random.Random random = Random.create();
             Backup backup = new Backup();
-            backup.biomeX = fromString(idO);
-            backup.biomeZ = fromString(idL);
 
             if (idD.size() < 2) {
                 throw new IllegalArgumentException("idD must have at least two elements for namespace and path.");
@@ -316,8 +341,8 @@ public class ModRules extends MaterialRules {
                         @Override public int blockZ() { return z; }
                     };
 
-                    double newDistOs = backup.biomeX.getNoise(noise.getNoiseRouter()).sample(pos);
-                    double newDistLs = backup.biomeZ.getNoise(noise.getNoiseRouter()).sample(pos);
+                    double newDistOs = idO.getNoise(noise.getNoiseRouter()).sample(pos);
+                    double newDistLs = idL.getNoise(noise.getNoiseRouter()).sample(pos);
                     List<Integer> newPoints = calculatePoints(goal, matrixX, matrixY, newDistOs, newDistLs);
 
                     backup.updatePosition(

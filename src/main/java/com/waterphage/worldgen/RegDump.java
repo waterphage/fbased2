@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2ShortArrayMap;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.gen.structure.StructureType;
 
 public class RegDump {
     public static void registerModChunk() {
@@ -24,6 +25,9 @@ public class RegDump {
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "block"), new Ore(Ore.OreConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "block_s"), new OreS(OreS.OreSConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "surface"), new Surface(Surface.SurfaceConfig.CODEC));
+        Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "raw_st"), new Stone(Stone.StoneConfig.CODEC));
+        Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "variants"), new Variants(Variants.VariantsConfig.CODEC));
+
         FbasedPlacers.registerplacers();
         ModRules.registerrules();
         ModPredicatesType.registerpredicates();

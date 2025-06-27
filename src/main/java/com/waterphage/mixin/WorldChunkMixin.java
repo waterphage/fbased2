@@ -43,6 +43,19 @@ public class WorldChunkMixin implements ChunkExtension{
     private void copyCustomMap(ServerWorld world, ProtoChunk protoChunk, @Nullable WorldChunk.EntityLoader loader, CallbackInfo ci) {
         if ((Object) this instanceof ChunkExtension self && protoChunk instanceof ChunkExtension proto) {
             self.setCustomMap(proto.getCustomMap());
+            self.setNoise(proto.getNoise());
         }
+    }
+    @Unique
+    private Map<String,Double> noise = new HashMap<>();
+
+    @Override
+    public Map<String,Double> getNoise() {
+        return noise;
+    }
+
+    @Override
+    public void setNoise(Map<String,Double> map) {
+        this.noise = map;
     }
 }

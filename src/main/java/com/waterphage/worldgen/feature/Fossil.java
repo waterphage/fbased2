@@ -18,6 +18,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
@@ -64,8 +65,7 @@ public class Fossil extends Feature<Fossil.FossilConfig> {
                 instance -> instance.group(
                                 Identifier.CODEC.listOf().fieldOf("structures").forGetter(config -> config.fossilStructures),
                                 StructureProcessorType.REGISTRY_CODEC.fieldOf("processors").forGetter(config -> config.fossilProcessors)
-                        )
-                        .apply(instance, FossilConfig::new)
+                        ).apply(instance, FossilConfig::new)
         );
         public final List<Identifier> fossilStructures;
         public final RegistryEntry<StructureProcessorList> fossilProcessors;

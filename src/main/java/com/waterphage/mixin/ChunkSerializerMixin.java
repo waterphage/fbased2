@@ -43,6 +43,15 @@ public class ChunkSerializerMixin {
             }
         }
         ext.setCustomMap(map);
+        Map<String, Double> noise = new HashMap<>();
+        if (nbt.contains("Noise", NbtElement.COMPOUND_TYPE)) {
+            NbtCompound custom = nbt.getCompound("Noise");
+            for (String key : custom.getKeys()) {
+                Double value= custom.getDouble(key);
+                noise.put(key,value);
+            }
+        }
+        ext.setNoise(noise);
     }
 
     @Inject(method = "serialize", at = @At("RETURN"))
@@ -51,7 +60,6 @@ public class ChunkSerializerMixin {
 
         Map<IntPair, TreeMap<Integer, Integer>> map = ext.getCustomMap();
         if (map == null || map.isEmpty()) return;
-
         NbtCompound root = cir.getReturnValue();
         NbtCompound surface = new NbtCompound();
         for (Map.Entry<IntPair, TreeMap<Integer, Integer>> entry : map.entrySet()) {
@@ -62,5 +70,12 @@ public class ChunkSerializerMixin {
             surface.put(entry.getKey().first() + "," + entry.getKey().second(), inner);
         }
         root.put("SurfaceCustom", surface);
+        Map<String,Double> noise = ext.getNoise();
+        if (noise == null || noise.isEmpty()) return;
+        NbtCompound param = new NbtCompound();
+        for (Map.Entry<String,Double> value : noise.entrySet()) {
+            param.putDouble(value.getKey(), value.getValue());
+        }
+        root.put("Noise", param);
     }
 }

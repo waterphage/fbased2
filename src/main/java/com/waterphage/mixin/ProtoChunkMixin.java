@@ -30,4 +30,16 @@ public class ProtoChunkMixin implements ChunkExtension {
     public void setCustomMap(Map<IntPair, TreeMap<Integer, Integer>> map) {
         this.customMap = map;
     }
+    @Unique
+    private Map<String,Double> noise = new HashMap<>();
+
+    @Override
+    public Map<String,Double> getNoise() {
+        return noise;
+    }
+
+    @Override
+    public void setNoise(Map<String,Double> map) {
+        this.noise = map;
+    }
 }
