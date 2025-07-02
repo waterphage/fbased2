@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/cyan_gem_tile",
+    "top": "fbased:block/cyan_gem_pol",
+    "side": "fbased:block/cyan_gem_bricks"
+  },
+  "render_type": "solid"
+}

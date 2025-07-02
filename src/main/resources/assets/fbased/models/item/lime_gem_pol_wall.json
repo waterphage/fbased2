@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/lime_gem_pol",
+    "particle": "fbased:block/lime_gem_pol"
+  },
+  "render_type": "solid"
+}

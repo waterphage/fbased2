@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/purple_dirty_gem_bricks",
+    "top": "fbased:block/purple_dirty_gem_bricks",
+    "side": "fbased:block/purple_dirty_gem_bricks"
+  }
+}

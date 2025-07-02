@@ -31,6 +31,13 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     public Surface(Codec<SurfaceConfig> codec) {
         super(codec);
     }
+    public record Wall(float rarity,RegistryEntry<PlacedFeature> feature){}
+    public static final Codec<Wall> FB_WALL_CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                    Codec.FLOAT.fieldOf("r").forGetter(Wall::rarity),
+                    PlacedFeature.REGISTRY_CODEC.fieldOf("f").forGetter(Wall::feature)
+            ).apply(instance, Wall::new)
+    );
     public record BiomeValue(int out, int in, float chance, float chance2) {}
     public static final Codec<BiomeValue> FB_BIOME_VALUE_CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
@@ -50,21 +57,27 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                         Codec.INT.fieldOf("tech_Y").forGetter(config -> config.yT),
                         Codec.INT.fieldOf("min").forGetter(config -> config.min),
                         Codec.INT.fieldOf("max").forGetter(config -> config.max),
+                        Codec.INT.listOf().fieldOf("matrix").forGetter(config -> config.matrix),
+                        FB_WALL_CODEC.listOf().fieldOf("wall").forGetter(config -> config.wall),
                         FB_BIOME_MAP_CODEC.fieldOf("biome_relations").forGetter(config -> config.biome),
                         FB_BIOME_FEATURE_CODEC.fieldOf("biome_features").forGetter(config -> config.feature)
                 ).apply(instance, SurfaceConfig::new));
         private Integer min;
         private Integer yT;
         private Integer max;
+        private List<Integer> matrix;
+        private List<Wall> wall;
         private Map<String,BiomeValue> biome;
         private Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature;
 
-        SurfaceConfig(Integer yT,Integer min, Integer max,Map<String,BiomeValue>biome,
+        SurfaceConfig(Integer yT,Integer min, Integer max,List<Integer> matrix,List<Wall> wall,Map<String,BiomeValue>biome,
                       Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature
         ) {
             this.yT=yT;
             this.max = max;
             this.min = min;
+            this.matrix=matrix;
+            this.wall=wall;
             this.biome = biome;
             this.feature=feature;
         }
@@ -77,6 +90,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         private StructureWorldAccess w;
         private Random r;
         private Map<String,BiomeValue> biomemap;
+        private Wall wall;private Double bE;
         private Map<IntPair,TreeMap<Integer,Integer>> global = new HashMap<>();
         private Map<BlockPos,List<BlockPos>> mapSF = new HashMap<>();
         private Map<BlockPos,List<BlockPos>> inSF = new HashMap<>();
@@ -107,6 +121,15 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             BlockPos.Mutable origin=ctx.getOrigin().mutableCopy();
             this.xi=origin.getX();this.zi=origin.getZ();
             this.yT=config.yT;
+            Chunk chunk=this.w.getChunk(ctx.getOrigin());
+            if(chunk instanceof ChunkExtension ext){
+                List<Double>val=ext.getNoise();
+                Double bX=(0.5D*val.get(0))+1;
+                Double bZ=(0.5D*val.get(1))+1;
+                this.bE=(0.5D*val.get(2))+1;
+                Integer index=Math.toIntExact(Math.round(bX*(config.matrix.get(0)-1)))+config.matrix.get(0)*Math.toIntExact(Math.round(bZ*(config.matrix.get(1)-1)));
+                if (index > 0 && index <= config.wall.size())this.wall=config.wall.get(index);
+            }
         }
     }
     // 0 Main method
@@ -494,5 +517,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         if(feature==null)return;
         ChunkGenerator generator = ctx.w.toServerWorld().getChunkManager().getChunkGenerator();
         feature.value().generate(ctx.w, generator, ctx.r, pos);
+        //if (Math.abs(i)==33&&ctx.random(pos)<1.0/ctx.wall.rarity)ctx.wall.feature().value().generate(ctx.w, generator, ctx.r, pos); //
     }
 }

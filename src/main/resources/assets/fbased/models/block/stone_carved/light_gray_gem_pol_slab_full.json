@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "bottom": "fbased:block/light_gray_gem_pol",
+    "top": "fbased:block/light_gray_gem_pol",
+    "side": "fbased:block/light_gray_gem_doub"
+  },
+  "render_type": "solid"
+}

@@ -1,6 +1,16 @@
 package com.waterphage.block;
 
 public class ModMaterials {
+    public enum Gem {
+        A1("gem"),
+        A2("foggy_gem"),
+        A3("dirty_gem");
+
+        public final String name;
+        Gem(String name) {
+            this.name = name;
+        }
+    }
     public enum Rock {
         A1("sandstone",0.867F,"black","white","yellow","tan"),
         A2("siltstone",0.867F,"black","white","yellow","tan"),

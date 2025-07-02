@@ -5,10 +5,12 @@
       "min": 2,
       "max": 16,
       "tech_Y": 0,
+      "matrix": [64,64],
+      "wall": [
+        {"r": 256,"f": "fbased:nothing"}
+      ],
       "biome_relations":{
-        "fbased:c_main/0_0,fbased:c_main/0_0": {
-          "out_p": 15,"in_p": 0,"out_c": 256,"in_c": 9999
-        }
+        "fbased:c_main/0_0,fbased:c_main/0_0": {"out_p": 15,"in_p": 0,"out_c": 256,"in_c": 9999}
       },
       "biome_features":{
         "fbased:c_main/0_0":{

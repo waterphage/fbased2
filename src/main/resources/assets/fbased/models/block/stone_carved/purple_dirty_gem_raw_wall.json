@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "fbased:block/purple_dirty_gem_raw",
+    "particle": "fbased:block/purple_dirty_gem_raw"
+  },
+  "render_type": "solid"
+}

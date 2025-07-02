@@ -5,6 +5,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.FacingBlock;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
@@ -19,25 +20,24 @@ public class FbBlock extends FacingBlock  {
 
     public FbBlock(Settings settings) {
         super(settings);
-        setDefaultState(this.stateManager.getDefaultState().with(Properties.FACING, Direction.UP));
+        setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.UP));
     }
 
+    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(
-                new Property[]{FACING}
-        );
+        builder.add(FACING);
     }
+
     @Environment(EnvType.CLIENT)
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        if (fbKeyFlip==0||fbKeyFlip==4) {
-            return this.getDefaultState().with(Properties.FACING, ctx.getSide().getOpposite());
-        } else if (fbKeyFlip==1||fbKeyFlip==5) {
-            return this.getDefaultState().with(Properties.FACING, ctx.getPlayerLookDirection().getOpposite());
-        } else if (fbKeyFlip==2||fbKeyFlip==6) {
-            return this.getDefaultState().with(Properties.FACING, ctx.getSide());
-        } else {
-            return this.getDefaultState().with(Properties.FACING, ctx.getPlayerLookDirection());
+        Direction dir;
+        switch (fbKeyFlip) {
+            case 0, 4 -> dir = ctx.getSide().getOpposite();
+            case 1, 5 -> dir = ctx.getPlayerLookDirection().getOpposite();
+            case 2, 6 -> dir = ctx.getSide();
+            default   -> dir = ctx.getPlayerLookDirection();
         }
+        return getDefaultState().with(FACING, dir);
     }
 }

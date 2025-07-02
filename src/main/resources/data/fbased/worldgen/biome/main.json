@@ -21,7 +21,6 @@
   },
   "features": [
     [
-      "fbased:crst_test",
       "fbased:test"
     ],
     [],

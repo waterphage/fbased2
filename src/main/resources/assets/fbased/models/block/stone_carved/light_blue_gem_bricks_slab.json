@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/light_blue_gem_bricks",
+    "top": "fbased:block/light_blue_gem_bricks",
+    "bottom": "fbased:block/light_blue_gem_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,70 @@
+from PIL import Image
+import os
+
+GEM_PATH = 'gems.png'
+OUTPUT_DIR = 'gem'
+TILE_SIZE = 16  # Один тайл 16x16
+
+# Материалы — порядок = строки сверху вниз
+materials = [
+    "white_gem", "light_gray_gem", "gray_gem", "black_gem",
+    "brown_gem", "red_gem", "orange_gem", "yellow_gem",
+    "lime_gem", "green_gem", "cyan_gem", "light_blue_gem",
+    "blue_gem", "purple_gem", "magenta_gem", "pink_gem",
+
+    "white_foggy_gem", "light_gray_foggy_gem", "gray_foggy_gem", "black_foggy_gem",
+    "brown_foggy_gem", "red_foggy_gem", "orange_foggy_gem", "yellow_foggy_gem",
+    "lime_foggy_gem", "green_foggy_gem", "cyan_foggy_gem", "light_blue_foggy_gem",
+    "blue_foggy_gem", "purple_foggy_gem", "magenta_foggy_gem", "pink_foggy_gem",
+
+    "white_dirty_gem", "light_gray_dirty_gem", "gray_dirty_gem", "black_dirty_gem",
+    "brown_dirty_gem", "red_dirty_gem", "orange_dirty_gem", "yellow_dirty_gem",
+    "lime_dirty_gem", "green_dirty_gem", "cyan_dirty_gem", "light_blue_dirty_gem",
+    "blue_dirty_gem", "purple_dirty_gem", "magenta_dirty_gem", "pink_dirty_gem"
+]
+
+# Варианты — порядок = группы по 4 колонки
+variants = ["raw", "pol", "doub", "tile", "bricks", "cobble", "gravel", "dust"]
+
+def save_tile(img, x, y, out_path):
+    tile = img.crop((x * TILE_SIZE, y * TILE_SIZE, (x + 1) * TILE_SIZE, (y + 1) * TILE_SIZE))
+    tile.save(out_path)
+
+def write_properties(path, material, variant, index):
+    lines = [
+        f"matchTiles=fbased:block/{material}_{variant}",
+        "method=random",
+        f"tiles={index}-{index+3}"
+    ]
+    with open(path, 'w', encoding='utf-8', newline='\n') as f:
+        f.write("\n".join(lines) + "\n")
+
+def main():
+    img = Image.open(GEM_PATH)
+    n = 0
+    for y, material in enumerate(materials):
+        for x_group, variant in enumerate(variants):
+            base_name = f"{material}_{variant}"
+            base_index = n
+
+            textures_dir = os.path.join(OUTPUT_DIR, "textures", "block")
+            ctm_dir = os.path.join(OUTPUT_DIR, "optifine", "ctm", f"{variant}_gem")
+            os.makedirs(textures_dir, exist_ok=True)
+            os.makedirs(ctm_dir, exist_ok=True)
+
+            # Текстура блока (n+0)
+            save_tile(img, x_group * 4 + 0, y, os.path.join(textures_dir, f"{base_name}.png"))
+
+            # 4 тайла CTM
+            for i in range(4):
+                save_tile(img, x_group * 4 + i, y, os.path.join(ctm_dir, f"{base_index + i}.png"))
+
+            # .properties файл
+            write_properties(os.path.join(ctm_dir, f"{base_index}.properties"), material, variant, base_index)
+
+            n += 4
+
+    print("✅ Готово: всё экспортировано по структуре CTM.")
+
+if __name__ == '__main__':
+    main()

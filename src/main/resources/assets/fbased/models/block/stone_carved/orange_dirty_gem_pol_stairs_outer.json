@@ -1,0 +1,8 @@
+{
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "fbased:block/orange_dirty_gem_pol",
+    "top": "fbased:block/orange_dirty_gem_pol",
+    "side": "fbased:block/orange_dirty_gem_pol"
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "variants": {
+    "facing=up,rotation=east": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 0,
+      "y": 0
+    },
+    "facing=up,rotation=south": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 0,
+      "y": 90
+    },
+    "facing=up,rotation=west": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 0,
+      "y": 180
+    },
+    "facing=up,rotation=north": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 0,
+      "y": 270
+    },
+
+    "facing=down,rotation=east": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 180,
+      "y": 0
+    },
+    "facing=down,rotation=south": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 180,
+      "y": 90
+    },
+    "facing=down,rotation=west": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 180,
+      "y": 180
+    },
+    "facing=down,rotation=north": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 180,
+      "y": 270
+    },
+
+    "facing=west,rotation=east": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 90,
+      "y": 0
+    },
+    "facing=west,rotation=south": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 0,
+      "y": 0
+    },
+    "facing=west,rotation=west": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 270,
+      "y": 0
+    },
+    "facing=west,rotation=north": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 180,
+      "y": 0
+    },
+
+    "facing=east,rotation=west": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east,rotation=south": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 0,
+      "y": 180
+    },
+    "facing=east,rotation=east": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 270,
+      "y": 180
+    },
+    "facing=east,rotation=north": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 180,
+      "y": 180
+    },
+
+    "facing=north,rotation=south": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north,rotation=east": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 0,
+      "y": 90
+    },
+    "facing=north,rotation=north": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 270,
+      "y": 90
+    },
+    "facing=north,rotation=west": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 180,
+      "y": 90
+    },
+
+    "facing=south,rotation=north": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 90,
+      "y": 270
+    },
+    "facing=south,rotation=east": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 0,
+      "y": 270
+    },
+    "facing=south,rotation=south": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 270,
+      "y": 270
+    },
+    "facing=south,rotation=west": {
+      "model": "fbased:block/stone_carved/yellow_dirty_gem_pol_stairs",
+      "x": 180,
+      "y": 270
+    }
+
+  }
+}

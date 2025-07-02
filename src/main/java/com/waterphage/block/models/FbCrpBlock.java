@@ -67,7 +67,6 @@ public class FbCrpBlock extends FbBlock implements Waterloggable {
         if (state.get(Properties.WATERLOGGED).booleanValue()) {
             return Fluids.WATER.getStill(false);
         }
-        // return state.getFluidState();
         return state.getFluidState();
 
     }

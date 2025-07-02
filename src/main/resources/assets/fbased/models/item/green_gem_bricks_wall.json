@@ -1,0 +1,8 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "fbased:block/green_gem_bricks",
+    "particle": "fbased:block/green_gem_bricks"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/gray_foggy_gem_pol",
+    "top": "fbased:block/gray_foggy_gem_pol",
+    "bottom": "fbased:block/gray_foggy_gem_pol"
+  },
+  "render_type": "solid"
+}

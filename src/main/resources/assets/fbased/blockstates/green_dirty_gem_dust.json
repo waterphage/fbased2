@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "fbased:block/stone_full/green_dirty_gem_dust"
+      },
+      {
+        "model": "fbased:block/stone_full/green_dirty_gem_dust",
+        "y": 90
+      },
+      {
+        "model": "fbased:block/stone_full/green_dirty_gem_dust",
+        "y": 180
+      },
+      {
+        "model": "fbased:block/stone_full/green_dirty_gem_dust",
+        "y": 270
+      }
+    ]
+  }
+}

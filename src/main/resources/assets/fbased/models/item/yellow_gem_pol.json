@@ -1,0 +1,8 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "fbased:block/yellow_gem_pol",
+    "particle": "fbased:block/yellow_gem_pol"
+  },
+  "render_type": "solid"
+}

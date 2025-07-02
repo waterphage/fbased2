@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/lime_dirty_gem_raw",
+    "top": "fbased:block/lime_dirty_gem_raw",
+    "bottom": "fbased:block/lime_dirty_gem_raw"
+  },
+  "render_type": "solid"
+}

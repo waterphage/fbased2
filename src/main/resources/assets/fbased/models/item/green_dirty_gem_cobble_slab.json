@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/green_dirty_gem_cobble",
+    "top": "fbased:block/green_dirty_gem_cobble",
+    "bottom": "fbased:block/green_dirty_gem_cobble"
+  },
+  "render_type": "solid"
+}

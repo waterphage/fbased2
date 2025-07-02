@@ -1,0 +1,9 @@
+{
+  "parent": "block/slab",
+  "textures": {
+    "side": "fbased:block/orange_dirty_gem_raw",
+    "top": "fbased:block/orange_dirty_gem_raw",
+    "bottom": "fbased:block/orange_dirty_gem_raw"
+  },
+  "render_type": "solid"
+}

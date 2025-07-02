@@ -50,7 +50,59 @@ public class ModTabs {
                         }
 
                     }).build());
+    public static final ItemGroup GEMS = Registry.register(Registries.ITEM_GROUP,
+            new Identifier(Fbased.MOD_ID, "gems"),
+            FabricItemGroup.builder().displayName(Text.translatable("fbased.itemgroup.gems"))
+                    .icon(() -> new ItemStack(Registries.ITEM.get(new Identifier("fbased:red_gem_raw"))))
+                    .entries((displayContext, entries) -> {
 
+                        for (ModMaterials.Gem dir: ModMaterials.Gem.values()){
+                            for (String s : Arrays.asList(
+                                    "fbased:white_"+dir.name,
+                                    "fbased:light_gray_"+dir.name,
+                                    "fbased:gray_"+dir.name,
+                                    "fbased:black_"+dir.name,
+
+                                    "fbased:brown_"+dir.name,
+                                    "fbased:red_"+dir.name,
+                                    "fbased:orange_"+dir.name,
+                                    "fbased:yellow_"+dir.name,
+
+                                    "fbased:lime_"+dir.name,
+                                    "fbased:green_"+dir.name,
+                                    "fbased:cyan_"+dir.name,
+                                    "fbased:light_blue_"+dir.name,
+
+                                    "fbased:blue_"+dir.name,
+                                    "fbased:purple_"+dir.name,
+                                    "fbased:magenta_"+dir.name,
+                                    "fbased:pink_"+dir.name
+                            )) {
+                                for (String d : Arrays.asList(
+                                        s+"_raw",
+                                        s+"_pol",
+                                        s+"_cobble",
+                                        s+"_bricks"
+                                ))
+                                {
+                                    for (String e : Arrays.asList(
+                                            d,
+                                            d+"_stairs",
+                                            d+"_slab",
+                                            d+"_wall"
+                                    ))
+                                    {
+                                        entries.add(new ItemStack(Registries.ITEM.get(new Identifier(e))));
+                                    }
+                                }
+                                String gravel = s+"_gravel";
+                                String dust = s+"_dust";
+                                entries.add(new ItemStack(Registries.ITEM.get(new Identifier(gravel))));
+                                entries.add(new ItemStack(Registries.ITEM.get(new Identifier(dust))));
+                            }
+                        }
+
+                    }).build());
     public static final ItemGroup MINERALS = Registry.register(Registries.ITEM_GROUP,
             new Identifier(Fbased.MOD_ID, "minerals"),
             FabricItemGroup.builder().displayName(Text.translatable("fbased.itemgroup.minerals"))

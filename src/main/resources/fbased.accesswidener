@@ -1,5 +1,10 @@
 accessWidener v2 named
 
+
+accessible field net/minecraft/world/chunk/light/ChunkLightProvider chunkProvider Lnet/minecraft/world/chunk/ChunkProvider;
+accessible field net/minecraft/world/chunk/light/ChunkLightProvider lightStorage Lnet/minecraft/world/chunk/light/LightStorage;
+
+
 accessible field net/minecraft/world/gen/chunk/placement/StructurePlacement frequencyReductionMethod Lnet/minecraft/world/gen/chunk/placement/StructurePlacement$FrequencyReductionMethod;
 accessible field net/minecraft/world/gen/chunk/placement/StructurePlacement frequency F
 accessible field net/minecraft/world/gen/chunk/placement/StructurePlacement salt I

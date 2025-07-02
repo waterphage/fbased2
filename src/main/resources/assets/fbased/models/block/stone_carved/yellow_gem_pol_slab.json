@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/yellow_gem_pol",
+    "top": "fbased:block/yellow_gem_pol",
+    "bottom": "fbased:block/yellow_gem_pol"
+  },
+  "render_type": "solid"
+}

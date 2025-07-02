@@ -1,0 +1,9 @@
+{
+  "parent": "block/cube_bottom_top",
+  "textures": {
+    "side": "fbased:block/orange_dirty_gem_bricks",
+    "top": "fbased:block/orange_dirty_gem_pol",
+    "bottom": "fbased:block/orange_dirty_gem_tile"
+  },
+  "render_type": "solid"
+}

@@ -11,10 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Mixin(ProtoChunk.class) // или Chunk.class — зависит от стадии
 public class ProtoChunkMixin implements ChunkExtension {
@@ -31,15 +28,15 @@ public class ProtoChunkMixin implements ChunkExtension {
         this.customMap = map;
     }
     @Unique
-    private Map<String,Double> noise = new HashMap<>();
+    private List<Double> noise = new ArrayList<>();
 
     @Override
-    public Map<String,Double> getNoise() {
+    public List<Double> getNoise() {
         return noise;
     }
 
     @Override
-    public void setNoise(Map<String,Double> map) {
+    public void setNoise(List<Double> map) {
         this.noise = map;
     }
 }

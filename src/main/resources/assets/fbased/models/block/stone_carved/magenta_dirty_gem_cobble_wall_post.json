@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/magenta_dirty_gem_cobble",
+    "particle": "fbased:block/magenta_dirty_gem_cobble"
+  },
+  "render_type": "solid"
+}

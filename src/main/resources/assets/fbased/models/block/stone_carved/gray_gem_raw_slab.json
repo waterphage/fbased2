@@ -1,0 +1,9 @@
+{
+  "parent": "fbased:block/tech/fbslab_tb",
+  "textures": {
+    "all": "fbased:block/gray_gem_raw",
+    "top": "fbased:block/gray_gem_raw",
+    "bottom": "fbased:block/gray_gem_raw"
+  },
+  "render_type": "solid"
+}

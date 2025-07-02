@@ -143,7 +143,7 @@ public class ModRules extends MaterialRules {
                 }
             }
             ext.setCustomMap(chunkData);
-            Map<String,Double> noiseData=new HashMap<>();
+            List<Double> noiseData=new ArrayList<>();
             BlockPos orb = chunkPos.getBlockPos(Math.toIntExact(Math.round(Math.random()*15)), yT, Math.toIntExact(Math.round(Math.random()*15)));
             DensityFunction.NoisePos nps=new DensityFunction.NoisePos() {
                 @Override
@@ -161,9 +161,9 @@ public class ModRules extends MaterialRules {
                     return orb.getZ();
                 }
             };
-            noiseData.put(bX.name(), safe(bX.getNoise(router).sample(nps)));
-            noiseData.put(bZ.name(), safe(bZ.getNoise(router).sample(nps)));
-            noiseData.put(bE.name(), safe(bE.getNoise(router).sample(nps)));
+            noiseData.add(0, safe(bX.getNoise(router).sample(nps)));
+            noiseData.add(1, safe(bZ.getNoise(router).sample(nps)));
+            noiseData.add(2, safe(bE.getNoise(router).sample(nps)));
             ext.setNoise(noiseData);
             chunk.setNeedsSaving(true);
             chunk.needsSaving();

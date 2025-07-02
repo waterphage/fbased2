@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "fbased:block/lime_foggy_gem_raw",
+    "particle": "fbased:block/lime_foggy_gem_raw"
+  },
+  "render_type": "solid"
+}

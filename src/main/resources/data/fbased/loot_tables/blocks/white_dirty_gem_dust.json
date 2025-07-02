@@ -1,0 +1,13 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "fbased:white_dirty_gem_dust"
+        }
+      ]
+    }
+  ]
+}

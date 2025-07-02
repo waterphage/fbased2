@@ -1,0 +1,8 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "fbased:block/blue_foggy_gem_raw",
+    "top": "fbased:block/blue_foggy_gem_raw",
+    "side": "fbased:block/blue_foggy_gem_raw"
+  }
+}

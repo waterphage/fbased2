@@ -25,15 +25,15 @@ public class ChunkMixin implements ChunkExtension {
         this.customMap = map;
     }
     @Unique
-    private Map<String,Double> noise = new HashMap<>();
+    private List<Double> noise = new ArrayList<>();
 
     @Override
-    public Map<String,Double> getNoise() {
+    public List<Double> getNoise() {
         return noise;
     }
 
     @Override
-    public void setNoise(Map<String,Double> map) {
+    public void setNoise(List<Double> map) {
         this.noise = map;
     }
 }
