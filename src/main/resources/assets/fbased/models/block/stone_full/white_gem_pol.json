@@ -4,5 +4,5 @@
     "all": "fbased:block/white_gem_pol",
     "particle": "fbased:block/white_gem_pol"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

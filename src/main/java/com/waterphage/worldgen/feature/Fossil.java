@@ -89,7 +89,9 @@ public class Fossil extends Feature<Fossil.FossilConfig> {
         );
         StructurePlacementData structurePlacementData = new StructurePlacementData().setRotation(blockRotation).setBoundingBox(blockBox).setRandom(random);
         Vec3i vec3i = structureTemplate.getRotatedSize(blockRotation);
-        BlockPos blockPos2 = blockPos.add(-vec3i.getX() / 2, -vec3i.getY() / 2, -vec3i.getZ() / 2);
+        int xf=(chunkPos.x-vec3i.getX()/2)>0?blockPos.getX()-vec3i.getX()/2:chunkPos.getStartX();
+        int zf=(chunkPos.z-vec3i.getZ()/2)>0?blockPos.getZ()-vec3i.getZ()/2:chunkPos.getStartZ();
+        BlockPos blockPos2 = new BlockPos(xf, blockPos.getY()-vec3i.getY() / 2,zf);
         BlockPos blockPos3 = structureTemplate.offsetByTransformedSize(blockPos2, BlockMirror.NONE, blockRotation);
 
         structurePlacementData.clearProcessors();

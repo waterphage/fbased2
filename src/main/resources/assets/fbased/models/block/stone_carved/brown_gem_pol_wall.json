@@ -4,5 +4,5 @@
     "wall": "fbased:block/brown_gem_pol",
     "particle": "fbased:block/brown_gem_pol"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

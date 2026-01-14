@@ -5,5 +5,5 @@
     "top": "fbased:block/lime_dirty_gem_pol",
     "bottom": "fbased:block/lime_dirty_gem_tile"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

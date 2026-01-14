@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "fbased:block/white_foggy_gem_dust"
+    "all": "fbased:block/white_gem_dust"
   }
 }

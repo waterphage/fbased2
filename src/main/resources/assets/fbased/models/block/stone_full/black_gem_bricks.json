@@ -5,5 +5,5 @@
     "top": "fbased:block/black_gem_pol",
     "bottom": "fbased:block/black_gem_tile"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

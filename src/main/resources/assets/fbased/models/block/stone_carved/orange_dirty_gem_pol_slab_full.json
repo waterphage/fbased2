@@ -5,5 +5,5 @@
     "top": "fbased:block/orange_dirty_gem_pol",
     "side": "fbased:block/orange_dirty_gem_doub"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

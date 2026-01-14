@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "fbased:yellow_chalk_raw",
+    "fbased:yellow_chert_raw",
+    "fbased:yellow_claystone_raw",
+    "fbased:yellow_conglomerate_raw",
+    "fbased:yellow_dolomite_raw",
+    "fbased:yellow_limestone_raw",
+    "fbased:yellow_mudstone_raw",
+    "fbased:yellow_rock_salt_raw",
+    "fbased:yellow_sandstone_raw",
+    "fbased:yellow_shale_raw",
+    "fbased:yellow_siltstone_raw"
+  ]
+}

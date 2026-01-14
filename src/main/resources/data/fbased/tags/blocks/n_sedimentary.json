@@ -1,0 +1,53 @@
+{
+  "replace": false,
+  "values": [
+
+    "fbased:black_chalk_raw",
+    "fbased:black_chert_raw",
+    "fbased:black_claystone_raw",
+    "fbased:black_conglomerate_raw",
+    "fbased:black_dolomite_raw",
+    "fbased:black_limestone_raw",
+    "fbased:black_mudstone_raw",
+    "fbased:black_rock_salt_raw",
+    "fbased:black_sandstone_raw",
+    "fbased:black_shale_raw",
+    "fbased:black_siltstone_raw",
+
+    "fbased:white_chalk_raw",
+    "fbased:white_chert_raw",
+    "fbased:white_claystone_raw",
+    "fbased:white_conglomerate_raw",
+    "fbased:white_dolomite_raw",
+    "fbased:white_limestone_raw",
+    "fbased:white_mudstone_raw",
+    "fbased:white_rock_salt_raw",
+    "fbased:white_sandstone_raw",
+    "fbased:white_shale_raw",
+    "fbased:white_siltstone_raw",
+
+    "fbased:tan_chalk_raw",
+    "fbased:tan_chert_raw",
+    "fbased:tan_claystone_raw",
+    "fbased:tan_conglomerate_raw",
+    "fbased:tan_dolomite_raw",
+    "fbased:red_limestone_raw",
+    "fbased:tan_mudstone_raw",
+    "fbased:red_rock_salt_raw",
+    "fbased:tan_sandstone_raw",
+    "fbased:red_shale_raw",
+    "fbased:tan_siltstone_raw",
+
+    "fbased:yellow_chalk_raw",
+    "fbased:yellow_chert_raw",
+    "fbased:yellow_claystone_raw",
+    "fbased:yellow_conglomerate_raw",
+    "fbased:yellow_dolomite_raw",
+    "fbased:yellow_limestone_raw",
+    "fbased:yellow_mudstone_raw",
+    "fbased:yellow_rock_salt_raw",
+    "fbased:yellow_sandstone_raw",
+    "fbased:yellow_shale_raw",
+    "fbased:yellow_siltstone_raw"
+  ]
+}

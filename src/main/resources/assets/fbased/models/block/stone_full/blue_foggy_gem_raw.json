@@ -1,8 +1,8 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "fbased:block/blue_foggy_gem_raw",
-    "particle": "fbased:block/blue_foggy_gem_raw"
+    "all": "fbased:block/blue_gem_raw",
+    "particle": "fbased:block/blue_gem_raw"
   },
   "render_type": "solid"
 }

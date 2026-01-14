@@ -1,9 +1,9 @@
 {
   "parent": "block/cube_bottom_top",
   "textures": {
-    "bottom": "fbased:block/blue_foggy_gem_pol",
-    "top": "fbased:block/blue_foggy_gem_pol",
-    "side": "fbased:block/blue_foggy_gem_doub"
+    "bottom": "fbased:block/blue_gem_pol",
+    "top": "fbased:block/blue_gem_pol",
+    "side": "fbased:block/blue_gem_doub"
   },
   "render_type": "solid"
 }

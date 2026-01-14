@@ -1,0 +1,47 @@
+[
+  {
+    "processor_type": "minecraft:protected_blocks",
+    "value": "#fbased:natural_rock"
+  },
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:pink_gem_raw",
+        "fbased:magenta_gem_raw",
+        "fbased:purple_gem_raw",
+        "fbased:blue_gem_raw",
+        "fbased:light_blue_gem_raw",
+        "fbased:cyan_gem_raw",
+        "fbased:green_gem_raw",
+        "fbased:lime_gem_raw",
+        "fbased:yellow_gem_raw",
+        "fbased:orange_gem_raw",
+        "fbased:red_gem_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:light_blue_gem_raw",
+        "fbased:white_gem_raw",
+        "fbased:white_foggy_gem_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:white_foggy_gem_raw",
+        "fbased:light_gray_foggy_gem_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:light_gray_foggy_gem_raw",
+        "fbased:light_gray_dirty_gem_raw",
+        "fbased:gray_foggy_gem_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:gray_foggy_gem_raw",
+        "fbased:gray_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:brown_dirty_gem_raw",
+        "fbased:yellow_foggy_gem_raw"
+      ]
+    }
+  }
+]

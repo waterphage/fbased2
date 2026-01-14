@@ -6,7 +6,7 @@
     "argument1": -2,
     "argument2": {
       "type": "minecraft:mul",
-      "argument1": 1,
+      "argument1": -1,
       "argument2": 0.00396825396
     }
   }

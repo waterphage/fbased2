@@ -5,5 +5,5 @@
     "top": "fbased:block/lime_gem_pol",
     "side": "fbased:block/lime_gem_bricks"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

@@ -31,10 +31,10 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     public Surface(Codec<SurfaceConfig> codec) {
         super(codec);
     }
-    public record Wall(float rarity,RegistryEntry<PlacedFeature> feature){}
+    public record Wall(int i,RegistryEntry<PlacedFeature> feature){}
     public static final Codec<Wall> FB_WALL_CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
-                    Codec.FLOAT.fieldOf("r").forGetter(Wall::rarity),
+                    Codec.INT.fieldOf("i").forGetter(Wall::i),
                     PlacedFeature.REGISTRY_CODEC.fieldOf("f").forGetter(Wall::feature)
             ).apply(instance, Wall::new)
     );
@@ -47,6 +47,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     Codec.FLOAT.fieldOf("in_c").forGetter(BiomeValue::chance2)
             ).apply(instance, BiomeValue::new)
     );
+    private boolean l=true;//log
     public static final UnboundedMapCodec<Integer, RegistryEntry<PlacedFeature>> FB_INDEX_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING.xmap(Integer::parseInt, Object::toString), PlacedFeature.REGISTRY_CODEC);
     public static final UnboundedMapCodec<String, Map<Integer, RegistryEntry<PlacedFeature>>> FB_BIOME_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING, FB_INDEX_FEATURE_CODEC);
 
@@ -87,6 +88,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         }
     }
     private class SurfCont {
+        Chunk chunk;
+
         private StructureWorldAccess w;
         private Random r;
         private Map<String,BiomeValue> biomemap;
@@ -108,7 +111,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         private int yT;
 
         private float random(BlockPos pos){
-            long seed = pos.asLong()^this.w.getSeed();
+            long seed = pos.asLong() ^ w.getSeed() ^ ((pos.getX()*31L) + (pos.getZ()*17L));
             java.util.Random random = new java.util.Random(seed);
             return random.nextFloat();
         }
@@ -121,14 +124,15 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             BlockPos.Mutable origin=ctx.getOrigin().mutableCopy();
             this.xi=origin.getX();this.zi=origin.getZ();
             this.yT=config.yT;
-            Chunk chunk=this.w.getChunk(ctx.getOrigin());
-            if(chunk instanceof ChunkExtension ext){
+            this.chunk=this.w.getChunk(ctx.getOrigin());
+            if(this.chunk instanceof ChunkExtension ext){
                 List<Double>val=ext.getNoise();
-                Double bX=(0.5D*val.get(0))+1;
-                Double bZ=(0.5D*val.get(1))+1;
-                this.bE=(0.5D*val.get(2))+1;
+                Double bX=(0.25D*val.get(0))+0.5D;// cont.json
+                Double bZ=(0.25D*val.get(1))+0.5D;// eros.json
+                this.bE=(0.25D*val.get(2))+0.5D;
                 Integer index=Math.toIntExact(Math.round(bX*(config.matrix.get(0)-1)))+config.matrix.get(0)*Math.toIntExact(Math.round(bZ*(config.matrix.get(1)-1)));
-                if (index > 0 && index <= config.wall.size())this.wall=config.wall.get(index);
+                if (l) {System.out.println("bX=" + bX + ", bZ=" + bZ+", i="+index);l=false;}
+                if (index >= 0 && index <= config.wall.size())this.wall=config.wall.get(index);
             }
         }
     }
@@ -137,7 +141,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     public boolean generate(FeatureContext<SurfaceConfig> context) {
         SurfCont ctx=new SurfCont(context);
         List<Pair<BlockPos,Integer>>placer=placer(ctx);// 1 holds all math stores placement positions and their indexes
-
+        geow(ctx);
         for (Pair<BlockPos,Integer> entry:placer){
             BlockPos.Mutable pos = entry.getLeft().mutableCopy();
             int i = entry.getRight();
@@ -517,6 +521,18 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         if(feature==null)return;
         ChunkGenerator generator = ctx.w.toServerWorld().getChunkManager().getChunkGenerator();
         feature.value().generate(ctx.w, generator, ctx.r, pos);
-        //if (Math.abs(i)==33&&ctx.random(pos)<1.0/ctx.wall.rarity)ctx.wall.feature().value().generate(ctx.w, generator, ctx.r, pos); //
+    }
+    private void  geow(SurfCont ctx){
+        ChunkGenerator generator = ctx.w.toServerWorld().getChunkManager().getChunkGenerator();
+        List<BlockPos> positions = new ArrayList<>();
+        positions.addAll(ctx.wallC.keySet());
+        positions.addAll(ctx.wallF.keySet());
+        Collections.shuffle(positions, new java.util.Random());
+        for (int i = 0; i < Math.min(ctx.wall.i, positions.size()); ++i) {
+            BlockPos pos = positions.get(i);
+            if (ctx.w.getChunk(pos).equals(ctx.chunk)) {
+                ctx.wall.feature().value().generate(ctx.w, generator, ctx.r, pos);
+            }
+        }
     }
 }

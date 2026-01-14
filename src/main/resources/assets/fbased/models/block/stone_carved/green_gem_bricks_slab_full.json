@@ -5,5 +5,5 @@
     "top": "fbased:block/green_gem_pol",
     "side": "fbased:block/green_gem_bricks"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

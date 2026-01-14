@@ -71,9 +71,46 @@ public class ModBlocks {
         for (String variant:types){
             for(ModMaterials.Color c:ModMaterials.Color.values()){
                 String block=c.name+variant;
+                if(variant=="_foggy_gem"){fgem(block,1.0F);continue;}
                 gem(block,1.0F);
             }
         }
+    }
+    private static Block fgem(String name, Float base) {
+        registerBlock(name + "_raw", new FbFGemBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*5F).resistance(base*1.25F).nonOpaque()));
+        registerBlock(name + "_pol", new FbFGemBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*3F).resistance(base*1.5F).nonOpaque()));
+        registerBlock(name + "_cobble", new FbBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*2F).resistance(base*1.75F)));
+        registerBlock(name + "_bricks", new FbFGemBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base).resistance(base*2F).nonOpaque()));
+
+        registerBlock(name + "_raw_wall", new FbGemWall(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*5F).resistance(base*1.25F).nonOpaque()));
+        registerBlock(name + "_pol_wall", new FbGemWall(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*3F).resistance(base*1.5F).nonOpaque()));
+        registerBlock(name + "_cobble_wall", new WallBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*2F).resistance(base*1.75F)));
+        registerBlock(name + "_bricks_wall", new FbGemWall(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base).resistance(base*2F).nonOpaque()));
+        registerBlock(name + "_raw_stairs", new FbGemStr(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*5F).resistance(base*1.25F).nonOpaque()));
+        registerBlock(name + "_pol_stairs", new FbGemStr(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*3F).resistance(base*1.5F).nonOpaque()));
+        registerBlock(name + "_cobble_stairs", new FbStrBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*2F).resistance(base*1.75F)));
+        registerBlock(name + "_bricks_stairs", new FbGemStr(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base).resistance(base*2F).nonOpaque()));
+
+        registerBlock(name + "_raw_slab", new FbGemSlb(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*5F).resistance(base*1.25F).nonOpaque(), SoundEvents.BLOCK_STONE_PLACE));
+        registerBlock(name + "_pol_slab", new FbGemSlb((FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*3F).resistance(base*1.5F).nonOpaque()), SoundEvents.BLOCK_STONE_PLACE));
+        registerBlock(name + "_cobble_slab", new FbSlbBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*2F).resistance(base*1.75F), SoundEvents.BLOCK_STONE_PLACE));
+        registerBlock(name + "_bricks_slab", new FbGemSlb(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base).resistance(base*2F).nonOpaque(), SoundEvents.BLOCK_STONE_PLACE));
+
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_pol")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_raw")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_bricks")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_pol_wall")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_raw_wall")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_bricks_wall")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_pol_stairs")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_raw_stairs")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_bricks_stairs")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_pol_slab")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_raw_slab")), RenderLayer.getTranslucent());
+        BlockRenderLayerMap.INSTANCE.putBlock(Registries.BLOCK.get(new Identifier(Fbased.MOD_ID,name + "_bricks_slab")), RenderLayer.getTranslucent());
+
+        registerBlock(name + "_gravel", new SandBlock(14406560,FabricBlockSettings.copyOf(Blocks.SAND).hardness(base*0.75F).resistance(base*2.5F)));
+        return registerBlock(name + "_dust", new SandBlock(14406560,FabricBlockSettings.copyOf(Blocks.SAND).hardness(base*0.25F).resistance(base*5F)));
     }
     private static Block gem(String name, Float base) {
         registerBlock(name + "_raw", new FbGemBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*5F).resistance(base*1.25F).nonOpaque()));
@@ -85,7 +122,6 @@ public class ModBlocks {
         registerBlock(name + "_pol_wall", new FbGemWall(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*3F).resistance(base*1.5F).nonOpaque()));
         registerBlock(name + "_cobble_wall", new WallBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*2F).resistance(base*1.75F)));
         registerBlock(name + "_bricks_wall", new FbGemWall(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base).resistance(base*2F).nonOpaque()));
-
         registerBlock(name + "_raw_stairs", new FbGemStr(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*5F).resistance(base*1.25F).nonOpaque()));
         registerBlock(name + "_pol_stairs", new FbGemStr(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*3F).resistance(base*1.5F).nonOpaque()));
         registerBlock(name + "_cobble_stairs", new FbStrBlock(FabricBlockSettings.create().mapColor(MapColor.STONE_GRAY).instrument(Instrument.BASEDRUM).hardness(base*2F).resistance(base*1.75F)));

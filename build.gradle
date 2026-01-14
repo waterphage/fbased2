@@ -10,8 +10,6 @@ base {
 	archivesName = project.archives_base_name
 }
 
-
-
 repositories {
 	// Add repositories to retrieve artifacts from in here.
 	// You should only use this when depending on other mods because
@@ -23,8 +21,6 @@ repositories {
 loom {
 	accessWidenerPath = file("src/main/resources/fbased.accesswidener")
 }
-
-
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -83,4 +79,16 @@ publishing {
 		// The repositories here will be used for publishing your artifact, not for
 		// retrieving dependencies.
 	}
+}
+import org.gradle.api.tasks.JavaExec
+
+// Настраиваем таску runClient — это именно та JavaExec‑таска, которую Loom использует для запуска игры
+tasks.named('runClient', JavaExec).configure {
+	// Метод jvmArgs(vararg String) добавляет аргументы в список, а не пытается перезаписать readonly‑свойство
+	jvmArgs '-Xms1G', '-Xmx8G'
+}
+
+// Если вы иногда тестируете сервер локально через Loom
+tasks.named('runServer', JavaExec).configure {
+	jvmArgs '-Xms1G', '-Xmx8G'
 }

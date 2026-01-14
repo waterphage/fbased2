@@ -1,8 +1,8 @@
 {
   "parent": "block/inner_stairs",
   "textures": {
-    "bottom": "fbased:block/lime_foggy_gem_cobble",
-    "top": "fbased:block/lime_foggy_gem_cobble",
-    "side": "fbased:block/lime_foggy_gem_cobble"
+    "bottom": "fbased:block/lime_gem_cobble",
+    "top": "fbased:block/lime_gem_cobble",
+    "side": "fbased:block/lime_gem_cobble"
   }
 }

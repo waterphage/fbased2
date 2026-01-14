@@ -1,16 +1,16 @@
 package com.waterphage.worldgen;
 
-import com.google.common.cache.Cache;
 import com.waterphage.Fbased;
+import com.waterphage.worldgen.blockstates.GeoPType;
+import com.waterphage.worldgen.blockstates.GeoProcessor;
 import com.waterphage.worldgen.blockstates.ModPredicatesType;
 import com.waterphage.worldgen.feature.*;
 import com.waterphage.worldgen.function.ConstantDensityFunction;
 import com.waterphage.worldgen.placers.FbasedPlacers;
-import it.unimi.dsi.fastutil.objects.Object2ShortArrayMap;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.structure.processor.StructureProcessorType;
 import net.minecraft.util.Identifier;
-import net.minecraft.world.gen.structure.StructureType;
 
 public class RegDump {
     public static void registerModChunk() {
@@ -32,5 +32,6 @@ public class RegDump {
         ModRules.registerrules();
         ModPredicatesType.registerpredicates();
         ConstantDensityFunction.register1();
+        GeoPType.registerprocessors();
     }
 }

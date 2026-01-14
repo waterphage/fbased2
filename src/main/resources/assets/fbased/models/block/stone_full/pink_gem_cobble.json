@@ -4,5 +4,5 @@
     "all": "fbased:block/pink_gem_cobble",
     "particle": "fbased:block/pink_gem_cobble"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

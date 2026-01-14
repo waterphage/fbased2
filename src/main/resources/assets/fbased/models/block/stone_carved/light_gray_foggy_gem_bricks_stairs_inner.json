@@ -1,8 +1,8 @@
 {
   "parent": "block/inner_stairs",
   "textures": {
-    "bottom": "fbased:block/light_gray_foggy_gem_bricks",
-    "top": "fbased:block/light_gray_foggy_gem_bricks",
-    "side": "fbased:block/light_gray_foggy_gem_bricks"
+    "bottom": "fbased:block/light_gray_gem_bricks",
+    "top": "fbased:block/light_gray_gem_bricks",
+    "side": "fbased:block/light_gray_gem_bricks"
   }
 }

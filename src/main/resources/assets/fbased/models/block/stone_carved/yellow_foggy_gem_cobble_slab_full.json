@@ -1,9 +1,9 @@
 {
   "parent": "block/cube_bottom_top",
   "textures": {
-    "bottom": "fbased:block/yellow_foggy_gem_cobble",
-    "top": "fbased:block/yellow_foggy_gem_cobble",
-    "side": "fbased:block/yellow_foggy_gem_cobble"
+    "bottom": "fbased:block/yellow_gem_cobble",
+    "top": "fbased:block/yellow_gem_cobble",
+    "side": "fbased:block/yellow_gem_cobble"
   },
   "render_type": "solid"
 }

@@ -1,0 +1,43 @@
+{
+  "replace": false,
+  "values": [
+    "fbased:black_quartzite_raw",
+    "fbased:black_slate_raw",
+    "fbased:black_phyllite_raw",
+    "fbased:black_schist_raw",
+    "fbased:black_gneiss_raw",
+    "fbased:black_marble_raw",
+    "fbased:black_sandstone_raw",
+    "fbased:black_rock_salt_raw",
+    "fbased:black_conglomerate_raw",
+
+    "fbased:white_quartzite_raw",
+    "fbased:white_slate_raw",
+    "fbased:white_phyllite_raw",
+    "fbased:white_schist_raw",
+    "fbased:white_gneiss_raw",
+    "fbased:white_marble_raw",
+    "fbased:white_sandstone_raw",
+    "fbased:white_rock_salt_raw",
+    "fbased:white_conglomerate_raw",
+
+    "fbased:green_phyllite_raw",
+    "fbased:green_quartzite_raw",
+    "fbased:green_slate_raw",
+    "fbased:green_schist_raw",
+    "fbased:green_gneiss_raw",
+    "fbased:green_marble_raw",
+
+    "fbased:tan_quartzite_raw",
+    "fbased:tan_sandstone_raw",
+    "fbased:tan_conglomerate_raw",
+    "fbased:tan_slate_raw",
+
+    "fbased:red_gneiss_raw",
+    "fbased:red_marble_raw",
+    "fbased:red_phyllite_raw",
+    "fbased:red_rock_salt_raw",
+    "fbased:red_schist_raw"
+
+  ]
+}

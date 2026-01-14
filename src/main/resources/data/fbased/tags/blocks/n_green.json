@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "fbased:green_andesite_raw",
+    "fbased:green_basalt_raw",
+    "fbased:green_dacite_raw",
+    "fbased:green_diorite_raw",
+    "fbased:green_gabbro_raw",
+    "fbased:green_gneiss_raw",
+    "fbased:green_granite_raw",
+    "fbased:green_marble_raw",
+    "fbased:green_obsidian_raw",
+    "fbased:green_phyllite_raw",
+    "fbased:green_quartzite_raw",
+    "fbased:green_rhyolite_raw",
+    "fbased:green_schist_raw",
+    "fbased:green_slate_raw"
+  ]
+}

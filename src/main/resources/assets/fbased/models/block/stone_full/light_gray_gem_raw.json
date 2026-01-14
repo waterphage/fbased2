@@ -4,5 +4,5 @@
     "all": "fbased:block/light_gray_gem_raw",
     "particle": "fbased:block/light_gray_gem_raw"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

@@ -4,5 +4,5 @@
     "all": "fbased:block/blue_dirty_gem_raw",
     "particle": "fbased:block/blue_dirty_gem_raw"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

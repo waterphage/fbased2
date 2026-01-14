@@ -5,5 +5,5 @@
     "top": "fbased:block/light_blue_dirty_gem_cobble",
     "side": "fbased:block/light_blue_dirty_gem_cobble"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

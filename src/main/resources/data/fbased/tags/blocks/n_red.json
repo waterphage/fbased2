@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "fbased:red_andesite_raw",
+    "fbased:red_basalt_raw",
+    "fbased:red_dacite_raw",
+    "fbased:red_diorite_raw",
+    "fbased:red_gabbro_raw",
+    "fbased:red_gneiss_raw",
+    "fbased:red_granite_raw",
+    "fbased:red_limestone_raw",
+    "fbased:red_marble_raw",
+    "fbased:red_obsidian_raw",
+    "fbased:red_phyllite_raw",
+    "fbased:red_rhyolite_raw",
+    "fbased:red_rock_salt_raw",
+    "fbased:red_schist_raw",
+    "fbased:red_shale_raw"
+  ]
+}

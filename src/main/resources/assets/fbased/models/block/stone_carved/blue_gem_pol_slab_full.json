@@ -5,5 +5,5 @@
     "top": "fbased:block/blue_gem_pol",
     "side": "fbased:block/blue_gem_doub"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

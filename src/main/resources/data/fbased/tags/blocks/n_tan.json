@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "fbased:tan_chalk_raw",
+    "fbased:tan_chert_raw",
+    "fbased:tan_claystone_raw",
+    "fbased:tan_conglomerate_raw",
+    "fbased:tan_dolomite_raw",
+    "fbased:tan_mudstone_raw",
+    "fbased:tan_quartzite_raw",
+    "fbased:tan_sandstone_raw",
+    "fbased:tan_siltstone_raw",
+    "fbased:tan_slate_raw"
+  ]
+}

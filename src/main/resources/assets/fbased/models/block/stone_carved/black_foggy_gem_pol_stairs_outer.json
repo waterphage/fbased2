@@ -1,8 +1,8 @@
 {
   "parent": "block/outer_stairs",
   "textures": {
-    "bottom": "fbased:block/black_foggy_gem_pol",
-    "top": "fbased:block/black_foggy_gem_pol",
-    "side": "fbased:block/black_foggy_gem_pol"
+    "bottom": "fbased:block/black_gem_pol",
+    "top": "fbased:block/black_gem_pol",
+    "side": "fbased:block/black_gem_pol"
   }
 }

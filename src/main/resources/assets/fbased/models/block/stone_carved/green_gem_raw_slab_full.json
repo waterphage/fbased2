@@ -5,5 +5,5 @@
     "top": "fbased:block/green_gem_raw",
     "side": "fbased:block/green_gem_raw"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

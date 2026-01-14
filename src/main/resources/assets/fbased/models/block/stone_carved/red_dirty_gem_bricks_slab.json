@@ -5,5 +5,5 @@
     "top": "fbased:block/red_dirty_gem_bricks",
     "bottom": "fbased:block/red_dirty_gem_bricks"
   },
-  "render_type": "solid"
+  "render_type": "translucent"
 }

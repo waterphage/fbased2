@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "fbased:white_andesite_raw",
+    "fbased:white_basalt_raw",
+    "fbased:white_chalk_raw",
+    "fbased:white_chert_raw",
+    "fbased:white_claystone_raw",
+    "fbased:white_conglomerate_raw",
+    "fbased:white_dacite_raw",
+    "fbased:white_diorite_raw",
+    "fbased:white_dolomite_raw",
+    "fbased:white_gabbro_raw",
+    "fbased:white_gneiss_raw",
+    "fbased:white_granite_raw",
+    "fbased:white_limestone_raw",
+    "fbased:white_marble_raw",
+    "fbased:white_mudstone_raw",
+    "fbased:white_obsidian_raw",
+    "fbased:white_phyllite_raw",
+    "fbased:white_quartzite_raw",
+    "fbased:white_rhyolite_raw",
+    "fbased:white_rock_salt_raw",
+    "fbased:white_sandstone_raw",
+    "fbased:white_schist_raw",
+    "fbased:white_shale_raw",
+    "fbased:white_siltstone_raw",
+    "fbased:white_slate_raw"
+  ]
+}
