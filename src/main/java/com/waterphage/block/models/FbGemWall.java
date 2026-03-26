@@ -1,9 +1,14 @@
 package com.waterphage.block.models;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.WallBlock;
 import net.minecraft.entity.ai.brain.task.WaitTask;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 
 public class FbGemWall extends WallBlock {
@@ -18,5 +23,17 @@ public class FbGemWall extends WallBlock {
     public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
         return 1.0F;
     }
+    public static final TagKey<Block> GEMS = TagKey.of(RegistryKeys.BLOCK, new Identifier("fbased", "gems"));
+    @Override
+    public boolean isSideInvisible(BlockState state, BlockState adjacent, Direction side) {
+        // если сосед — тот же класс, не прятать грань
+        return adjacent.isIn(GEMS);
+    }
+    private int l=0;
+    @Override
+    public int getOpacity(BlockState state, BlockView world, BlockPos pos) {
+        return l;
+    }
+    public FbGemWall(Settings settings, int l) {super(settings);this.l=l;}
 
 }

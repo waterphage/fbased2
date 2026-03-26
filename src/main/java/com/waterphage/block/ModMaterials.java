@@ -142,28 +142,27 @@ public class ModMaterials {
 
     public enum Color {
 
-        C1("white"),
-        C2("light_gray"),
-        C3("gray"),
-        C4("black"),
-        C5("brown"),
-        C6("red"),
-        C7("orange"),
-        C8("yellow"),
-        C9("lime"),
-        C10("green"),
-        C11("cyan"),
-        C12("light_blue"),
-        C13("blue"),
-        C14("purple"),
-        C15("magenta"),
-        C16("pink")
+        C1("white",0),
+        C2("light_gray",4),
+        C3("gray",5),
+        C4("black",8),
+        C5("brown",6),
+        C6("red",5),
+        C7("orange",4),
+        C8("yellow",3),
+        C9("lime",4),
+        C10("green",5),
+        C11("cyan",4),
+        C12("light_blue",3),
+        C13("blue",5),
+        C14("purple",3),
+        C15("magenta",4),
+        C16("pink",2)
         ;
         public final String name;
+        public final int l;
 
-        Color(String name) {
-            this.name = name;
-        }
+        Color(String name,int l) {this.name = name;this.l=l;}
 
     }
     public static void registerModMaterials(){

@@ -25,7 +25,7 @@ public class StructureTemplateMixin implements ScalableStructure {
         for (StructureTemplate.PalettedBlockInfoList list : self.blockInfoLists) {
             List<StructureTemplate.StructureBlockInfo> newInfos = new ArrayList<>();
             for (StructureTemplate.StructureBlockInfo info : list.getAll()) {
-                if(Math.random()>Math.pow(scale,2)){continue;}
+                if(Math.random()>scale){continue;}
                 // смещаем блоки к центру, масштабируем и обратно
                 Vec3i pos = info.pos();
                 int x = Math.round(pos.getX() * scale);

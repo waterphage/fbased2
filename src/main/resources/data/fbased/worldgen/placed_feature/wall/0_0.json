@@ -17,11 +17,12 @@
                 "fbased:dode_1_7"
               ],
               "proc": [
-                "fbased:gem/blue_jade",
-                "fbased:gem/lace_agate",
-                "fbased:gem/shorl",
-                "fbased:gem/morion",
-                "fbased:gem/onyx"
+                "fbased:gem/lapis_lazuli",
+                "fbased:gem/prase",
+                "fbased:gem/prase_opal",
+                "fbased:gem/bloodstone",
+                "fbased:gem/moss_agate",
+                "fbased:gem/moss_opal"
               ],
               "scales": [0.05, 0.154, 0.368, 0.687, 1.0],
               "weights": [0.72,0.86,0.92,0.98,1.0]

@@ -12,5 +12,7 @@ import net.minecraft.world.gen.blockpredicate.BlockPredicateType;
 public final class GeoPType {
     public static final StructureProcessorType<GeoProcessor> GEOP =
             StructureProcessorType.register("fbased:geo", GeoProcessor.CODEC);
+    public static final StructureProcessorType<RadProcessor> GEOR =
+            StructureProcessorType.register("fbased:rad", RadProcessor.CODEC);
     public static void registerprocessors(){}
 }

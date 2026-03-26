@@ -70,4 +70,8 @@ public class FbCrpBlock extends FbBlock implements Waterloggable {
         return state.getFluidState();
 
     }
+    @Override
+    public boolean isSideInvisible(BlockState state, BlockState adjacent, Direction side) {
+        return false;
+    }
 }

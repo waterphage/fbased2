@@ -1,0 +1,19 @@
+{
+  "feature": {
+    "type": "fbased:variants",
+    "config": {
+      "yT": 0,
+      "default": {
+        "feature": {
+          "type": "fbased:raw_st",
+          "config": {"type": "dust"}
+        },
+        "placement": []
+      },
+      "domain":{
+
+      }
+    }
+  },
+  "placement": []
+}

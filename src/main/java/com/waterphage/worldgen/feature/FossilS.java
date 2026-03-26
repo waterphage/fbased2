@@ -128,25 +128,28 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
         StructureTemplateManager structureTemplateManager = world.toServerWorld().getServer().getStructureTemplateManager();
         StructureTemplate work=get(c.str.get(random.nextInt(c.str.size())), choose(c,random), structureTemplateManager,serv,c);
         ChunkPos chunkPos = new ChunkPos(blockPos);
-        int cx1=chunkPos.getStartX() - 16;int cz1=chunkPos.getStartZ() - 16;
-        int cx2=chunkPos.getEndX() + 16;int cz2=chunkPos.getEndZ() + 16;
+        Vec3i vec3i = work.getRotatedSize(blockRotation);
+        int x=blockPos.getX();int z=blockPos.getZ();int y=blockPos.getY();
+        int vx=vec3i.getX()/2;int vz=vec3i.getZ()/2;int vy=vec3i.getY()/2;
+        int dx=Math.max(0,chunkPos.getStartX()-16-x+vx)-
+                Math.max(0,x+vx-chunkPos.getEndX()-16);
+        int dz=Math.max(0,chunkPos.getStartZ()-16-z+vz)-
+                Math.max(0,z+vz-chunkPos.getEndZ()-16);
+        int dy=Math.max(0,world.getBottomY()-y+vy)-
+                Math.max(0,blockPos.getY()+vy-world.getTopY());
+        int cx1=x-vx+dx;int cx2=x+vx+dx;
+        int cz1=z-vz+dz;int cz2=z+vz+dz;
+        int cy1=y-vy+dy;int cy2=y+vy+dy;
         BlockBox blockBox = new BlockBox(
                 cx1,
-                world.getBottomY(),
+                cy1,
                 cz1,
                 cx2,
-                world.getTopY(),
+                cy2,
                 cz2
         );
         StructurePlacementData structurePlacementData = new StructurePlacementData().setRotation(blockRotation).setBoundingBox(blockBox).setRandom(random);
-        Vec3i vec3i = work.getRotatedSize(blockRotation);
-        int dx=vec3i.getX()/2;int dz=vec3i.getZ()/2;int dy=vec3i.getY()/2;
-        int x=blockPos.getX();int z=blockPos.getZ();
-        int x1= x-dx>cx1?0:cx1-x+dx;
-        int x2= x+dx<cx2?0:x+dx-cx2;
-        int z1= z-dz>cz1?0:cz1-z+dz;
-        int z2= z+dz<cz2?0:z+dz-cz2;
-        BlockPos blockPos2 = blockPos.add(-dx+x1-x2, -dy, -dz+z1-z2);
+        BlockPos blockPos2 = blockBox.getCenter().add(-vx,-vy,-vz);
         BlockPos blockPos3 = work.offsetByTransformedSize(blockPos2, BlockMirror.NONE, blockRotation);
 
         structurePlacementData.clearProcessors();

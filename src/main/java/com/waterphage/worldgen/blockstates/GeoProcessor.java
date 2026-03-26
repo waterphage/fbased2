@@ -46,7 +46,7 @@ public class GeoProcessor extends StructureProcessor {
         BlockState b=originalBlockInfo.state();
         Identifier id = Registries.BLOCK.getId(b.getBlock());
         List<Identifier> pool = variants.get(id);
-        if (pool == null) return currentBlockInfo;
+        if (pool == null||pool.toString()=="skip") return currentBlockInfo;
         BlockState nb=Registries.BLOCK.get(pool.get(random.nextInt(pool.size()))).getDefaultState();
         return new StructureTemplate.StructureBlockInfo(currentBlockInfo.pos(),nb,currentBlockInfo.nbt());
     }
