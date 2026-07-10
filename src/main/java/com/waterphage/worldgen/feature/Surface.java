@@ -220,10 +220,11 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 int idk=xzm.indexMap().get(xz);
                 int start = xzm.helper().getInt(idk);
                 int end = (idk + 1 < xzm.helper().size()) ? xzm.helper().getInt(idk + 1) : xzm.values().size();
-                for (int y=start;y<end;y++){
+                for (int idy=start;idy<end;idy++){
+                    int y = xzm.values().getInt(idy);
                     Long xyz=FBXZMap.L(xz,y);
                     ctx.bannedxyz.add(xyz);
-                    ctx.bannedxyz.add((long)vls.get(FBXZMap.L(xz,y)));
+                    ctx.bannedxyz.add((long)vls.get(xyz));
                 }
             }
             int idk=xzm.indexMap().get(xz);
@@ -231,7 +232,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             int zl=FBXZMap.zL(xz);
             int start = xzm.helper().getInt(idk);
             int end = (idk + 1 < xzm.helper().size()) ? xzm.helper().getInt(idk + 1) : xzm.values().size();
-            for (int y=start;y<end;y++){
+            for (int idy=start;idy<end;idy++){
+                int y = xzm.values().getInt(idy);
                 long xyz=FBXZMap.L(xz,y);
                 boolean m=vls.get(FBXZMap.L(xz,y))>0;
                 basicMap(xyz,xl,y,zl,ctx,ext,xzm,m);
@@ -261,7 +263,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         // Since I'm already having everything:
         if (mapNeig.size()>0) {
             if (m){ext.getNMesh("mapSF").add(key,mapNeig);}else {ext.getNMesh("mapSC").add(key,mapNeig);}
-            ctx.global.put(key,m?17:-17); //Smooth surface filler value
+            ctx.global.put(key,m?17:-17);//Smooth surface filler value
         }else{
             ctx.global.put(key,m?33:-33); //Wall filler value
         }
@@ -432,6 +434,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     Integer i=it<33?Math.abs(it-17):it-33;
                     if (is-dy<i)continue;
                     Integer ifin=(m?1:-1)*(is-dy+33);
+
                     ctx.global.put(neig,ifin);
                     upd.add(neig,wall.get(neig));
                 }
