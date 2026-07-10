@@ -1,14 +1,20 @@
 {
   "feature": {
+    "type": "fbased:add",
     "config": {
-      "to_place": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:brown_wool"
+      "features": [
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "gravel"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 0, 0]}
+
+          ]
         }
-      }
-    },
-    "type": "minecraft:simple_block"
+      ]
+    }
   },
   "placement": []
 }

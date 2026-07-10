@@ -4,10 +4,17 @@
     "config": {
       "features": [
         {
-          "feature": {
-            "type": "fbased:raw_st",
-            "config": {"type": "raw"}
-          },
+  "feature": {
+    "config": {
+      "to_place": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:yellow_concrete"
+        }
+      }
+    },
+    "type": "minecraft:simple_block"
+  },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 2, 0]}
 

@@ -6,8 +6,11 @@ import com.waterphage.Fbased;
 import com.waterphage.block.models.TechBlock;
 import com.waterphage.block.models.TechBlockEntity;
 import com.waterphage.meta.ChunkExtension;
-import com.waterphage.meta.CustomChunkData;
+
+import com.waterphage.meta.FBXZMap;
 import com.waterphage.meta.IntPair;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -99,9 +102,11 @@ public class ModRules extends MaterialRules {
             return CODEC;
         }
 
-        private void runy(Map<IntPair, TreeMap<Integer, Integer>> chunkData, int miny, int maxy, BlockPos orb, Chunk chunk) {
+        private void runy(FBXZMap xzM,Long2IntMap chunkData, int miny, int maxy, BlockPos orb, Chunk chunk) {
             int x = orb.getX();
             int z = orb.getZ();
+            long xz=xzM.xzL(x,z);
+            Set<Integer> ys=new HashSet<>();
             for (int y = miny; y <= maxy; y++) {
                 BlockPos pos = new BlockPos(x, y, z);
                 BlockState state = chunk.getBlockState(pos);
@@ -112,13 +117,16 @@ public class ModRules extends MaterialRules {
                     boolean solidAbove3 = chunk.getBlockState(pos.up(3)).isSolid();
 
                     if (airAbove && solidBelow3) {
-                        chunkData.computeIfAbsent(new IntPair(x, z), __ -> new TreeMap<>()).put(y, 1);
+                        chunkData.put(pos.asLong(),1);
+                        ys.add(y);
                     }
                     if (airBelow && solidAbove3) {
-                        chunkData.computeIfAbsent(new IntPair(x, z), __ -> new TreeMap<>()).put(y, -1);
+                        chunkData.put(pos.asLong(),-1);
+                        ys.add(y);
                     }
                 }
             }
+            xzM.add(xz,ys);
         }
         public static double safe(double value) {
             return Double.isFinite(value) ? value : 0.0;
@@ -129,20 +137,20 @@ public class ModRules extends MaterialRules {
             int miny = chunk.getBottomY() + 1;
 
             // Используем временное хранилище в чанке через миксин
-            if (!(chunk instanceof ChunkExtension ext)) {
+            if (!(chunk instanceof ChunkExtension ext)) {return (x, y, z) -> null;}
 
-                return (x, y, z) -> chunk.getBlockState(new BlockPos(x, y, z)); // fallback
-            }
             NoiseRouter router=context.noiseConfig.getNoiseRouter();
-            Map<IntPair, TreeMap<Integer, Integer>> chunkData = ext.getCustomMap();
+            Long2IntMap chunkData = ext.getCustomMap();
+            FBXZMap fbxzMap=ext.getXZmap();
             for (int x = 0; x <= 15; x++) {
                 for (int z = 0; z <= 15; z++) {
                     BlockPos orb = chunkPos.getBlockPos(x, yT, z);
                     int maxy = chunk.getHeightmap(Heightmap.Type.OCEAN_FLOOR_WG).get(x, z);
-                    runy(chunkData, miny, maxy, orb, chunk);
+                    runy(fbxzMap,chunkData, miny, maxy, orb, chunk);
                 }
             }
             ext.setCustomMap(chunkData);
+            ext.setXZmap(fbxzMap);
             List<Double> noiseData=new ArrayList<>();
             BlockPos orb = chunkPos.getBlockPos(Math.toIntExact(Math.round(Math.random()*15)), yT, Math.toIntExact(Math.round(Math.random()*15)));
             DensityFunction.NoisePos nps=new DensityFunction.NoisePos() {
@@ -167,7 +175,7 @@ public class ModRules extends MaterialRules {
             ext.setNoise(noiseData);
             chunk.setNeedsSaving(true);
             chunk.needsSaving();
-            return (x, y, z) -> chunk.getBlockState(new BlockPos(x, y, z));
+            return (x, y, z) -> null;
         }
     }
 

@@ -1,14 +1,50 @@
 {
   "feature": {
+    "type": "fbased:add",
     "config": {
-      "to_place": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:lime_wool"
+      "features": [
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "gravel"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 4, 0]}
+
+          ]
+        },
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "gravel"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 3, 0]}
+
+          ]
+        },
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "cobble"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 2, 0]}
+
+          ]
+        },
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "cobble"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 1, 0]}
+
+          ]
         }
-      }
-    },
-    "type": "minecraft:simple_block"
+      ]
+    }
   },
   "placement": []
 }
