@@ -4,17 +4,10 @@
     "config": {
       "features": [
         {
-  "feature": {
-    "config": {
-      "to_place": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:yellow_concrete"
-        }
-      }
-    },
-    "type": "minecraft:simple_block"
-  },
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "gravel"}
+          },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 3, 0]}
 
@@ -23,7 +16,7 @@
         {
           "feature": {
             "type": "fbased:raw_st",
-            "config": {"type": "raw"}
+            "config": {"type": "gravel"}
           },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 2, 0]}
@@ -33,7 +26,7 @@
         {
           "feature": {
             "type": "fbased:raw_st",
-            "config": {"type": "raw"}
+            "config": {"type": "cobble"}
           },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 1, 0]}

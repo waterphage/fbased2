@@ -4,40 +4,6 @@
     "config": {
       "features": [
         {
-  "feature": {
-    "config": {
-      "to_place": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:yellow_concrete"
-        }
-      }
-    },
-    "type": "minecraft:simple_block"
-  },
-          "placement": [
-            {"type": "fbased:offset", "xyz": [0, 7, 0]}
-          ]
-        },
-        {
-          "feature": {
-            "type": "fbased:raw_st",
-            "config": {"type": "raw"}
-          },
-          "placement": [
-            {"type": "fbased:offset", "xyz": [0, 6, 0]}
-          ]
-        },
-        {
-          "feature": {
-            "type": "fbased:raw_st",
-            "config": {"type": "raw"}
-          },
-          "placement": [
-            {"type": "fbased:offset", "xyz": [0, 5, 0]}
-          ]
-        },
-        {
           "feature": {
             "type": "fbased:raw_st",
             "config": {"type": "raw"}

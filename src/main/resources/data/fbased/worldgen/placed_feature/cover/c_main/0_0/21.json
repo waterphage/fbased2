@@ -4,52 +4,49 @@
     "config": {
       "features": [
         {
-  "feature": {
-    "config": {
-      "to_place": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:yellow_concrete"
-        }
-      }
-    },
-    "type": "minecraft:simple_block"
-  },
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "dust"}
+          },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 7, 0]}
+
           ]
         },
         {
           "feature": {
             "type": "fbased:raw_st",
-            "config": {"type": "raw"}
+            "config": {"type": "gravel"}
           },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 6, 0]}
+
           ]
         },
         {
           "feature": {
             "type": "fbased:raw_st",
-            "config": {"type": "raw"}
+            "config": {"type": "gravel"}
           },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 5, 0]}
+
           ]
         },
         {
           "feature": {
             "type": "fbased:raw_st",
-            "config": {"type": "raw"}
+            "config": {"type": "cobble"}
           },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 4, 0]}
+
           ]
         },
         {
           "feature": {
             "type": "fbased:raw_st",
-            "config": {"type": "raw"}
+            "config": {"type": "cobble"}
           },
           "placement": [
             {"type": "fbased:offset", "xyz": [0, 3, 0]}

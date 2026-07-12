@@ -3,22 +3,33 @@
     "type": "fbased:add",
     "config": {
       "features": [
-        {
-  "feature": {
-    "config": {
-      "to_place": {
-        "type": "minecraft:simple_state_provider",
-        "state": {
-          "Name": "minecraft:light_blue_concrete"
-        }
-      }
-    },
-    "type": "minecraft:simple_block"
-  },
-          "placement": [
-            {"type": "fbased:offset", "xyz": [0, 1, 0]}
-
-          ]
+        {"feature": {"type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:orange_concrete"}}}},
+          "placement": [{"type": "fbased:offset", "xyz": [0, 0, 0]}]
+        },
+        {"feature": {"type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:orange_concrete"}}}},
+          "placement": [{"type": "fbased:offset", "xyz": [0, 1, 0]}]
+        },
+        {"feature": {"type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:orange_concrete"}}}},
+          "placement": [{"type": "fbased:offset", "xyz": [0, 2, 0]}]
+        },
+        {"feature": {"type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:orange_concrete"}}}},
+          "placement": [{"type": "fbased:offset", "xyz": [0, 3, 0]}]
         }
       ]
     }

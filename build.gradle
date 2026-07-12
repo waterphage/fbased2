@@ -85,10 +85,10 @@ import org.gradle.api.tasks.JavaExec
 // Настраиваем таску runClient — это именно та JavaExec‑таска, которую Loom использует для запуска игры
 tasks.named('runClient', JavaExec).configure {
 	// Метод jvmArgs(vararg String) добавляет аргументы в список, а не пытается перезаписать readonly‑свойство
-	jvmArgs '-Xms1G', '-Xmx6G'
+	jvmArgs '-Xms1G', '-Xmx2G'
 }
 
 // Если вы иногда тестируете сервер локально через Loom
 tasks.named('runServer', JavaExec).configure {
-	jvmArgs '-Xms1G', '-Xmx6G'
+	jvmArgs '-Xms1G', '-Xmx2G'
 }

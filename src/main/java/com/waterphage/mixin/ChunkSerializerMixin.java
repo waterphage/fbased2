@@ -25,7 +25,7 @@ import java.util.*;
 @Mixin(ChunkSerializer.class)
 public class ChunkSerializerMixin {
 
-    private static final String[] MESH_TYPES = {"mapSF","inSF","outSF","wallF","mapSC","inSC","outSC","wallC"};
+    private static final String[] MESH_TYPES = {"mapSF","inSF","outSF","wallF","mapSC","inSC","outSC","wallC"};//"rawSF", "rawSC", "walRF", "wallRC"
 
     @Inject(method = "deserialize", at = @At("RETURN"))
     private static void onDeserialize(ServerWorld world, PointOfInterestStorage poiStorage, ChunkPos chunkPos, NbtCompound nbt, CallbackInfoReturnable<ProtoChunk> cir) {
@@ -108,20 +108,16 @@ public class ChunkSerializerMixin {
             }
             root.put("Noise", param);
         }
-
-        // FIX: Ensure mesh serialization writes to unique compound property signatures
-        if (ext.second()) {
-            NbtCompound meshes = new NbtCompound();
-            for (String type : MESH_TYPES){
-                FBNMesh insert = ext.getNMesh(type);
-                if (insert == null || insert.keyset().isEmpty()) continue;
-                meshes.putLongArray(type + "Key", insert.keyset().toLongArray());
-                meshes.putLongArray(type + "Value", insert.values().toLongArray());
-                meshes.putIntArray(type + "Adr", insert.helper().toIntArray());
-            }
-            if (!meshes.isEmpty()) {
-                root.put("Meshes", meshes);
-            }
+        NbtCompound meshes = new NbtCompound();
+        for (String type : MESH_TYPES){
+            FBNMesh insert = ext.getNMesh(type);
+            if (insert == null || insert.keyset().isEmpty()) continue;
+            meshes.putLongArray(type + "Key", insert.keyset().toLongArray());
+            meshes.putLongArray(type + "Value", insert.values().toLongArray());
+            meshes.putIntArray(type + "Adr", insert.helper().toIntArray());
+        }
+        if (!meshes.isEmpty()) {
+            root.put("Meshes", meshes);
         }
     }
 }

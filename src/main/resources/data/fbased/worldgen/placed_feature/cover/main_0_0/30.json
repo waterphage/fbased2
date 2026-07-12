@@ -3,25 +3,26 @@
     "type": "fbased:add",
     "config": {
       "features": [
-        {
-          "feature": {
-            "type": "fbased:raw_st",
-            "config": {"type": "gravel"}
-          },
-          "placement": [
-            {"type": "fbased:offset", "xyz": [0, 1, 0]}
-
-          ]
+        {"feature": {"type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:red_wool"}}}},
+          "placement": [{"type": "fbased:offset", "xyz": [0, 0, 0]}]
         },
-        {
-          "feature": {
-            "type": "fbased:raw_st",
-            "config": {"type": "gravel"}
-          },
-          "placement": [
-            {"type": "fbased:offset", "xyz": [0, 0, 0]}
-
-          ]
+        {"feature": {"type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:red_wool"}}}},
+          "placement": [{"type": "fbased:offset", "xyz": [0, 1, 0]}]
+        },
+        {"feature": {"type": "minecraft:simple_block",
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {"Name": "minecraft:red_wool"}}}},
+          "placement": [{"type": "fbased:offset", "xyz": [0, 2, 0]}]
         }
       ]
     }

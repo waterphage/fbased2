@@ -1,0 +1,70 @@
+{
+  "feature": {
+    "type": "fbased:add",
+    "config": {
+      "features": [
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "dust"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 6, 0]}
+
+          ]
+        },
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "gravel"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 5, 0]}
+
+          ]
+        },
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "gravel"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 4, 0]}
+
+          ]
+        },
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "cobble"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 3, 0]}
+
+          ]
+        },
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "raw"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 2, 0]}
+
+          ]
+        },
+        {
+          "feature": {
+            "type": "fbased:raw_st",
+            "config": {"type": "raw"}
+          },
+          "placement": [
+            {"type": "fbased:offset", "xyz": [0, 1, 0]}
+
+          ]
+        }
+      ]
+    }
+  },
+  "placement": []
+}

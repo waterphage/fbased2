@@ -32,6 +32,7 @@ public class FBXZMap {
         this.adr.add(0);
         this.indexMap.defaultReturnValue(-1);
     }
+    public Long xzS(int i){return this.xz.getLong(i);}
     public static long xzL(long Lpos){
         return Lpos & 0xFFFFFFFFFFFFF000L;
     }

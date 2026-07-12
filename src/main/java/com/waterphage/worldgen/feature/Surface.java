@@ -3,20 +3,19 @@ package com.waterphage.worldgen.feature;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.mojang.serialization.codecs.UnboundedMapCodec;
-import com.sun.jna.StringArray;
+import com.waterphage.Fbased;
 import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.FBNMesh;
 import com.waterphage.meta.FBXZMap;
-import com.waterphage.meta.IntPair;
-import com.waterphage.worldgen.ModRules;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongArraySet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.util.Pair;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.random.Random;
@@ -28,7 +27,7 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
-import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -53,8 +52,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             ).apply(instance, BiomeValue::new)
     );
     private boolean l=true;//log
-    public static final UnboundedMapCodec<Integer, RegistryEntry<PlacedFeature>> FB_INDEX_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING.xmap(Integer::parseInt, Object::toString), PlacedFeature.REGISTRY_CODEC);
-    public static final UnboundedMapCodec<String, Map<Integer, RegistryEntry<PlacedFeature>>> FB_BIOME_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING, FB_INDEX_FEATURE_CODEC);
+    //public static final UnboundedMapCodec<Integer, RegistryEntry<PlacedFeature>> FB_INDEX_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING.xmap(Integer::parseInt, Object::toString), PlacedFeature.REGISTRY_CODEC);
+    //public static final UnboundedMapCodec<String, Map<Integer, RegistryEntry<PlacedFeature>>> FB_BIOME_FEATURE_CODEC = Codec.unboundedMap(Codec.STRING, FB_INDEX_FEATURE_CODEC);
 
     public static final Codec<Map<String, BiomeValue>> FB_BIOME_MAP_CODEC = Codec.unboundedMap(Codec.STRING, FB_BIOME_VALUE_CODEC);
     public static class SurfaceConfig implements FeatureConfig {
@@ -65,8 +64,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                         Codec.INT.fieldOf("max").forGetter(config -> config.max),
                         Codec.INT.listOf().fieldOf("matrix").forGetter(config -> config.matrix),
                         FB_WALL_CODEC.listOf().fieldOf("wall").forGetter(config -> config.wall),
-                        FB_BIOME_MAP_CODEC.fieldOf("biome_relations").forGetter(config -> config.biome),
-                        FB_BIOME_FEATURE_CODEC.fieldOf("biome_features").forGetter(config -> config.feature)
+                        FB_BIOME_MAP_CODEC.fieldOf("biome_relations").forGetter(config -> config.biome)
+                        //FB_BIOME_FEATURE_CODEC.fieldOf("biome_features").forGetter(config -> config.feature)
                 ).apply(instance, SurfaceConfig::new));
         private Integer min;
         private Integer yT;
@@ -76,8 +75,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         private Map<String,BiomeValue> biome;
         private Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature;
 
-        SurfaceConfig(Integer yT,Integer min, Integer max,List<Integer> matrix,List<Wall> wall,Map<String,BiomeValue>biome,
-                      Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature
+        SurfaceConfig(Integer yT,Integer min, Integer max,List<Integer> matrix,List<Wall> wall,Map<String,BiomeValue>biome
+                      //Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature
         ) {
             this.yT=yT;
             this.max = max;
@@ -94,7 +93,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     }
     private static final String[] MESH_NAMES = {
             "mapSF", "inSF", "outSF", "wallF",
-            "mapSC", "inSC", "outSC", "wallC"
+            "mapSC", "inSC", "outSC", "wallC",
+            "rawSF", "rawSC", "walRF", "wallRC"
     };
     private static final Integer[] banpos= {
             0,0, 0,1, 0,2, 0,3, 0,4, 0,5, 0,6, 0,7, 0,8, 0,9, 0,10, 0,11, 0,12, 0,13, 0,14, 0,15,
@@ -106,6 +106,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         Chunk chunk;
         private FBNMesh[] meshes = new FBNMesh[MESH_NAMES.length];
         private Set<Long> banned = new HashSet<>();
+        private LongArrayList toRefine = new LongArrayList();
+        private IntArrayList toSave = new IntArrayList();
         private LongArrayList bannedxyz =new LongArrayList();
         private StructureWorldAccess w;
         private Random r;
@@ -144,6 +146,9 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 if (l) {System.out.println("bX=" + bX + ", bZ=" + bZ+", i="+index);l=false;}
                 if (index >= 0 && index <= config.wall.size())this.wall=config.wall.get(index);
             }
+            for (int i = 0; i < biome.length; i++) {
+                biome[i] = new LongArrayList();
+            }
         }
     }
     // 0 Main method
@@ -158,23 +163,23 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         ChunkPos chunkPos = ctx.w.getChunk(new BlockPos(ctx.xi,ctx.yT,ctx.zi)).getPos();
         int chunkX = chunkPos.x;
         int chunkZ = chunkPos.z;
-        global(chunkX,chunkZ,ctx); // Surface data reading
+        global(chunkX,chunkZ,ctx); // 1.1 Surface data reading
+        refine(ctx); // 1.2 Neighbour mesh sampling
+        export(chunkX,chunkZ,ctx);
         neighbours(ctx); // 1.3 Edge calculation
+
         ChunkExtension ext=(ChunkExtension)ctx.chunk;
         Long2IntMap local= ext.getCustomMap();
         for (Long Lpos:local.keySet()){
             BlockPos.Mutable pos = BlockPos.fromLong(Lpos).mutableCopy();
             Integer i = ctx.global.get(Lpos);
-            //System.out.println("Value of "+i+", X: must "+FBXZMap.xL(Lpos)+" done "+pos.getX()+", Y: must "+FBXZMap.yL(Lpos)+" done "+pos.getY()+", Z: must "+FBXZMap.zL(Lpos)+" done "+pos.getZ());
             test(i,pos,ctx);
-            local.put(Lpos,i);
         }
         geow(ctx);
     }
+    // 1.1 Surface data reading it goes for every chunk to read raw data and write into global data
     public static void global(int centerChunkX, int centerChunkZ,SurfCont ctx) {
         int id=0;
-        for (FBNMesh mesh : ctx.meshes){mesh.chunk().put(0,0);}
-        ctx.globXZ.chunk().put(0,0);
         for (int dx = -1; dx <= 1; dx++) {
             for (int dz = -1; dz <= 1; dz++) {
                 id += 1;
@@ -185,38 +190,51 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 ctx.global.putAll(ext.getCustomMap());
                 ctx.globXZ.addAll(ext.getXZmap());
                 ext.setPos(chunk.getPos().getCenterAtY(0));
-                ctx.globXZ.chunk().put(id, ctx.globXZ.keyset().size() - 1); //marking chunks in a global data (probably not needed)
                 BlockPos org = chunk.getPos().getStartPos();
-                load(id, ctx, ext, org);  // 1.1.1 Loading data from chunk to context
+                load(id, ctx, ext, org);  // 1.1.1 Loading neighbour mesh chunk data.
             }
         }
-        id=0;
-        while (id<ctx.bannedxyz.size()/2){edgeCalc(ctx.bannedxyz.getLong(id),ctx.bannedxyz.getLong(id+1)>0,ctx);id+=2;}
-        for (FBNMesh mesh : ctx.meshes){mesh.chunk().put(10,mesh.keyset().size()-1);}// I was never sure how to save data back, so if simple approach wil not succeed, I'll try to get from global data.
-        ctx.globXZ.chunk().put(10,ctx.globXZ.keyset().size()-1);
+        // 1.1.3 Creating unrefined mesh data of chunk edges. They should not be saved.
+        id=0;while (id<ctx.bannedxyz.size()/2){edgeBan(ctx.bannedxyz.getLong(id*2),ctx.bannedxyz.getLong(id*2+1)>0,ctx);id+=1;}
     }
     private static void load(int id,SurfCont ctx,ChunkExtension ext,BlockPos org) {
         if (ext.getNMesh("mapSF").keyset().isEmpty()){calc(id,ctx,ext,org);return;} // 1.1.2 Generating local data
-        for (int i=0;i<8;++i){
-            FBNMesh ins=ctx.meshes[i];
-            ins.addAll(ext.getNMesh(MESH_NAMES[i]));
-            ins.chunk().put(id,ins.keyset().size()); //marking chunks in a global data (probably not needed
+        int xo=org.getX();int zo=org.getZ();
+        for(int i=0;i< banpos.length/2;++i){
+            Long xzb=FBXZMap.xzL(xo+banpos[i*2],zo+banpos[i*2+1]);
+            ctx.banned.add(xzb);
+            Long2IntMap vls = ext.getCustomMap();
+            FBXZMap xzm=ext.getXZmap();
+            int idk=xzm.indexMap().get(xzb);
+            int start = xzm.helper().getInt(idk);
+            int end = (idk + 1 < xzm.helper().size()) ? xzm.helper().getInt(idk + 1) : xzm.values().size();
+            for (int idy=start;idy<end;idy++){
+                int y = xzm.values().getInt(idy);
+                Long xyz=FBXZMap.L(xzb,y);
+                ctx.bannedxyz.add(xyz);
+                ctx.bannedxyz.add((long)vls.get(xyz));
+            }
         }
-        for (long l : ext.getNMesh("mapSF").keyset()){ctx.global.put(l,17);}
-        for (long l : ext.getNMesh("mapSC").keyset()){ctx.global.put(l,-17);}
-        for (long l : ext.getNMesh("wallF").keyset()){ctx.global.put(l,33);}
-        for (long l : ext.getNMesh("wallC").keyset()){ctx.global.put(l,-33);}
+        for (int i=0;i<MESH_NAMES.length;++i){
+            if (ext.getNMesh(MESH_NAMES[i]).keyset().isEmpty())continue;
+            FBNMesh ins=ctx.meshes[i];
+            FBNMesh imp=ext.getNMesh(MESH_NAMES[i]);
+            ins.addAll(imp);
+            if (i%4==0){int idm=i/4+8;ctx.meshes[idm].addAll(imp);}
+            if (i%4==3){int idm=i/4+10;ctx.meshes[idm].addAll(imp);}
+        }
     }
     private static void calc(int id,SurfCont ctx,ChunkExtension ext,BlockPos org){
+        ctx.toSave.add(id);
         FBXZMap xzm=ext.getXZmap();
         Long2IntMap vls = ext.getCustomMap();
         int xo=org.getX();
         int zo=org.getZ();
         for(int i=0;i< banpos.length/2;++i){
-            ctx.banned.add(FBXZMap.xzL(xo+banpos[i],zo+banpos[i+1]));
+            ctx.banned.add(FBXZMap.xzL(xo+banpos[i*2],zo+banpos[i*2+1]));
         }
         for(long xz:xzm.keyset()){
-            if (ctx.banned.contains(xz)){ // 1.1.3 Splitting calculation (banned positions should not be written)
+            if (ctx.banned.contains(xz)){ // 1.1.2.1 Splitting calculation (banned positions should not be written)
                 int idk=xzm.indexMap().get(xz);
                 int start = xzm.helper().getInt(idk);
                 int end = (idk + 1 < xzm.helper().size()) ? xzm.helper().getInt(idk + 1) : xzm.values().size();
@@ -226,105 +244,234 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                     ctx.bannedxyz.add(xyz);
                     ctx.bannedxyz.add((long)vls.get(xyz));
                 }
+                continue;
             }
             int idk=xzm.indexMap().get(xz);
             int xl=FBXZMap.xL(xz);
             int zl=FBXZMap.zL(xz);
             int start = xzm.helper().getInt(idk);
             int end = (idk + 1 < xzm.helper().size()) ? xzm.helper().getInt(idk + 1) : xzm.values().size();
-            for (int idy=start;idy<end;idy++){
+            for (int idy=start;idy<end;++idy){
                 int y = xzm.values().getInt(idy);
                 long xyz=FBXZMap.L(xz,y);
                 boolean m=vls.get(FBXZMap.L(xz,y))>0;
-                basicMap(xyz,xl,y,zl,ctx,ext,xzm,m);
+                basicMap(xyz,xl,y,zl,ctx,ext,xzm,m); // 1.1.2.2 Single point calculation
             }
         }
-        ext.count();
+        ext.count(); // 1.1.2.3 Marking chunk for update (useless for now)
         Chunk ch=ctx.w.getChunk(ext.getPos());
-        ch.setNeedsSaving(true); // 1.1.2 This should write new data?
+        ch.setNeedsSaving(true);
         ch.needsSaving();
     }
+    // 1.1.2.2 and 1.1.3 hepler stuff
     private static final Integer[] src1= {1,0, -1,0, 0,1, 0,-1,};
-    private static final Integer[] src2= {1,0, -1,0, 0,1, 0,-1, 1,1, -1,-1, 1,-1, -1,1,};
-    private static void basicMap(long key,int x,int y,int z, SurfCont ctx,ChunkExtension ext,FBXZMap xzm,boolean m) {
-        LongArrayList mapNeig = new LongArrayList();
-        LongArrayList wallNeig = new LongArrayList();
-        Integer[] src=src1;int crn=4;
-        if (ctx.random(key) < 0.58095F){src=src2;crn=8;}
-        int yl = m?y-1:y+1;
-        for (int i=0;i<src.length/2;++i){
-            int xl=x+src[i];int zl=z+src[i+1];
-            int yg=xzm.search(xl,zl,yl,m);
-            long xyz=FBXZMap.L(xl,yl,zl);
-            if (m!=ext.getCustomMap().get(xyz)>0){continue;}
-            if (Math.abs(yg-y)>1){mapNeig.add(xyz);}
-            else {wallNeig.add(xyz);}
-        }
-        // Since I'm already having everything:
-        if (mapNeig.size()>0) {
-            if (m){ext.getNMesh("mapSF").add(key,mapNeig);}else {ext.getNMesh("mapSC").add(key,mapNeig);}
-            ctx.global.put(key,m?17:-17);//Smooth surface filler value
-        }else{
-            ctx.global.put(key,m?33:-33); //Wall filler value
+    private static final Integer[] src2= {1,1, -1,-1, 1,-1, -1,1,};
+    private static void mark(int crn,LongArrayList neig,boolean m,Long key, SurfCont ctx){
+        Integer val;
+        if (crn < 4) {
+            ctx.meshes[3].add(key, neig);
+        } else {
+            int t=m?8:9;ctx.meshes[t].add(key, neig);val=m?17:-17;
+            ctx.global.put(key,val);//Smooth surface filler value
+            ctx.toRefine.add(key);ctx.toRefine.add(t);
         }
 
-        if (mapNeig.size()<crn){
-            if (m){ext.getNMesh("wallF").add(key,wallNeig);}else {ext.getNMesh("wallC").add(key,wallNeig);}
-            if (wallNeig.size()>0){
-                if (m){ext.getNMesh("inSF").add(key,mapNeig);}else {ext.getNMesh("inSC").add(key,mapNeig);}
-            } else{
-                if (m){ext.getNMesh("outSF").add(key,mapNeig);}else {ext.getNMesh("outSC").add(key,mapNeig);}
-            }
-        }
     }
-
-    private static void edgeCalc(long key,boolean m, SurfCont ctx) {
-        LongArrayList mapNeig = new LongArrayList();
-        LongArrayList wallNeig = new LongArrayList();
-        Integer[] src=src1;int crn=4;
-        if (ctx.random(key) < 0.58095F){src=src2;crn=8;}
+    private static int test(boolean m,int x,int y,int z,LongArrayList neig,SurfCont ctx){
+        int yl = m?y-2:y+2;int crn=0;
+        int p=16;
+        for (int i=0;i<src1.length/2;++i){
+            int xl=x+src1[i*2];int zl=z+src1[i*2+1];
+            int yg=ctx.globXZ.search(xl,zl,yl,m);
+            long xyz=FBXZMap.L(xl,yg,zl);
+            if (m!=ctx.global.get(xyz)>0||yg==-9999){continue;}
+            if (Math.abs(yg-y)<2){crn+=1;}
+            else{p=Math.min(p,(m?yg-y:y-yg)-1);if(p>0){crn+=1;}}
+            neig.add(xyz);
+        }
+        Long xyz=FBXZMap.L(x,y,z);
+        if(p<16&&p>0){ctx.biome[p].add(xyz);ctx.biome[29-p/2].add(xyz);}
+        biomeBorder(ctx,xyz,neig);
+        return crn;
+    }
+    // 1.1.2.2 Single point calculation
+    private static void basicMap(long key,int x,int y,int z, SurfCont ctx,ChunkExtension ext,FBXZMap xzm,boolean m) {
+        LongArrayList neig = new LongArrayList();
+        int crn = test(m,x,y,z,neig,ctx);
+        mark(crn,neig,m,key,ctx);
+    }
+    // 1.1.3 Banned points calculation
+    private static void edgeBan(long key,boolean m, SurfCont ctx) {
+        LongArrayList neig = new LongArrayList();
         int x=FBXZMap.xL(key);
         int y=FBXZMap.yL(key);
         int z=FBXZMap.zL(key);
-        FBXZMap xzm=ctx.globXZ;
-        Long2IntMap map=ctx.global;
-        FBNMesh[] meshes= ctx.meshes;
-        int yl = m?y-1:y+1;
-        for (int i=0;i<src.length/2;++i){
-            int xl=x+src[i];int zl=z+src[i+1];
-            int yg=xzm.search(xl,zl,yl,m);
-            long xyz=FBXZMap.L(xl,yl,zl);
-            if (m!=map.get(xyz)>0){continue;}
-            if (Math.abs(yg-y)>1){mapNeig.add(xyz);}
-            else {wallNeig.add(xyz);}
+        int crn = test(m,x,y,z,neig,ctx);
+        mark(crn,neig,m,key,ctx);
+    }
+    //1.2 Mesh refining
+    private void refine(SurfCont ctx){
+        for (int i=0;i<ctx.toRefine.size()/2;++i){
+            Long key=ctx.toRefine.get(i*2);
+            Integer t= Math.toIntExact(ctx.toRefine.get(i * 2 + 1));
+            FBNMesh mesh=ctx.meshes[t];
+            LongArrayList chk=mesh.get(key);
+            setsmooth(key,chk,t,ctx);
+        }
+    }
+    private static final int[] CTYPE = {0, 4, 3, 7};
+    private static int Ct(Integer t) {
+        return CTYPE[t - 8];
+    }
+    private static void setsmooth(Long key, LongArrayList chk, Integer t, SurfCont ctx){
+        //8="rawSF", 9="rawSC", 10="walRF", 11="wallRC"
+        LongArrayList map=new LongArrayList();
+        LongArrayList wall=new LongArrayList();
+        boolean m=t%2==0;int y=FBXZMap.yL(key);
+        for (Long n:chk){
+            if(ctx.meshes[t].keyset().contains(n)){map.add(n);}
+            else{int yl=FBXZMap.yL(n);if (m?yl>y-1:yl<y+1){wall.add(n);}}
         }
         //            0="mapSF", 1="inSF", 2="outSF", 3="wallF",4="mapSC", 5-"inSC", 6="outSC", 7="wallC"\
-        if (mapNeig.size()>0){
-            meshes[0+(m?0:4)].add(key,mapNeig);
-            map.put(key,m?17:-17);
-        }else {
-            map.put(key,m?33:-33);
+        if (map.size()<4){ctx.meshes[Ct(t)+2].add(key,map);}
+        else{
+            if (ctx.random(key) < 0.58095F*0.5F){
+                int x=FBXZMap.xL(key);int z=FBXZMap.zL(key);
+                for (int i=0;i<src2.length/2;++i) {
+                    int xl=x+src2[i*2];int zl=z+src2[i*2+1];
+                    int yl=m?y-2:y+2;
+                    int yg=ctx.globXZ.search(xl,zl,yl,m);
+                    Long p=FBXZMap.L(xl,yg,zl);
+                    if (ctx.meshes[t].keyset().contains(p)){map.add(p);}
+                }
+            }
         }
-        if (mapNeig.size()<crn){
-            meshes[3+(m?0:4)].add(key,wallNeig);
-            if (wallNeig.size()>0){
-                meshes[1+(m?0:4)].add(key,mapNeig);
-            } else{
-                meshes[2+(m?0:4)].add(key,mapNeig);
+        ctx.meshes[Ct(t)].add(key,map);
+    }
+    private static final Integer[] exp= {0,4,3,7};
+    public static void export(int centerChunkX, int centerChunkZ,SurfCont ctx) {
+        int id=0;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                id += 1;
+                if (!ctx.toSave.contains(id)){continue;}
+                LongArrayList keyset=new LongArrayList();
+                int chunkX = centerChunkX + dx;
+                int chunkZ = centerChunkZ + dz;
+                Chunk chunk = ctx.w.getChunk(chunkX, chunkZ, ChunkStatus.EMPTY, false);
+                if (!(chunk instanceof ChunkExtension ext)) continue;
+                Long2IntMap Cmap=ext.getCustomMap();
+                for (long xyz:Cmap.keySet()){
+                    Long xz=FBXZMap.xzL(xyz);
+                    if (ctx.banned.contains(xz)){continue;}
+                    Cmap.put(xyz,ctx.global.get(xyz));
+                    keyset.add(xyz);
+                    for (int Im=0;Im<MESH_NAMES.length;++Im){
+                        FBNMesh map=ext.getNMesh(MESH_NAMES[Im]);
+                        if (!map.keyset().contains(xyz))continue;
+                        map.add(xyz,ctx.meshes[Im].get(xyz));
+                    }
+                }
             }
         }
     }
-    //1.2 Edge detection and calculation
-    void neighbours(SurfCont ctx){
-        FBNMesh biom=new FBNMesh();biom.addAll(ctx.meshes[0]);biom.addAll(ctx.meshes[4]);
-        for (Long org:biom.keyset()){biomeBorder(ctx,org,biom.get(org));} // biome effects
+
+    //1.3 Edge detection and calculation
+    private void neighbours(SurfCont ctx){
         calcsmooth(ctx,true); // determining smooth values
         calcsmooth(ctx,false);
-        calcsteep(ctx,true);
-        calcsteep(ctx,false);
-
     }
-    private void biomeBorder(SurfCont ctx,Long org,LongArrayList local){
+    // 1.3.2 determining i-values for smooth mesh
+    private void calcsmooth(SurfCont ctx, boolean m) {
+        //            0="mapSF", 1="inSF", 2="outSF", 3="wallF",4="mapSC", 5-"inSC", 6="outSC", 7="wallC"\
+        FBNMesh map = ctx.meshes[m?0:4];
+        edgeUpdate1(ctx.meshes[m?2:6].keyset(), m, ctx,map);//ctx.meshes[m?2:6].keyset()
+        //edgeUpdate2(ctx.meshes[m?1:5].keyset(), m, ctx,map);
+        edgeUpdate3(new LongArrayList(), m, ctx,map);
+    }
+    private void edgeUpdate1(LongArrayList initial, boolean m, SurfCont ctx, FBNMesh mapS) {
+        Set<Long> use = new HashSet<>(initial);
+        Set<Long> next = new HashSet<>();
+        Set<Long> ban=new HashSet<>();
+        for (int n = 15; n > 0; --n) {
+            LongArrayList list = new LongArrayList();
+            list = ctx.biome[n-1];
+            if (list != null && !list.isEmpty()) { //another safeguard moment
+                for (Long pos : list) {
+                    if (ban.contains(pos))continue;
+                    if (mapS.keyset().contains(pos)) use.add(pos);
+                }
+            }
+            for (Long point : use) {
+                Integer val = Math.abs(ctx.global.get(point));
+                if (val == null) continue;
+                Integer f=val;
+                if (Math.abs(17 - val) > n) continue;
+                f=m ? 17 - n : -17 + n;
+                ctx.global.put(point,f);
+                next.addAll(mapS.get(point));
+            }
+            ban.addAll(use);
+            next.removeAll(ban);
+            Set<Long> temp = use;
+            use = next;
+            next = temp;
+            next.clear();
+        }
+    }
+    /**
+    private void edgeUpdate2(LongArrayList initial, boolean m, SurfCont ctx, FBNMesh mapS) {
+        Set<Long> use = new HashSet<>(initial);
+        Set<Long> next = new HashSet<>();
+
+        for (int n = 15; n > 0; --n) {
+            LongArrayList list = new LongArrayList();
+            for (Long point : use) {
+                Integer val = Math.abs(ctx.global.get(point));
+                if (val == null) continue;
+                Integer f=val;
+                if (val > 17 || 17 - val > n - 1) continue;
+                f=m ? 34 - val : -34 + val;
+                ctx.global.put(point,f);
+                next.addAll(mapS.get(point));
+            }
+            Set<Long> temp = use;
+            use = next;
+            next = temp;
+            next.clear();
+        }
+    }*/
+    private void edgeUpdate3(LongArrayList initial, boolean m, SurfCont ctx, FBNMesh mapS) {
+        Set<Long> use = new HashSet<>(initial);
+        Set<Long> next = new HashSet<>();
+        Set<Long> ban=new HashSet<>();
+        for (int n = 15; n > 0; --n) {
+            LongArrayList list = new LongArrayList();
+            list = ctx.biome[n+14];
+            if (list != null && !list.isEmpty()) { //another safeguard moment
+                for (Long pos : list) {
+                    if (ban.contains(pos))continue;
+                    if (mapS.keyset().contains(pos)) use.add(pos);
+                }
+            }
+            for (Long point : use) {
+                Integer val = Math.abs(ctx.global.get(point));
+                if (val == null) continue;
+                Integer f=val;
+                if (val > 17) continue;
+                f=m ? 34 - val : -34 + val;
+                ctx.global.put(point,f);
+                next.addAll(mapS.get(point));
+            }
+            ban.addAll(use);
+            next.removeAll(ban);
+            Set<Long> temp = use;
+            use = next;
+            next = temp;
+            next.clear();
+        }
+    }
+    private static void biomeBorder(SurfCont ctx, Long org, LongArrayList local){
         String orgB=ctx.w.getRegistryManager().get(RegistryKeys.BIOME).getId(ctx.w.getBiome(BlockPos.fromLong(org)).value()).toString();
         if(lightcheck(ctx,org,local,orgB))return;
         for (Long neig:local){
@@ -337,122 +484,39 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             if(rand<1.0/biom.chance2&&n>0){ctx.biome[n+14].add(org);} //ctx.biomeI
         }
     }
-    private boolean lightcheck(SurfCont ctx,Long org,LongArrayList local,String orgB){
+    private static boolean lightcheck(SurfCont ctx, Long org, LongArrayList local, String orgB){
         Long xz=FBXZMap.xzL(org);int yo=FBXZMap.yL(org);boolean m=ctx.global.getOrDefault((long) org, 0) > 0; //should test it out later
         Integer ym=ctx.globXZ.search(xz,yo,m); if(ym==-9999)return false;
         for (Long neig:local){
             xz=FBXZMap.xzL(neig);yo=FBXZMap.yL(neig);
             ym=ctx.globXZ.search(xz,yo,m);if(ym!=-9999)continue;
             String key=orgB+",shadow";
-            BiomeValue biom=ctx.biomemap.get(key);
-            if(biom==null)continue;float rand=ctx.random(org);
+            BiomeValue biom=ctx.biomemap.get(key); Long seed=ctx.w.getSeed();
+            if(biom==null)continue;float rand=ctx.random(-(seed+org)*(seed+org));float rand2=ctx.random((seed-org)*(seed-org));
             int n=Math.round(biom.out*rand*biom.chance);
             if(rand<1.0/biom.chance&&n>0){ctx.biome[n-1].add(org);} //ctx.biomeO
-            n=Math.round(biom.in*rand*biom.chance2);
-            if(rand<1.0/biom.chance2&&n>0){ctx.biome[n+14].add(org);} //ctx.biomeI
+            n=Math.round(biom.in*rand2*biom.chance2);
+            if(rand2<1.0/biom.chance2&&n>0){ctx.biome[n+14].add(org);} //ctx.biomeI
             return true;
         }
         return false;
     }
-    private void edgeUpdate(LongArrayList initial, boolean m, SurfCont ctx, FBNMesh mapS,int i) {
-        Set<Long> use = new HashSet<>(initial);
-        Set<Long> next = new HashSet<>();
-
-        for (int n = 15; n > 0; --n) {
-            LongArrayList list = new LongArrayList();
-            switch(i){
-                case 0:
-                    list = ctx.biome[n-1];break;
-                case 1:
-                    break;
-                case 2:
-                    list = ctx.biome[n+14];break;
-            }
-            if (list != null && !list.isEmpty()) { //another safeguard moment
-                for (Long pos : list) {
-                    if (mapS.keyset().contains(pos)) use.add(pos);
-                }
-            }
-            for (Long point : use) {
-                Integer val = ctx.global.get(point);
-                if (val == null) continue;
-                Integer f=val;
-                switch(i){
-                    case 0:
-                        if (Math.abs(17 - val) > n) continue;
-                        f=m ? 17 - n : -17 + n;break;
-                    case 1:
-                        if (Math.abs(val) > 17 || 17 - Math.abs(val) > n - 1) continue;
-                        f=m ? 34 - val : -34 + val;break;
-                    case 2:
-                        if (Math.abs(val) > 17) continue;
-                        f=m ? 34 - val : -34 + val;break;
-                }
-                ctx.global.put(point,f);
-                next.addAll(mapS.get(point));
-            }
-            Set<Long> temp = use;
-            use = next;
-            next = temp;
-            next.clear();
-        }
-    }
-    // 1.3.2 determining i-values for smooth mesh
-    private void calcsmooth(SurfCont ctx, boolean m) {
-        Set<BlockPos> next = new HashSet<>();
-        //            0="mapSF", 1="inSF", 2="outSF", 3="wallF",4="mapSC", 5-"inSC", 6="outSC", 7="wallC"\
-        FBNMesh map=ctx.meshes[m?0:4];
-        edgeUpdate(ctx.meshes[m?2:6].keyset(), m, ctx,map,0);
-        edgeUpdate(ctx.meshes[m?1:5].keyset(), m, ctx,map,1);
-        edgeUpdate(new LongArrayList(), m, ctx,map,2);
-    }
-
-    // 1.3.4 Steep calcutaions.
-
-    private void calcsteep(SurfCont ctx,boolean m){
-        //            0="mapSF", 1="inSF", 2="outSF", 3="wallF",4="mapSC", 5-"inSC", 6="outSC", 7="wallC"\
-        FBNMesh edge=ctx.meshes[m?1:5];
-        FBNMesh wall=ctx.meshes[m?3:7];
-        for (int n=16;n>0;--n){//push calculation further
-            if (edge.keyset().isEmpty())return;
-            FBNMesh upd=new FBNMesh();
-            for (Long start:edge.keyset()){// main cycle
-                int ys=FBXZMap.yL(start);
-                Integer rawGlobal = ctx.global.get(start);
-                if (rawGlobal == null) continue;
-                Integer isi=Math.abs(rawGlobal);
-                if (isi==null)continue;
-                Integer is=isi<33?15-Math.abs(isi-17):isi-33;// I decided formulas on a go. It only looks good. Too tired to fully calculate this crap.
-                if(wall.get(start)==null)continue;
-                for(Long neig:wall.get(start)){
-                    if(neig==null)continue;
-                    int yn=FBXZMap.yL(neig);
-                    int dy=m?yn-ys:ys-yn;
-                    if(dy<0)dy=0;
-                    Integer it=ctx.global.get(neig);
-                    if (it==null)continue;
-                    Integer i=it<33?Math.abs(it-17):it-33;
-                    if (is-dy<i)continue;
-                    Integer ifin=(m?1:-1)*(is-dy+33);
-
-                    ctx.global.put(neig,ifin);
-                    upd.add(neig,wall.get(neig));
-                }
-            }
-            edge.clear();
-            edge.addAll(upd);
-        }
-    }
-    // 2 Cool glacier thing for testing.
+    // 2 Surface feature placement
     private void test(int i,BlockPos pos,SurfCont ctx) {
-        String biome=ctx.w.getRegistryManager().get(RegistryKeys.BIOME).getId(ctx.w.getBiome(pos).value()).toString();
-        Map<Integer,RegistryEntry<PlacedFeature>> index=ctx.Ftypes.get(biome);
-        if(index==null)return;
-        RegistryEntry<PlacedFeature> feature=index.get(i);
+        Identifier biom=ctx.w.getRegistryManager()
+                .get(RegistryKeys.BIOME)
+                .getId(ctx.w.getBiome(pos).value());
+        Identifier id = Identifier.of(biom.getNamespace(),"cover/"+biom.getPath()+"/"+i);
+        RegistryKey<PlacedFeature> key = RegistryKey.of(RegistryKeys.PLACED_FEATURE, id);
+        RegistryEntry<PlacedFeature> feature = ctx.w.getRegistryManager()
+                .get(RegistryKeys.PLACED_FEATURE)
+                .getEntry(key)
+                .orElse(null);
         if(feature==null)return;
         ChunkGenerator generator = ctx.w.toServerWorld().getChunkManager().getChunkGenerator();
         feature.value().generate(ctx.w, generator, ctx.r, pos);
     }
+    // 3 Geology placement
     private void  geow(SurfCont ctx){
         ChunkGenerator generator = ctx.w.toServerWorld().getChunkManager().getChunkGenerator();
         List<Long> positions = new ArrayList<>();
