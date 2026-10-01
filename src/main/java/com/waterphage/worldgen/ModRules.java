@@ -182,10 +182,10 @@ public class ModRules extends MaterialRules {
     // Function to create a new GeologyD rule
 // This is a factory method to simplify creating instances of the GeologyD class
     public static ModRules.GeologyD condition(NoiseType idL, NoiseType idO, Integer yT, List<String> idD,
-                                              List<Float> scaleOffsets, List<Float> scaleWidths,
+                                              List<Float> scaleOffsets,
                                               List<Integer> matrix, List<List<Integer>> goal,
                                               List<Float> bedrockParams, List<BlockStateProvider> rockTypes) {
-        return new ModRules.GeologyD(idL, idO, yT, idD, scaleOffsets, scaleWidths, matrix, goal, bedrockParams, rockTypes);
+        return new ModRules.GeologyD(idL, idO, yT, idD, scaleOffsets, matrix, goal, bedrockParams, rockTypes);
     }
 
     // Enum to map different noise types to their respective functions in the NoiseRouter
@@ -248,34 +248,16 @@ public class ModRules extends MaterialRules {
 
     // Helper class to store and manage intermediate state for block generation
     private static class Backup {
-        private int xPrev = -9999;
-        private int zPrev = -9999;
         private int yMax;
+        private double scale;
         private List<Integer> points = new ArrayList<>();
-        private double distOs;
-        private double distLs;
-
-        // Check if the current position has changed
-        public boolean isPositionChanged(int x, int z) {
-            return x != xPrev || z != zPrev;
-        }
-
+        private Random random;
         // Update backup state with new values
-        public void updatePosition(int x, int z, int yMax, double distOs, double distLs, List<Integer> points) {
-            this.xPrev = x;
-            this.zPrev = z;
+        public void updatePosition(int yMax, double scale, List<Integer> points, Random random) {
             this.yMax = yMax;
-            this.distOs = distOs;
-            this.distLs = distLs;
+            this.scale = scale;
             this.points = points;
-        }
-
-        public int getXPrev() {
-            return xPrev;
-        }
-
-        public int getZPrev() {
-            return zPrev;
+            this.random = random;
         }
     }
 
@@ -288,7 +270,7 @@ public class ModRules extends MaterialRules {
 
     // Main record defining the GeologyD terrain rule
     record GeologyD(NoiseType idL, NoiseType idO, Integer yT, List<String> idD, List<Float> scaleOffsets,
-                    List<Float> scaleWidths, List<Integer> matrix, List<List<Integer>> goal,
+                    List<Integer> matrix, List<List<Integer>> goal,
                     List<Float> bedrockParams, List<BlockStateProvider> rockTypes) implements MaterialRules.MaterialRule {
 
         // Codec for serializing and deserializing the rule
@@ -300,7 +282,6 @@ public class ModRules extends MaterialRules {
                                         Codec.INT.fieldOf("tech_Y").forGetter(ModRules.GeologyD::yT),
                                         Codec.STRING.listOf().fieldOf("local_noise").forGetter(ModRules.GeologyD::idD),
                                         Codec.FLOAT.listOf().fieldOf("offset").forGetter(ModRules.GeologyD::scaleOffsets),
-                                        Codec.FLOAT.listOf().fieldOf("width").forGetter(ModRules.GeologyD::scaleWidths),
                                         Codec.INT.listOf().fieldOf("matrix").forGetter(ModRules.GeologyD::matrix),
                                         Codec.INT.listOf().listOf().fieldOf("goal").forGetter(ModRules.GeologyD::goal),
                                         Codec.FLOAT.listOf().fieldOf("bedrock").forGetter(ModRules.GeologyD::bedrockParams),
@@ -321,9 +302,6 @@ public class ModRules extends MaterialRules {
 
             HeightContext height = context.heightContext;
             NoiseConfig noise = context.noiseConfig;
-            net.minecraft.util.math.random.Random random = Random.create();
-            Backup backup = new Backup();
-
             if (idD.size() < 2) {
                 throw new IllegalArgumentException("idD must have at least two elements for namespace and path.");
             }
@@ -332,43 +310,38 @@ public class ModRules extends MaterialRules {
             );
 
             double yMax = height.getHeight();
-            Float scaleOffset0 = scaleOffsets.get(0), scaleOffset1 = scaleOffsets.get(1);
-            Float scaleOffset2 = scaleOffsets.get(2), scaleOffset3 = scaleOffsets.get(3);
-            Float scaleWidth0 = scaleWidths.get(0), scaleWidth1 = scaleWidths.get(1);
-            Float scaleWidth2 = scaleWidths.get(2), scaleWidth3 = scaleWidths.get(3);
-            int goalSize = goal.size(), rockSize = rockTypes.size();
             int matrixX = matrix.get(0), matrixY = matrix.get(1);
             float bedrockStart = bedrockParams.get(0), bedrockGradient = bedrockParams.get(1);
             int bedrockBase = bedrockParams.get(2).intValue(), bedrockHeight = bedrockParams.get(3).intValue();
-            return (x, y, z) -> {
-
-                if (backup.isPositionChanged(x, z)) {
+            Backup backups[][] = new Backup[16][16];
+            int xo=chunk.getPos().getStartX(),zo=chunk.getPos().getStartZ();
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    backups[x][z] = new Backup();int xf=x+xo,zf=z+zo;
                     DensityFunction.NoisePos pos = new DensityFunction.NoisePos() {
-                        @Override public int blockX() { return x; }
+                        @Override public int blockX() { return xf; }
                         @Override public int blockY() { return yT; }
-                        @Override public int blockZ() { return z; }
+                        @Override public int blockZ() { return zf; }
                     };
-
                     double newDistOs = idO.getNoise(noise.getNoiseRouter()).sample(pos);
                     double newDistLs = idL.getNoise(noise.getNoiseRouter()).sample(pos);
                     List<Integer> newPoints = calculatePoints(goal, matrixX, matrixY, newDistOs, newDistLs);
-
-                    backup.updatePosition(
-                            x, z,
+                    Random r =Random.create(FBXZMap.xzL(x,z));
+                    double scale = offset(newDistOs,newDistLs,scaleOffsets);
+                    backups[x][z].updatePosition(
                             chunk.sampleHeightmap(Heightmap.Type.OCEAN_FLOOR_WG, x, z),
-                            newDistOs,
-                            newDistLs,
-                            newPoints
+                            scale,
+                            newPoints,
+                            r
                     );
                 }
-
+            }
+            return (x, y, z) -> {
+                Backup backup=backups[x&15][z&15];double s=backup.scale;
                 int adjustedY = (int) Math.round(backup.yMax * 0.5 + yMax * 0.5);
-                double size = Math.pow(scaleWidth0, scaleWidth1 + scaleWidth2 * backup.distOs + scaleWidth3 * backup.distLs);
-                double offsetScale = Math.pow(scaleOffset0, scaleOffset1 + scaleOffset2 * backup.distOs + scaleOffset3 * backup.distLs);
-                double distOffset = distSampler.sample(x * offsetScale, y * offsetScale, z * offsetScale);
+                double distOffset = distSampler.sample(x * s, y * s, z * s);
                 double distY = Math.pow((yMax - y - 0.5 * ((backup.points.size() * distOffset) % backup.points.size())) / (yMax - bedrockStart), bedrockGradient);
-
-                int layer = (int) (Math.round(Math.abs(y - adjustedY + 0.5 * backup.points.size() * distOffset) / size)) % backup.points.size();
+                int layer = (int) (Math.round(Math.abs(y - adjustedY + 0.5 * backup.points.size() * distOffset))) % backup.points.size();
                 int mx = backup.points.get(layer) % matrixX;
                 int my = backup.points.get(layer) / matrixX;
 
@@ -376,8 +349,16 @@ public class ModRules extends MaterialRules {
                 my = (int) MathHelper.clamp(distY * bedrockHeight + (1.0 - distY) * my, 0, matrixY - 1);
 
                 BlockPos pos = new BlockPos(x, y, z);
-                return rockTypes.get(mx + my * matrixX).get(random, pos);
+                return rockTypes.get(mx + my * matrixX).get(backup.random, pos);
             };
+        }
+        private double offset(double x, double y, List<Float> map){
+            double val=0D;double all=0D;
+            for (int i=0;i<map.size()/3;++i){
+                double r=Math.pow(Math.pow(x-map.get(i+1),2)+Math.pow(y-map.get(i+2),2)+1e-9,-0.5);
+                val+=map.get(i)*r;all+=r;
+            }
+            return Math.pow(10,val/all);
         }
 
         private List<Integer> calculatePoints(List<List<Integer>> goal, int matrixX, int matrixY, double distOs, double distLs) {
@@ -393,6 +374,4 @@ public class ModRules extends MaterialRules {
             return points;
         }
     }
-
-
 }

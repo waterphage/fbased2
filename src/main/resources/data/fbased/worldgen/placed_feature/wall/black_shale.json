@@ -1,0 +1,67 @@
+{
+  "feature": {
+    "type": "fbased:mul",
+    "config": {
+      "features": [
+        {
+          "feature": {
+            "type": "fbased:fossil_s",
+            "config": {
+              "str": [
+                "fbased:acub_1_1",
+                "fbased:acub_1_2",
+                "fbased:acub_1_3",
+                "fbased:acub_1_4",
+                "fbased:acub_1_5",
+                "fbased:acub_1_6",
+                "fbased:acub_1_7",
+				
+		"fbased:cube_1_1",
+                "fbased:cube_1_2",
+                "fbased:cube_1_3",
+                "fbased:cube_1_4",
+                "fbased:cube_1_5",
+                "fbased:cube_1_6",
+                "fbased:cube_1_7",
+				
+		"fbased:dode_1_1",
+                "fbased:dode_1_2",
+                "fbased:dode_1_3",
+                "fbased:dode_1_4",
+                "fbased:dode_1_5",
+                "fbased:dode_1_6",
+                "fbased:dode_1_7",
+				
+		"fbased:icos_1_1",
+                "fbased:icos_1_2",
+                "fbased:icos_1_3",
+                "fbased:icos_1_4",
+                "fbased:icos_1_5",
+                "fbased:icos_1_6",
+                "fbased:icos_1_7",
+				
+		"fbased:tthr_1_1",
+                "fbased:tthr_1_2",
+                "fbased:tthr_1_3",
+                "fbased:tthr_1_4",
+                "fbased:tthr_1_5",
+                "fbased:tthr_1_6",
+                "fbased:tthr_1_7"
+              ],
+              "proc": [
+                "fbased:rock/black_shale"
+              ],
+              "scales": [0.05, 0.154, 0.368, 0.687, 1.0],
+              "weights": [0.72,0.86,0.92,0.98,1.0]
+            }
+          },
+          "placement": [
+          ]
+        }
+      ]
+    }
+  },
+  "placement": [
+  ]
+}
+

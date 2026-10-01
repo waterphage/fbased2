@@ -1,8 +1,0 @@
-{
-  "parent": "block/inner_stairs",
-  "textures": {
-    "bottom": "fbased:block/alabaster_pol",
-    "top": "fbased:block/alabaster_pol",
-    "side": "fbased:block/alabaster_pol"
-  }
-}

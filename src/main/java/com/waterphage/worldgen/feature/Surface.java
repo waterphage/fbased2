@@ -12,6 +12,7 @@ import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -63,20 +64,21 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                         Codec.INT.fieldOf("min").forGetter(config -> config.min),
                         Codec.INT.fieldOf("max").forGetter(config -> config.max),
                         Codec.INT.listOf().fieldOf("matrix").forGetter(config -> config.matrix),
-                        FB_WALL_CODEC.listOf().fieldOf("wall").forGetter(config -> config.wall),
-                        FB_BIOME_MAP_CODEC.fieldOf("biome_relations").forGetter(config -> config.biome)
-                        //FB_BIOME_FEATURE_CODEC.fieldOf("biome_features").forGetter(config -> config.feature)
+                        Codec.INT.fieldOf("wall").forGetter(config -> config.wall),
+                        FB_BIOME_MAP_CODEC.fieldOf("biome_relations").forGetter(config -> config.biome),
+                        Codec.FLOAT.fieldOf("power").forGetter(config -> config.feature)
                 ).apply(instance, SurfaceConfig::new));
         private Integer min;
         private Integer yT;
         private Integer max;
         private List<Integer> matrix;
-        private List<Wall> wall;
+        private Integer wall;
+        private Float feature;
         private Map<String,BiomeValue> biome;
-        private Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature;
 
-        SurfaceConfig(Integer yT,Integer min, Integer max,List<Integer> matrix,List<Wall> wall,Map<String,BiomeValue>biome
-                      //Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> feature
+
+        SurfaceConfig(Integer yT,Integer min, Integer max,List<Integer> matrix,
+                      Integer wall,Map<String,BiomeValue>biome,Float feature
         ) {
             this.yT=yT;
             this.max = max;
@@ -112,11 +114,11 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         private StructureWorldAccess w;
         private Random r;
         private Map<String,BiomeValue> biomemap;
-        private Wall wall;private Double bE;
+        private Integer wall;
+        private Float feature;
         private Long2IntMap global = new Long2IntOpenHashMap();
         private FBXZMap globXZ = new FBXZMap();
         private LongArrayList[] biome=new LongArrayList[30];
-        private Map<String,Map<Integer,RegistryEntry<PlacedFeature>>> Ftypes;
         private int xi;
         private int zi;
         private int yT;
@@ -127,33 +129,24 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         }
 
         private SurfCont(FeatureContext<SurfaceConfig> ctx) {
-            for (int i = 0; i < meshes.length; i++) {meshes[i] = new FBNMesh();}
             this.w = ctx.getWorld();
+            this.chunk=this.w.getChunk(ctx.getOrigin());
             this.r = ctx.getRandom();
             SurfaceConfig config=ctx.getConfig();
+            this.wall = config.wall;
             this.biomemap = config.biome();
-            this.Ftypes=config.feature;
             BlockPos.Mutable origin=ctx.getOrigin().mutableCopy();
             this.xi=origin.getX();this.zi=origin.getZ();
             this.yT=config.yT;
-            this.chunk=this.w.getChunk(ctx.getOrigin());
-            if(this.chunk instanceof ChunkExtension ext){
-                List<Double>val=ext.getNoise();
-                Double bX=(0.25D*val.get(0))+0.5D;// cont.json
-                Double bZ=(0.25D*val.get(1))+0.5D;// eros.json
-                this.bE=(0.25D*val.get(2))+0.5D;
-                Integer index=Math.toIntExact(Math.round(bX*(config.matrix.get(0)-1)))+config.matrix.get(0)*Math.toIntExact(Math.round(bZ*(config.matrix.get(1)-1)));
-                if (l) {System.out.println("bX=" + bX + ", bZ=" + bZ+", i="+index);l=false;}
-                if (index >= 0 && index <= config.wall.size())this.wall=config.wall.get(index);
-            }
-            for (int i = 0; i < biome.length; i++) {
-                biome[i] = new LongArrayList();
-            }
+            for (int i = 0; i < meshes.length; i++) {meshes[i] = new FBNMesh();}
+            for (int i = 0; i < biome.length; i++) {biome[i] = new LongArrayList();}
+            this.feature=config.feature;
         }
     }
     // 0 Main method
     @Override
     public boolean generate(FeatureContext<SurfaceConfig> context) {
+        if(context.getWorld().getChunk(context.getOrigin()) instanceof ChunkExtension ext){if (ext.second())return false;}
         SurfCont ctx=new SurfCont(context);
         placer(ctx);// 1 holds all math stores placement positions and their indexes
         return true;
@@ -161,14 +154,13 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     // 1 Placement positions calculation
     private void placer(SurfCont ctx){
         ChunkPos chunkPos = ctx.w.getChunk(new BlockPos(ctx.xi,ctx.yT,ctx.zi)).getPos();
+        ChunkExtension ext=(ChunkExtension)ctx.chunk;
         int chunkX = chunkPos.x;
         int chunkZ = chunkPos.z;
         global(chunkX,chunkZ,ctx); // 1.1 Surface data reading
         refine(ctx); // 1.2 Neighbour mesh sampling
         export(chunkX,chunkZ,ctx);
         neighbours(ctx); // 1.3 Edge calculation
-
-        ChunkExtension ext=(ChunkExtension)ctx.chunk;
         Long2IntMap local= ext.getCustomMap();
         for (Long Lpos:local.keySet()){
             BlockPos.Mutable pos = BlockPos.fromLong(Lpos).mutableCopy();
@@ -176,6 +168,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             test(i,pos,ctx);
         }
         geow(ctx);
+        ext.count(); // Marking chunk as used
     }
     // 1.1 Surface data reading it goes for every chunk to read raw data and write into global data
     public static void global(int centerChunkX, int centerChunkZ,SurfCont ctx) {
@@ -204,6 +197,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             Long xzb=FBXZMap.xzL(xo+banpos[i*2],zo+banpos[i*2+1]);
             ctx.banned.add(xzb);
             Long2IntMap vls = ext.getCustomMap();
+            if(id==4){}
             FBXZMap xzm=ext.getXZmap();
             int idk=xzm.indexMap().get(xzb);
             int start = xzm.helper().getInt(idk);
@@ -258,7 +252,6 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 basicMap(xyz,xl,y,zl,ctx,ext,xzm,m); // 1.1.2.2 Single point calculation
             }
         }
-        ext.count(); // 1.1.2.3 Marking chunk for update (useless for now)
         Chunk ch=ctx.w.getChunk(ext.getPos());
         ch.setNeedsSaving(true);
         ch.needsSaving();
@@ -269,7 +262,8 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     private static void mark(int crn,LongArrayList neig,boolean m,Long key, SurfCont ctx){
         Integer val;
         if (crn < 4) {
-            ctx.meshes[3].add(key, neig);
+            ctx.meshes[3].add(key, neig);//System.out.println("d"); - positions are applied
+
         } else {
             int t=m?8:9;ctx.meshes[t].add(key, neig);val=m?17:-17;
             ctx.global.put(key,val);//Smooth surface filler value
@@ -374,6 +368,12 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 }
             }
         }
+        if (!(ctx.w.getChunk(centerChunkX, centerChunkZ, ChunkStatus.EMPTY, false) instanceof ChunkExtension ext)) return;
+        Long2IntMap Cmap=ext.getCustomMap();
+        {for (int i = 0; i < Math.min(ctx.meshes[3].keyset().size(), ctx.wall); ++i){
+            Long k=ctx.meshes[3].keyset().getLong(ctx.r.nextInt(ctx.meshes[3].keyset().size()));
+            if (ctx.globXZ.search(k,true)==-9999&&(ctx.r.nextFloat()<Math.pow(FBXZMap.yL(k)/ctx.w.getHeight(),ctx.feature)))continue;
+            if(Cmap.keySet().contains(k)){ctx.meshes[7].add(k,new LongArrayList());}}}
     }
 
     //1.3 Edge detection and calculation
@@ -519,16 +519,17 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     // 3 Geology placement
     private void  geow(SurfCont ctx){
         ChunkGenerator generator = ctx.w.toServerWorld().getChunkManager().getChunkGenerator();
-        List<Long> positions = new ArrayList<>();
-        //            0="mapSF", 1="inSF", 2="outSF", 3="wallF",4="mapSC", 5-"inSC", 6="outSC", 7="wallC"\
-        positions.addAll(ctx.meshes[3].keyset());
-        positions.addAll(ctx.meshes[7].keyset());
-        Collections.shuffle(positions, new java.util.Random());
-        for (int i = 0; i < Math.min(ctx.wall.i, positions.size()); ++i) {
-            BlockPos pos = BlockPos.fromLong(positions.get(i));
-            if (ctx.w.getChunk(pos).equals(ctx.chunk)) {
-                ctx.wall.feature().value().generate(ctx.w, generator, ctx.r, pos);
-            }
+        for (Long k:ctx.meshes[7].keyset()) {
+            BlockPos pos = BlockPos.fromLong(k);
+            Identifier rock= Registries.BLOCK.getId(ctx.w.getBlockState(pos).getBlock());
+            Identifier kind = new Identifier(rock.getNamespace(),"wall/"+rock.getPath().replace("_raw",""));
+            RegistryKey<PlacedFeature> key = RegistryKey.of(RegistryKeys.PLACED_FEATURE, kind);
+            RegistryEntry<PlacedFeature> feature = ctx.w.getRegistryManager()
+                        .get(RegistryKeys.PLACED_FEATURE)
+                        .getEntry(key)
+                        .orElse(null);
+            if (feature==null)continue;
+            feature.value().generate(ctx.w, generator, ctx.r, pos);
         }
     }
 }

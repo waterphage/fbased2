@@ -1,0 +1,35 @@
+{
+  "feature": {
+    "type": "fbased:surface",
+    "config": {
+      "min": 2,
+      "max": 16,
+      "tech_Y": 0,
+      "matrix": [64,64],
+      "wall": 50,"power":2.0,
+      "biome_relations":{
+        "fbased:c_main/0_0,fbased:c_main/0_0": {"out_p": 15,"in_p": 7,"out_c": 256,"in_c": 512}
+      },
+      "default": {
+        "feature": {
+          "config": {
+            "to_place": {
+              "type": "minecraft:simple_state_provider",
+              "state": {
+                "Name": "minecraft:pink_concrete"
+              }
+            }
+          },
+          "type": "minecraft:simple_block"
+        },
+        "placement": []
+      }
+    }
+  },
+  "placement": [
+    {
+      "type": "fbased:mod",
+      "y": 0
+    }
+  ]
+}

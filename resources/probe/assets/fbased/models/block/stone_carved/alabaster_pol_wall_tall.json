@@ -1,8 +1,0 @@
-{
-  "parent": "block/template_wall_side_tall",
-  "textures": {
-    "wall": "fbased:block/alabaster_pol",
-    "particle": "fbased:block/alabaster_pol"
-  },
-  "render_type": "solid"
-}

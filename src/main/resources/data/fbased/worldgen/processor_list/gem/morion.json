@@ -7,7 +7,7 @@
     "processor_type": "fbased:geo",
     "types": {
       "minecraft:orange_concrete": [
-        "fbased:black_gem_raw"
+        "fbased:black_foggy_gem_raw"
       ],
       "minecraft:lime_concrete": [
         "fbased:black_foggy_gem_raw"
@@ -15,28 +15,19 @@
       "minecraft:light_blue_concrete": [
         "fbased:black_foggy_gem_raw",
         "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:brown_foggy_gem_raw"
+        "fbased:brown_dirty_gem_raw"
       ],
       "minecraft:blue_concrete": [
         "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:brown_foggy_gem_raw"
+        "fbased:brown_dirty_gem_raw",
+        "fbased:white_dirty_gem_raw"
       ],
       "minecraft:purple_concrete": [
-        "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:brown_foggy_gem_raw"
+        "fbased:brown_dirty_gem_raw",
+        "fbased:white_dirty_gem_raw"
       ],
       "minecraft:pink_concrete": [
-        "fbased:black_foggy_gem_raw",
-        "fbased:black_foggy_gem_raw",
-        "fbased:brown_foggy_gem_raw"
+        "fbased:white_dirty_gem_raw"
       ]
     }
   }

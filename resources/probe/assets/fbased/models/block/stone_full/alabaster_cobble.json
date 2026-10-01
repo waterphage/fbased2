@@ -1,8 +1,0 @@
-{
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "fbased:block/alabaster_cobble",
-    "particle": "fbased:block/alabaster_cobble"
-  },
-  "render_type": "solid"
-}

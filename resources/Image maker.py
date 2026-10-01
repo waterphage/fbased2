@@ -349,19 +349,19 @@ def create_full_map(full_map_path, palette_path, image_atlas_path, goal_path, ou
     full_map.paste(image_atlas, (full_map_width - atlas_width, 0))
 
     # Увеличиваем изображение goal
-    #goal_width, goal_height = goal.size
-    #enlarged_goal = Image.new("RGBA", (goal_width * cell_size, goal_height * cell_size))
-    #for y in range(goal_height):
-    #    for x in range(goal_width):
-    #        pixel_color = goal.getpixel((x, y))
-    #        for dy in range(cell_size):
-    #            for dx in range(cell_size):
-    #                enlarged_goal.putpixel((x * cell_size + dx, y * cell_size + dy), pixel_color)
+    goal_width, goal_height = goal.size
+    enlarged_goal = Image.new("RGBA", (goal_width * cell_size, goal_height * cell_size))
+    for y in range(goal_height):
+        for x in range(goal_width):
+            pixel_color = goal.getpixel((x, y))
+            for dy in range(cell_size):
+                for dx in range(cell_size):
+                    enlarged_goal.putpixel((x * cell_size + dx, y * cell_size + dy), pixel_color)
 
     # Вставляем увеличенное изображение goal под атлас
-    #enlarged_goal_x = full_map_width - atlas_width
-    #enlarged_goal_y = atlas_height+16
-    #full_map.paste(enlarged_goal, (enlarged_goal_x, enlarged_goal_y))
+    enlarged_goal_x = full_map_width - atlas_width
+    enlarged_goal_y = atlas_height+16
+    full_map.paste(enlarged_goal, (enlarged_goal_x, enlarged_goal_y))
 
     # Сохраняем итоговое изображение
     full_map.save(output_path)

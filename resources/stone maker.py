@@ -7,56 +7,31 @@ BASE_OUTPUT_DIR = 'out'
 REPLACE_FROM = 'alabaster'
 
 class Material(Enum):
-    A1 = "brown_gem"
-    A2 = "red_gem"
-    A3 = "orange_gem"
-    A4 = "yellow_gem"
-    A5 = "lime_gem"
-    A6 = "green_gem"
-    A7 = "cyan_gem"
-    A8 = "light_blue_gem"
-    A9 = "blue_gem"
-    A10 = "purple_gem"
-    A11 = "magenta_gem"
-    A12 = "pink_gem"
-    A13 = "white_gem"
-    A14 = "light_gray_gem"
-    A15 = "gray_gem"
-    A16 = "black_gem"
-
-    B1 = "brown_foggy_gem"
-    B2 = "red_foggy_gem"
-    B3 = "orange_foggy_gem"
-    B4 = "yellow_foggy_gem"
-    B5 = "lime_foggy_gem"
-    B6 = "green_foggy_gem"
-    B7 = "cyan_foggy_gem"
-    B8 = "light_blue_foggy_gem"
-    B9 = "blue_foggy_gem"
-    B10 = "purple_foggy_gem"
-    B11 = "magenta_foggy_gem"
-    B12 = "pink_foggy_gem"
-    B13 = "white_foggy_gem"
-    B14 = "light_gray_foggy_gem"
-    B15 = "gray_foggy_gem"
-    B16 = "black_foggy_gem"
-
-    C1 = "brown_dirty_gem"
-    C2 = "red_dirty_gem"
-    C3 = "orange_dirty_gem"
-    C4 = "yellow_dirty_gem"
-    C5 = "lime_dirty_gem"
-    C6 = "green_dirty_gem"
-    C7 = "cyan_dirty_gem"
-    C8 = "light_blue_dirty_gem"
-    C9 = "blue_dirty_gem"
-    C10 = "purple_dirty_gem"
-    C11 = "magenta_dirty_gem"
-    C12 = "pink_dirty_gem"
-    C13 = "white_dirty_gem"
-    C14 = "light_gray_dirty_gem"
-    C15 = "gray_dirty_gem"
-    C16 = "black_dirty_gem"
+        A1=["sandstone","black","white","yellow","tan"]
+        A2=["siltstone","black","white","yellow","tan"]
+        A3=["mudstone","black","white","yellow","tan"]
+        A4=["shale","black","white","yellow","red"]
+        A5=["claystone","black","white","yellow","tan"]
+        A6=["rock_salt","black","white","yellow","red"]
+        A7=["limestone","black","white","yellow","red"]
+        A8=["conglomerate","black","white","yellow","tan"]
+        A9=["dolomite","black","white","yellow","tan"]
+        A10=["chert","black","white","yellow","tan"]
+        A11=["chalk","black","white","yellow","tan"]
+        A12=["granite","black","white","green","red"]
+        A13=["diorite","black","white","green","red"]
+        A14=["gabbro","black","white","green","red"]
+        A15=["rhyolite","black","white","green","red"]
+        A16=["basalt","black","white","green","red"]
+        A17=["andesite","black","white","green","red"]
+        A18=["dacite","black","white","green","red"]
+        A19=["obsidian","black","white","green","red"]
+        A20=["quartzite","black","white","green","tan"]
+        A21=["slate","black","white","green","tan"]
+        A22=["phyllite","black","white","green","red"]
+        A23=["schist","black","white","green","red"]
+        A24=["gneiss","black","white","green","red"]
+        A25=["marble","black","white","green","red"]
 
 def process_dir(src, dst, replace_to):
     for root, dirs, files in os.walk(src):
@@ -85,5 +60,9 @@ if __name__ == '__main__':
     os.makedirs(BASE_OUTPUT_DIR)
 
     for material in Material:
-        process_dir(SOURCE_DIR, BASE_OUTPUT_DIR, material.value)
-        print(f"✅ {material.name}: заменено '{REPLACE_FROM}' на '{material.value}'")
+        
+        process_dir(SOURCE_DIR, BASE_OUTPUT_DIR,f'{material.value[1]}_{material.value[0]}')
+        process_dir(SOURCE_DIR, BASE_OUTPUT_DIR,f'{material.value[2]}_{material.value[0]}')
+        process_dir(SOURCE_DIR, BASE_OUTPUT_DIR,f'{material.value[3]}_{material.value[0]}')
+        process_dir(SOURCE_DIR, BASE_OUTPUT_DIR,f'{material.value[4]}_{material.value[0]}')
+        print(f"✅ {material.name}: заменено '{REPLACE_FROM}' на '{material.value[0]}'")

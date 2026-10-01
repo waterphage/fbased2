@@ -1,0 +1,58 @@
+#garnierite gabbro#
+#native silver granite gneiss#
+#native copper sandstone#
+#malachite limestone marble#
+#galena granite limestone#
+#cassierite granite#
+#native platinum basalt#
+#cinnabar shale quartzite#
+#horn silver granite gneiss#
+#talc dolomite#
+#puddingstone conglomerate#
+#graphite gneiss quartzite marble schist#
+#kimberlite gabbro#
+#bismuthinite granite#
+#sylvite rock salt#
+#cryolite granite#
+#periclase marble#
+#ilmenite gabbro#
+#rutile granite#
+#chromite basalt#
+#pitchblende granite#
+#borax rock salt#
+#olivine gabbro#
+#serpentine basalt#
+#mica granite#
+#calcite limestone marble#
+saltpeter sedimentary#
+alabaster sedimentary#
+selenite sedimentary#
+satinspar sedimentary#
+anhydrite sedimentary#
+alunite igneous sedimentary#
+native gold igneous alluvial#
+sphalerite metamorphic#
+
+
+cobaltite igneous metamorphic#
+gypsum sedimentary#
+jet sedimentary#
+petrified wood sedimentary#
+realgar igneous#
+opriment igneous#
+stibnite  ingeous#
+marcasite sedimentary#
+brimstone igneous#
+magnetite sedimentary#
+bauxite sedimentary#
+native aluminum igneous#
+orthoclase igneous metamorphic#
+hornblende metamorphic igneous#
+pyroclusite igneous#
+kaolinite sedimentary#
+microcline all#
+tetrahedrite all
+lignite sedimentary
+bituminous coal sedimentary
+hematite sedimentary, igneous
+limonite sedimentary

@@ -1,8 +1,8 @@
 package com.waterphage.worldgen.feature;
 
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.ScalableStructure;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
@@ -24,20 +24,102 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FossilS extends Feature<FossilS.FossilSConfig> {
     public FossilS(Codec<FossilSConfig> codec) {
         super(codec);
     }
+    private static final Map<Identifier, Float> STR_SIZES = Map.ofEntries(
+            Map.entry(new Identifier("fbased","acub_1_1"), 0.759817f),
+            Map.entry(new Identifier("fbased","acub_1_2"), 0.778435f),
+            Map.entry(new Identifier("fbased","acub_1_3"), 0.782039f),
+            Map.entry(new Identifier("fbased","acub_1_4"), 0.785926f),
+            Map.entry(new Identifier("fbased","acub_1_5"), 0.779921f),
+            Map.entry(new Identifier("fbased","acub_1_6"), 0.777436f),
+            Map.entry(new Identifier("fbased","acub_1_7"), 0.784097f),
+            Map.entry(new Identifier("fbased","cube_1_1"), 0.755701f),
+            Map.entry(new Identifier("fbased","cube_1_2"), 0.716010f),
+            Map.entry(new Identifier("fbased","cube_1_3"), 0.713761f),
+            Map.entry(new Identifier("fbased","cube_1_4"), 0.712701f),
+            Map.entry(new Identifier("fbased","cube_1_5"), 0.715027f),
+            Map.entry(new Identifier("fbased","cube_1_6"), 0.711902f),
+            Map.entry(new Identifier("fbased","cube_1_7"), 0.710906f),
+            Map.entry(new Identifier("fbased","disc_1_1"), 0.885533f),
+            Map.entry(new Identifier("fbased","disc_1_2"), 0.891208f),
+            Map.entry(new Identifier("fbased","disc_1_3"), 0.892817f),
+            Map.entry(new Identifier("fbased","disc_1_4"), 0.895685f),
+            Map.entry(new Identifier("fbased","disc_1_5"), 0.887606f),
+            Map.entry(new Identifier("fbased","disc_1_6"), 0.881490f),
+            Map.entry(new Identifier("fbased","disc_1_7"), 0.884782f),
+            Map.entry(new Identifier("fbased","disc_2_1"), 0.878201f),
+            Map.entry(new Identifier("fbased","disc_2_2"), 0.888807f),
+            Map.entry(new Identifier("fbased","disc_2_3"), 0.894698f),
+            Map.entry(new Identifier("fbased","disc_2_4"), 0.890309f),
+            Map.entry(new Identifier("fbased","disc_2_5"), 0.877809f),
+            Map.entry(new Identifier("fbased","disc_2_6"), 0.867780f),
+            Map.entry(new Identifier("fbased","disc_2_7"), 0.881027f),
+            Map.entry(new Identifier("fbased","disc_3_1"), 0.868386f),
+            Map.entry(new Identifier("fbased","disc_3_2"), 0.886557f),
+            Map.entry(new Identifier("fbased","disc_3_3"), 0.876287f),
+            Map.entry(new Identifier("fbased","disc_3_4"), 0.874693f),
+            Map.entry(new Identifier("fbased","disc_3_5"), 0.866389f),
+            Map.entry(new Identifier("fbased","disc_3_6"), 0.859082f),
+            Map.entry(new Identifier("fbased","disc_3_7"), 0.869495f),
+            Map.entry(new Identifier("fbased","disc_4_1"), 0.897723f),
+            Map.entry(new Identifier("fbased","disc_4_2"), 0.904917f),
+            Map.entry(new Identifier("fbased","disc_4_3"), 0.901649f),
+            Map.entry(new Identifier("fbased","disc_4_4"), 0.901929f),
+            Map.entry(new Identifier("fbased","disc_4_5"), 0.901410f),
+            Map.entry(new Identifier("fbased","disc_4_6"), 0.896292f),
+            Map.entry(new Identifier("fbased","disc_4_7"), 0.896160f),
+            Map.entry(new Identifier("fbased","disc_5_1"), 0.883526f),
+            Map.entry(new Identifier("fbased","disc_5_2"), 0.901007f),
+            Map.entry(new Identifier("fbased","disc_5_3"), 0.904150f),
+            Map.entry(new Identifier("fbased","disc_5_4"), 0.908746f),
+            Map.entry(new Identifier("fbased","disc_5_5"), 0.901441f),
+            Map.entry(new Identifier("fbased","disc_5_6"), 0.895938f),
+            Map.entry(new Identifier("fbased","disc_5_7"), 0.882107f),
+            Map.entry(new Identifier("fbased","disc_6_1"), 0.886906f),
+            Map.entry(new Identifier("fbased","disc_6_2"), 0.888064f),
+            Map.entry(new Identifier("fbased","disc_6_3"), 0.891961f),
+            Map.entry(new Identifier("fbased","disc_6_4"), 0.893136f),
+            Map.entry(new Identifier("fbased","disc_6_5"), 0.890280f),
+            Map.entry(new Identifier("fbased","disc_6_6"), 0.882972f),
+            Map.entry(new Identifier("fbased","disc_6_7"), 0.887859f),
+            Map.entry(new Identifier("fbased","disc_7_1"), 0.875199f),
+            Map.entry(new Identifier("fbased","disc_7_2"), 0.873951f),
+            Map.entry(new Identifier("fbased","disc_7_3"), 0.878883f),
+            Map.entry(new Identifier("fbased","disc_7_4"), 0.878883f),
+            Map.entry(new Identifier("fbased","disc_7_5"), 0.876343f),
+            Map.entry(new Identifier("fbased","disc_7_6"), 0.868645f),
+            Map.entry(new Identifier("fbased","disc_7_7"), 0.874262f),
+            Map.entry(new Identifier("fbased","disc_8_1"), 0.883583f),
+            Map.entry(new Identifier("fbased","disc_8_2"), 0.895726f),
+            Map.entry(new Identifier("fbased","disc_8_3"), 0.902656f),
+            Map.entry(new Identifier("fbased","disc_8_4"), 0.900831f),
+            Map.entry(new Identifier("fbased","disc_8_5"), 0.894357f),
+            Map.entry(new Identifier("fbased","disc_8_6"), 0.889994f),
+            Map.entry(new Identifier("fbased","disc_8_7"), 0.879633f),
+            Map.entry(new Identifier("fbased","dode_1_1"), 0.614382f),
+            Map.entry(new Identifier("fbased","dode_1_2"), 0.612926f),
+            Map.entry(new Identifier("fbased","dode_1_3"), 0.611887f),
+            Map.entry(new Identifier("fbased","dode_1_4"), 0.612983f),
+            Map.entry(new Identifier("fbased","dode_1_5"), 0.613407f),
+            Map.entry(new Identifier("fbased","dode_1_6"), 0.612559f),
+            Map.entry(new Identifier("fbased","dode_1_7"), 0.612658f),
+            Map.entry(new Identifier("fbased","icos_1_1"), 0.581709f),
+            Map.entry(new Identifier("fbased","icos_1_2"), 0.582287f),
+            Map.entry(new Identifier("fbased","icos_1_3"), 0.576951f),
+            Map.entry(new Identifier("fbased","icos_1_4"), 0.577428f),
+            Map.entry(new Identifier("fbased","icos_1_5"), 0.578333f),
+            Map.entry(new Identifier("fbased","icos_1_6"), 0.614458f),
+            Map.entry(new Identifier("fbased","icos_1_7"), 0.613424f)
+    );
     public static class FossilSConfig implements FeatureConfig {
         public static final Codec<FossilSConfig> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
@@ -53,7 +135,7 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
         public final List<Float> scales; //0.05f, 0.154f, 0.368f, 0.687f, 1.0f
         public final List<Float> weights;
         public FossilSConfig(
-                List<Identifier>  str,
+                List<Identifier> str,
                 List<RegistryEntry<StructureProcessorList>> proc,
                 List<Float> scales,
                 List<Float> weights
@@ -73,11 +155,11 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
             FossilSConfig c
     ) {
         StructureTemplate base = mgr.getTemplateOrBlank(id);
-
+        Float stype=STR_SIZES.getOrDefault(id, 1.0f);
         List<StructureTemplate> list = new ArrayList<>(c.scales.size());
         for (float scale : c.scales) {
             StructureTemplate copy = cloneTemplate(base, world);
-            ((ScalableStructure) copy).scaleStructure(scale);
+            ((ScalableStructure) copy).scaleStructure(scale*stype);
             list.add(copy);
         }
         return List.copyOf(list); // immutable

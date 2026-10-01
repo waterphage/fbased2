@@ -20,6 +20,7 @@ public interface FbasedPlacers extends PlacementModifierType {
     PlacementModifierType<RandomH> FBASED_A8 = register( "random", RandomH.MODIFIER_CODEC);
     PlacementModifierType<Shadow> FBASED_A9 = register( "light", Shadow.MODIFIER_CODEC);
     PlacementModifierType<Glacier> FBASED_A10 = register( "glacier", Glacier.MODIFIER_CODEC);
+    PlacementModifierType<BiomeYT> FBASED_A11 = register( "mod", BiomeYT.MODIFIER_CODEC);
     private static <P extends PlacementModifier> PlacementModifierType<P> register(String id, Codec<P> codec) {
         return Registry.register(Registries.PLACEMENT_MODIFIER_TYPE, new Identifier(Fbased.MOD_ID,id), () -> codec);
     }

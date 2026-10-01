@@ -1,30 +1,97 @@
 [
   {
-    "processor_type": "minecraft:protected_blocks",
-    "value": "#fbased:open2"
-  },
-  {
     "processor_type": "fbased:geo",
     "types": {
       "minecraft:orange_concrete": [
-        "fbased:mica_raw"
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+
+        "fbased:yellow_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw"
       ],
       "minecraft:lime_concrete": [
-        "fbased:microcline_raw"
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+
+        "fbased:yellow_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+
+        "fbased:yellow_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+
+        "fbased:yellow_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+
+        "fbased:yellow_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+        "fbased:lime_foggy_gem_raw",
+
+        "fbased:yellow_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw"
       ]
     }
-  },
-  {
-    "processor_type": "fbased:rad",
-    "modes": [1,2,5],
-    "amp": [0.5,1.0,1.0],
-    "types": [
-      "fbased:green_dirty_gem_raw",
-      "fbased:green_dirty_gem_raw",
-      "fbased:lime_dirty_gem_raw",
-      "fbased:lime_dirty_gem_raw",
-      "fbased:white_dirty_gem_raw",
-      "fbased:cyan_dirty_gem_raw"
-    ]
   }
 ]
