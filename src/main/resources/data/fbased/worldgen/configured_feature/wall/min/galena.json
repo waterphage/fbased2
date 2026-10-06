@@ -1,0 +1,55 @@
+{
+  "type": "fbased:fossil_s",
+  "config": {
+    "str": [
+      "fbased:cube_1_1",
+      "fbased:cube_1_2",
+      "fbased:cube_1_3",
+      "fbased:cube_1_4",
+      "fbased:cube_1_5",
+      "fbased:cube_1_6",
+      "fbased:cube_1_7",
+
+      "fbased:acub_1_1",
+      "fbased:acub_1_2",
+      "fbased:acub_1_3",
+      "fbased:acub_1_4",
+      "fbased:acub_1_5",
+      "fbased:acub_1_6",
+      "fbased:acub_1_7",
+
+      "fbased:disk_6_1",
+      "fbased:disk_6_2",
+      "fbased:disk_6_3",
+      "fbased:disk_6_4",
+      "fbased:disk_6_5",
+      "fbased:disk_6_6",
+      "fbased:disk_6_7",
+
+      "fbased:crst_6_1",
+      "fbased:crst_6_2",
+      "fbased:crst_6_3",
+      "fbased:crst_6_4",
+      "fbased:crst_6_5",
+      "fbased:crst_6_6",
+      "fbased:crst_6_7"
+    ],
+    "proc": [
+      "fbased:min/galena"
+    ],
+    "scales": [
+      0.05,
+      0.154,
+      0.368,
+      0.687,
+      1.0
+    ],
+    "weights": [
+      0.72,
+      0.86,
+      0.92,
+      0.98,
+      1.0
+    ]
+  }
+}

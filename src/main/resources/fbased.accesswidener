@@ -1,5 +1,7 @@
 accessWidener v2 named
 
+accessible field net/minecraft/world/gen/surfacebuilder/MaterialRules$MaterialRuleContext posToBiome Ljava/util/function/Function;
+
 accessible method net/minecraft/world/chunk/ChunkStatus register (Ljava/lang/String;Lnet/minecraft/world/chunk/ChunkStatus;ILjava/util/EnumSet;Lnet/minecraft/world/chunk/ChunkStatus$ChunkType;Lnet/minecraft/world/chunk/ChunkStatus$SimpleGenerationTask;)Lnet/minecraft/world/chunk/ChunkStatus;
 accessible method net/minecraft/world/chunk/ChunkStatus register (Ljava/lang/String;Lnet/minecraft/world/chunk/ChunkStatus;IZLjava/util/EnumSet;Lnet/minecraft/world/chunk/ChunkStatus$ChunkType;Lnet/minecraft/world/chunk/ChunkStatus$GenerationTask;Lnet/minecraft/world/chunk/ChunkStatus$LoadTask;)Lnet/minecraft/world/chunk/ChunkStatus;
 

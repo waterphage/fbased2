@@ -1,0 +1,25 @@
+[
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:mica_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:mica_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:mica_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:mica_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:mica_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:mica_raw"
+      ]
+    }
+  }
+]

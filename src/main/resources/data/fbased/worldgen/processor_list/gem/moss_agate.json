@@ -28,18 +28,18 @@
         "fbased:white_dirty_gem_raw",
         "fbased:white_dirty_gem_raw",
         "fbased:green_dirty_gem_raw",
-        "fbssed:green_quartzite_raw"
+        "fbased:green_quartzite_raw"
       ],
       "minecraft:purple_concrete": [
         "fbased:white_dirty_gem_raw",
         "fbased:green_dirty_gem_raw",
         "fbased:green_dirty_gem_raw",
-        "fbssed:green_quartzite_raw"
+        "fbased:green_quartzite_raw"
       ],
       "minecraft:pink_concrete": [
         "fbased:green_dirty_gem_raw",
-        "fbssed:green_quartzite_raw",
-        "fbssed:green_quartzite_raw"
+        "fbased:green_quartzite_raw",
+        "fbased:green_quartzite_raw"
       ]
     }
   }

@@ -1,0 +1,24 @@
+{
+  "feature": {
+    "type": "fbased:mul",
+    "config": {
+      "features": [
+        {
+          "feature": "fbased:wall/min/magma2",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.5
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/min/magma",
+          "placement": [
+          ]
+        }
+      ]
+    }
+  },
+  "placement": []
+}

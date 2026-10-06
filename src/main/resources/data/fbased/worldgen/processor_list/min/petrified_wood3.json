@@ -1,0 +1,52 @@
+[
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:petrified_wood_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:petrified_wood_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:petrified_wood_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:green_foggy_gem_raw",
+	"fbased:blue_foggy_gem_raw",
+	"fbased:red_foggy_gem_raw",
+	"fbased:cyan_foggy_gem_raw",
+	"fbased:magenta_foggy_gem_raw",
+	"fbased:lime_foggy_gem_raw",
+	"fbased:yellow_foggy_gem_raw",
+	"fbased:light_blue_foggy_gem_raw",
+	"fbased:pink_foggy_gem_raw",
+	"fbased:white_foggy_gem_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:green_foggy_gem_raw",
+	"fbased:blue_foggy_gem_raw",
+	"fbased:red_foggy_gem_raw",
+	"fbased:cyan_foggy_gem_raw",
+	"fbased:magenta_foggy_gem_raw",
+	"fbased:lime_foggy_gem_raw",
+	"fbased:yellow_foggy_gem_raw",
+	"fbased:light_blue_foggy_gem_raw",
+	"fbased:pink_foggy_gem_raw",
+	"fbased:white_foggy_gem_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:green_foggy_gem_raw",
+	"fbased:blue_foggy_gem_raw",
+	"fbased:red_foggy_gem_raw",
+	"fbased:cyan_foggy_gem_raw",
+	"fbased:magenta_foggy_gem_raw",
+	"fbased:lime_foggy_gem_raw",
+	"fbased:yellow_foggy_gem_raw",
+	"fbased:light_blue_foggy_gem_raw",
+	"fbased:pink_foggy_gem_raw",
+	"fbased:white_foggy_gem_raw"
+      ]
+    }
+  }
+]

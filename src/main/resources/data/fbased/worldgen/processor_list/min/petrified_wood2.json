@@ -1,0 +1,34 @@
+[
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:petrified_wood_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:petrified_wood_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:petrified_wood_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:brown_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw",
+        "fbased:yellow_dirty_gem_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:brown_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw",
+        "fbased:yellow_dirty_gem_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:brown_dirty_gem_raw",
+        "fbased:brown_dirty_gem_raw",
+        "fbased:orange_dirty_gem_raw",
+        "fbased:yellow_dirty_gem_raw"
+      ]
+    }
+  }
+]

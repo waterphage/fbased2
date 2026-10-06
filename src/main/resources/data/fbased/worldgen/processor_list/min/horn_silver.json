@@ -1,0 +1,25 @@
+[
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:gray_dirty_gem_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:horn_silver_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:horn_silver_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:horn_silver_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:horn_silver_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:horn_silver_raw"
+      ]
+    }
+  }
+]

@@ -9,8 +9,8 @@
 		"WorldChunkMixin",
 		"ChunkSerializerMixin",
 		"StructureTemplateMixin",
-		"ChunkStatusMixin"
-
+		"ChunkStatusMixin",
+		"BlockColorsMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

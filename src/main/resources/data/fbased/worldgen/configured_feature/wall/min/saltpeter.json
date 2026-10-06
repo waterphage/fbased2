@@ -1,0 +1,55 @@
+{
+  "type": "fbased:fossil_s",
+  "config": {
+    "str": [
+      "fbased:pod_1_1",
+      "fbased:pod_1_2",
+      "fbased:pod_1_3",
+      "fbased:pod_1_4",
+      "fbased:pod_1_5",
+      "fbased:pod_1_6",
+      "fbased:pod_1_7",
+
+      "fbased:pllr_1_1",
+      "fbased:pllr_1_2",
+      "fbased:pllr_1_3",
+      "fbased:pllr_1_4",
+      "fbased:pllr_1_5",
+      "fbased:pllr_1_6",
+      "fbased:pllr_1_7",
+
+      "fbased:ring_1_1",
+      "fbased:ring_1_2",
+      "fbased:ring_1_3",
+      "fbased:ring_1_4",
+      "fbased:ring_1_5",
+      "fbased:ring_1_6",
+      "fbased:ring_1_7",
+
+      "fbased:ring_2_1",
+      "fbased:ring_2_2",
+      "fbased:ring_2_3",
+      "fbased:ring_2_4",
+      "fbased:ring_2_5",
+      "fbased:ring_2_6",
+      "fbased:ring_2_7"
+    ],
+    "proc": [
+      "fbased:min/saltpeter"
+    ],
+    "scales": [
+      0.05,
+      0.154,
+      0.368,
+      0.687,
+      1.0
+    ],
+    "weights": [
+      0.72,
+      0.86,
+      0.92,
+      0.98,
+      1.0
+    ]
+  }
+}

@@ -4,64 +4,113 @@
     "config": {
       "features": [
         {
-          "feature": {
-            "type": "fbased:fossil_s",
-            "config": {
-              "str": [
-                "fbased:acub_1_1",
-                "fbased:acub_1_2",
-                "fbased:acub_1_3",
-                "fbased:acub_1_4",
-                "fbased:acub_1_5",
-                "fbased:acub_1_6",
-                "fbased:acub_1_7",
-				
-		"fbased:cube_1_1",
-                "fbased:cube_1_2",
-                "fbased:cube_1_3",
-                "fbased:cube_1_4",
-                "fbased:cube_1_5",
-                "fbased:cube_1_6",
-                "fbased:cube_1_7",
-				
-		"fbased:dode_1_1",
-                "fbased:dode_1_2",
-                "fbased:dode_1_3",
-                "fbased:dode_1_4",
-                "fbased:dode_1_5",
-                "fbased:dode_1_6",
-                "fbased:dode_1_7",
-				
-		"fbased:icos_1_1",
-                "fbased:icos_1_2",
-                "fbased:icos_1_3",
-                "fbased:icos_1_4",
-                "fbased:icos_1_5",
-                "fbased:icos_1_6",
-                "fbased:icos_1_7",
-				
-		"fbased:tthr_1_1",
-                "fbased:tthr_1_2",
-                "fbased:tthr_1_3",
-                "fbased:tthr_1_4",
-                "fbased:tthr_1_5",
-                "fbased:tthr_1_6",
-                "fbased:tthr_1_7"
-              ],
-              "proc": [
-                "fbased:rock/red_obsidian"
-              ],
-              "scales": [0.05, 0.154, 0.368, 0.687, 1.0],
-              "weights": [0.72,0.86,0.92,0.98,1.0]
-            }
-          },
+          "feature": "fbased:wall/gem/cherry_opal",
           "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.032679738562091505
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/wood_opal",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.033783783783783786
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/jasper_opal",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.03496503496503497
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/quartz_rose",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.09057971014492754
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/red_zircon",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.398406374501992
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/fire_opal",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.052980132450331126
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/brown_zircon",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.6993006993006993
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/amethyst",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.5813953488372093
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/opal_pfire",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.4444444444444444
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/opal_redflash",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.8
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/opal_claro",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 1.0
+            }
           ]
         }
       ]
     }
   },
-  "placement": [
-  ]
+  "placement": []
 }
-

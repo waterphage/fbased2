@@ -1,0 +1,15 @@
+[
+  {
+    "processor_type": "minecraft:protected_blocks",
+    "value": "#fbased:natural_rock"
+  },
+  {
+    "processor_type": "fbased:rad",
+    "modes": [3],
+    "amp": [1.0],
+    "types": [
+      "fbased:lime_gem_raw",
+      "fbased:green_gem_raw"
+    ]
+  }
+]

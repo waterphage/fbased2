@@ -1,6 +1,8 @@
 package com.waterphage.mixin;
 
 import com.waterphage.meta.ScalableStructure;
+import it.unimi.dsi.fastutil.longs.Long2IntMap;
+import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import net.minecraft.structure.StructureTemplate;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -9,7 +11,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mixin(StructureTemplate.class)
 public class StructureTemplateMixin implements ScalableStructure {
@@ -23,17 +27,24 @@ public class StructureTemplateMixin implements ScalableStructure {
         Vec3i originalSize = self.getSize();
 
         for (StructureTemplate.PalettedBlockInfoList list : self.blockInfoLists) {
-            List<StructureTemplate.StructureBlockInfo> newInfos = new ArrayList<>();
+            Map<Long,List<Integer>> check= new HashMap<>();
+            List<StructureTemplate.StructureBlockInfo> total = new ArrayList<>();
             for (StructureTemplate.StructureBlockInfo info : list.getAll()) {
-                if(Math.random()>scale){continue;}
-                // смещаем блоки к центру, масштабируем и обратно
                 Vec3i pos = info.pos();
                 int x = Math.round(pos.getX() * scale);
                 int y = Math.round(pos.getY() * scale);
                 int z = Math.round(pos.getZ() * scale);
-                newInfos.add(new StructureTemplate.StructureBlockInfo(new BlockPos(x, y, z), info.state(), info.nbt()));
+                total.add(new StructureTemplate.StructureBlockInfo(new BlockPos(x, y, z), info.state(), info.nbt()));
+                Long key=BlockPos.asLong(x,y,z);
+                List<Integer> cont=check.computeIfAbsent(key, k -> new ArrayList<>());
+                cont.add(total.size()-1);check.put(key,cont);
             }
             list.getAll().clear();
+            List<StructureTemplate.StructureBlockInfo> newInfos = new ArrayList<>();
+            for (Long p:check.keySet()){
+                List<Integer>pos=check.get(p);
+                newInfos.add(total.get(pos.get((int)(Math.random() * pos.size()))));
+            }
             list.getAll().addAll(newInfos);
         }
 

@@ -6,9 +6,11 @@ import com.waterphage.Fbased;
 import com.waterphage.block.models.TechBlock;
 import com.waterphage.block.models.TechBlockEntity;
 import com.waterphage.meta.ChunkExtension;
+import net.minecraft.registry.entry.RegistryEntry;
 
 import com.waterphage.meta.FBXZMap;
 import com.waterphage.meta.IntPair;
+import com.waterphage.worldgen.feature.Surface;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import net.minecraft.block.Block;
@@ -24,6 +26,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -33,8 +36,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
+import net.minecraft.util.math.random.ChunkRandom;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ProtoChunk;
@@ -184,9 +190,20 @@ public class ModRules extends MaterialRules {
     public static ModRules.GeologyD condition(NoiseType idL, NoiseType idO, Integer yT, List<String> idD,
                                               List<Float> scaleOffsets,
                                               List<Integer> matrix, List<List<Integer>> goal,
-                                              List<Float> bedrockParams, List<BlockStateProvider> rockTypes) {
+                                              List<Float> bedrockParams, List<GeologyD.RockFill> rockTypes) {
         return new ModRules.GeologyD(idL, idO, yT, idD, scaleOffsets, matrix, goal, bedrockParams, rockTypes);
     }
+    public static final TagKey<Biome> FB_HOT =
+            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "hot"));
+
+    public static final TagKey<Biome> FB_COLD =
+            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "cold"));
+
+    public static final TagKey<Biome> FB_DRY =
+            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "dry"));
+
+    public static final TagKey<Biome> FB_WET =
+            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "wet"));
 
     // Enum to map different noise types to their respective functions in the NoiseRouter
     private enum NoiseType {
@@ -271,9 +288,26 @@ public class ModRules extends MaterialRules {
     // Main record defining the GeologyD terrain rule
     record GeologyD(NoiseType idL, NoiseType idO, Integer yT, List<String> idD, List<Float> scaleOffsets,
                     List<Integer> matrix, List<List<Integer>> goal,
-                    List<Float> bedrockParams, List<BlockStateProvider> rockTypes) implements MaterialRules.MaterialRule {
-
+                    List<Float> bedrockParams, List<RockFill> rockTypes) implements MaterialRules.MaterialRule {
         // Codec for serializing and deserializing the rule
+        public record RockMod(BlockState main, Optional<BlockState> hot, Optional<BlockState> cold,Optional<BlockState> dry, Optional<BlockState> wet) {}
+        public static final Codec<RockMod> FB_ROCK_MOD_CODEC = RecordCodecBuilder.create(instance ->
+                instance.group(
+                        BlockState.CODEC.fieldOf("m").forGetter(RockMod::main),
+                        BlockState.CODEC.optionalFieldOf("h").forGetter(RockMod::hot),
+                        BlockState.CODEC.optionalFieldOf("c").forGetter(RockMod::cold),
+                        BlockState.CODEC.optionalFieldOf("w").forGetter(RockMod::wet),
+                        BlockState.CODEC.optionalFieldOf("d").forGetter(RockMod::dry)
+                ).apply(instance, RockMod::new)
+        );
+        public record RockFill(RockMod rock,Optional<String> type,Optional<RockMod> min){}
+        public static final Codec<RockFill> FB_ROCK_FILL_CODEC = RecordCodecBuilder.create(instance ->
+                instance.group(
+                        FB_ROCK_MOD_CODEC.fieldOf("rock").forGetter(RockFill::rock),
+                        Codec.STRING.optionalFieldOf("type").forGetter(RockFill::type),
+                        FB_ROCK_MOD_CODEC.optionalFieldOf("min").forGetter(RockFill::min)
+                ).apply(instance, RockFill::new)
+        );
         static final CodecHolder<ModRules.GeologyD> CODEC = CodecHolder.of(
                 RecordCodecBuilder.mapCodec(
                         instance -> instance.group(
@@ -285,7 +319,7 @@ public class ModRules extends MaterialRules {
                                         Codec.INT.listOf().fieldOf("matrix").forGetter(ModRules.GeologyD::matrix),
                                         Codec.INT.listOf().listOf().fieldOf("goal").forGetter(ModRules.GeologyD::goal),
                                         Codec.FLOAT.listOf().fieldOf("bedrock").forGetter(ModRules.GeologyD::bedrockParams),
-                                        BlockStateProvider.TYPE_CODEC.listOf().fieldOf("types").forGetter(ModRules.GeologyD::rockTypes)
+                                        FB_ROCK_FILL_CODEC.listOf().fieldOf("types").forGetter(ModRules.GeologyD::rockTypes)
                                 )
                                 .apply(instance, ModRules.GeologyD::new)
                 )
@@ -299,7 +333,6 @@ public class ModRules extends MaterialRules {
         // Main method for applying the terrain rule
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext context) {
             Chunk chunk = context.chunk;
-
             HeightContext height = context.heightContext;
             NoiseConfig noise = context.noiseConfig;
             if (idD.size() < 2) {
@@ -349,8 +382,61 @@ public class ModRules extends MaterialRules {
                 my = (int) MathHelper.clamp(distY * bedrockHeight + (1.0 - distY) * my, 0, matrixY - 1);
 
                 BlockPos pos = new BlockPos(x, y, z);
-                return rockTypes.get(mx + my * matrixX).get(backup.random, pos);
+                double loc=distOffset;
+                boolean r=((hash(x,y,z) & 0xFFFFFFFFL) / (double) 0x100000000L)>0.5D;
+                //return Registries.BLOCK.get(new Identifier("minecraft:stone")).getDefaultState();
+                return fillRock(context.posToBiome.apply(pos),loc,r,rockTypes.get(mx + my * matrixX));
             };
+        }
+        private static long hash(int x, int y, int z) {
+            long h = x * 374761393L;
+            h += y * 668265263L;
+            h += z * 2147483647L;
+
+            h = (h ^ (h >> 13)) * 1274126177L;
+            return h ^ (h >> 16);
+        }
+        private BlockState fillRock(
+                RegistryEntry<Biome> biome,
+                double key,
+                boolean r,
+                RockFill fill
+        ) {
+            switch (fill.type.orElse("")) {
+                case "c":
+                    if (key > 0) {
+                        return modRock(biome, fill.min().get());
+                    }
+                    return modRock(biome, fill.rock());
+
+                case "s":
+                    if (r) {
+                        return modRock(biome, fill.min().get());
+                    }
+                    return modRock(biome, fill.rock());
+
+                default:
+                    return modRock(biome, fill.rock());
+            }
+        }
+        private BlockState modRock(RegistryEntry<Biome> biome, RockMod fill) {
+            if (biome.isIn(FB_HOT) && fill.hot.isPresent()) {
+                return fill.hot.get();
+            }
+
+            if (biome.isIn(FB_WET) && fill.wet.isPresent()) {
+                return fill.wet.get();
+            }
+
+            if (biome.isIn(FB_COLD) && fill.cold.isPresent()) {
+                return fill.cold.get();
+            }
+
+            if (biome.isIn(FB_DRY) && fill.dry.isPresent()) {
+                return fill.dry.get();
+            }
+
+            return fill.main;
         }
         private double offset(double x, double y, List<Float> map){
             double val=0D;double all=0D;

@@ -1,0 +1,26 @@
+[
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:light_blue_dirty_gem_raw",
+        "fbased:light_gray_dirty_gem_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:cobaltite_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:cobaltite_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:cobaltite_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:cobaltite_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:cobaltite_raw"
+      ]
+    }
+  }
+]

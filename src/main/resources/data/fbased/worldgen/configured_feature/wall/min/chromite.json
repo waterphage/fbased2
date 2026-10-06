@@ -1,0 +1,103 @@
+{
+  "type": "fbased:fossil_s",
+  "config": {
+    "str": [
+      "fbased:icos_1_1",
+      "fbased:icos_1_2",
+      "fbased:icos_1_3",
+      "fbased:icos_1_4",
+      "fbased:icos_1_5",
+      "fbased:icos_1_6",
+      "fbased:icos_1_7",
+
+      "fbased:dode_1_1",
+      "fbased:dode_1_2",
+      "fbased:dode_1_3",
+      "fbased:dode_1_4",
+      "fbased:dode_1_5",
+      "fbased:dode_1_6",
+      "fbased:dode_1_7",
+
+      "fbased:disc_1_1",
+      "fbased:disc_1_2",
+      "fbased:disc_1_3",
+      "fbased:disc_1_4",
+      "fbased:disc_1_5",
+      "fbased:disc_1_6",
+      "fbased:disc_1_7",
+
+      "fbased:disc_2_1",
+      "fbased:disc_2_2",
+      "fbased:disc_2_3",
+      "fbased:disc_2_4",
+      "fbased:disc_2_5",
+      "fbased:disc_2_6",
+      "fbased:disc_2_7",
+
+      "fbased:disc_3_1",
+      "fbased:disc_3_2",
+      "fbased:disc_3_3",
+      "fbased:disc_3_4",
+      "fbased:disc_3_5",
+      "fbased:disc_3_6",
+      "fbased:disc_3_7",
+
+      "fbased:disc_4_1",
+      "fbased:disc_4_2",
+      "fbased:disc_4_3",
+      "fbased:disc_4_4",
+      "fbased:disc_4_5",
+      "fbased:disc_4_6",
+      "fbased:disc_4_7",
+
+      "fbased:disc_5_1",
+      "fbased:disc_5_2",
+      "fbased:disc_5_3",
+      "fbased:disc_5_4",
+      "fbased:disc_5_5",
+      "fbased:disc_5_6",
+      "fbased:disc_5_7",
+
+      "fbased:disc_6_1",
+      "fbased:disc_6_2",
+      "fbased:disc_6_3",
+      "fbased:disc_6_4",
+      "fbased:disc_6_5",
+      "fbased:disc_6_6",
+      "fbased:disc_6_7",
+
+      "fbased:disc_7_1",
+      "fbased:disc_7_2",
+      "fbased:disc_7_3",
+      "fbased:disc_7_4",
+      "fbased:disc_7_5",
+      "fbased:disc_7_6",
+      "fbased:disc_7_7",
+
+      "fbased:disc_8_1",
+      "fbased:disc_8_2",
+      "fbased:disc_8_3",
+      "fbased:disc_8_4",
+      "fbased:disc_8_5",
+      "fbased:disc_8_6",
+      "fbased:disc_8_7"
+    ],
+    "proc": [
+      "fbased:min/chromite"
+    ],
+    "scales": [
+      0.05,
+      0.154,
+      0.368,
+      0.687,
+      1.0
+    ],
+    "weights": [
+      0.72,
+      0.86,
+      0.92,
+      0.98,
+      1.0
+    ]
+  }
+}

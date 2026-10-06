@@ -1,0 +1,39 @@
+{
+  "type": "fbased:fossil_s",
+  "config": {
+    "str": [
+      "fbased:tthr_1_1",
+      "fbased:tthr_1_2",
+      "fbased:tthr_1_3",
+      "fbased:tthr_1_4",
+      "fbased:tthr_1_5",
+      "fbased:tthr_1_6",
+      "fbased:tthr_1_7",
+
+      "fbased:disc_5_1",
+      "fbased:disc_5_2",
+      "fbased:disc_5_3",
+      "fbased:disc_5_4",
+      "fbased:disc_5_5",
+      "fbased:disc_5_6",
+      "fbased:disc_5_7"
+    ],
+    "proc": [
+      "fbased:min/magnetite"
+    ],
+    "scales": [
+      0.05,
+      0.154,
+      0.368,
+      0.687,
+      1.0
+    ],
+    "weights": [
+      0.72,
+      0.86,
+      0.92,
+      0.98,
+      1.0
+    ]
+  }
+}

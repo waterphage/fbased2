@@ -19,7 +19,7 @@ public class RegDump {
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "test2"), new TestF2(TestF2.TestF2Config.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "mul"), new Order(Multiple.MultipleConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "add"), new Multiple(Multiple.MultipleConfig.CODEC));
-        Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "biome"), new Biome(Biome.BiomeConfig.CODEC));
+        Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "biome"), new BiomeF(BiomeF.BiomeConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "disk"), new Disk(Disk.DiskConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "fossil"), new Fossil(Fossil.FossilConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "block"), new Ore(Ore.OreConfig.CODEC));

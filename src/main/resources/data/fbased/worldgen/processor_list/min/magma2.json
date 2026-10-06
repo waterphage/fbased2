@@ -1,0 +1,33 @@
+[
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:black_basalt_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:black_basalt_raw",
+        "fbased:black_basalt_raw",
+        "minecraft:magma_block"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:black_basalt_raw",
+        "minecraft:magma_block"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:black_basalt_raw",
+        "minecraft:magma_block",
+        "minecraft:magma_block"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:black_basalt_raw",
+        "minecraft:magma_block",
+        "minecraft:magma_block",
+        "minecraft:magma_block"
+      ],
+      "minecraft:pink_concrete": [
+        "minecraft:magma_block"
+      ]
+    }
+  }
+]

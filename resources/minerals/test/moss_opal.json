@@ -1,0 +1,16 @@
+[
+  {
+    "processor_type": "fbased:rad",
+    "modes": [1,2,5],
+    "amp": [0.5,1.0,1.0],
+    "types": [
+      "fbased:green_dirty_gem_raw",
+      "fbased:lime_dirty_gem_raw",
+      "fbased:cyan_dirty_gem_raw",
+      "fbased:white_dirty_gem_raw",
+      "fbased:green_dirty_gem_raw",
+      "fbased:white_dirty_gem_raw",
+      "fbased:green_dirty_gem_raw"
+    ]
+  }
+]

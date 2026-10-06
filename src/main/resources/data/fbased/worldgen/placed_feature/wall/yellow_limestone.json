@@ -4,64 +4,259 @@
     "config": {
       "features": [
         {
-          "feature": {
-            "type": "fbased:fossil_s",
-            "config": {
-              "str": [
-                "fbased:acub_1_1",
-                "fbased:acub_1_2",
-                "fbased:acub_1_3",
-                "fbased:acub_1_4",
-                "fbased:acub_1_5",
-                "fbased:acub_1_6",
-                "fbased:acub_1_7",
-				
-		"fbased:cube_1_1",
-                "fbased:cube_1_2",
-                "fbased:cube_1_3",
-                "fbased:cube_1_4",
-                "fbased:cube_1_5",
-                "fbased:cube_1_6",
-                "fbased:cube_1_7",
-				
-		"fbased:dode_1_1",
-                "fbased:dode_1_2",
-                "fbased:dode_1_3",
-                "fbased:dode_1_4",
-                "fbased:dode_1_5",
-                "fbased:dode_1_6",
-                "fbased:dode_1_7",
-				
-		"fbased:icos_1_1",
-                "fbased:icos_1_2",
-                "fbased:icos_1_3",
-                "fbased:icos_1_4",
-                "fbased:icos_1_5",
-                "fbased:icos_1_6",
-                "fbased:icos_1_7",
-				
-		"fbased:tthr_1_1",
-                "fbased:tthr_1_2",
-                "fbased:tthr_1_3",
-                "fbased:tthr_1_4",
-                "fbased:tthr_1_5",
-                "fbased:tthr_1_6",
-                "fbased:tthr_1_7"
-              ],
-              "proc": [
-                "fbased:rock/yellow_limestone"
-              ],
-              "scales": [0.05, 0.154, 0.368, 0.687, 1.0],
-              "weights": [0.72,0.86,0.92,0.98,1.0]
-            }
-          },
+          "feature": "fbased:wall/gem/lace_agate",
           "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.0037174721189591076
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/prase",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.07462686567164178
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/prase_opal",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.008064516129032258
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/bloodstone",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.08130081300813008
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/moss_opal",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.008849557522123894
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/variscite",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.008928571428571428
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/chrysoprase",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.09009009009009009
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/chrysocolla",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.09900990099009901
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/tube_agate",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.02197802197802198
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/fire_agate",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.02247191011235955
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/picture_jasper",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.11494252873563218
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/amber_opal",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.012987012987012988
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/gold_opal",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.013157894736842105
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/yellow_jasper",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.13333333333333333
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/tigereye",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.15384615384615385
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/tiger_iron",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.18181818181818182
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/resin_opal",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.022222222222222223
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/aventurine",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.22727272727272727
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/turquoise",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.29411764705882354
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/quartz_rose",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.10416666666666667
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/indigo_tourmaline",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.11627906976744186
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/green_tourmaline",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.5263157894736842
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/pink_tourmaline",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.2777777777777778
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/amethyst",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.38461538461538464
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/opal_claro",
+          "placement": [
+            {"type": "fbased:biome", "itag": ["fbased:hot", "fbased:dry"]},
+            {
+              "type": "fbased:random_c",
+              "pass": 0.05
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/sapphire",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 0.6578947368421053
+            }
+          ]
+        },
+        {
+          "feature": "fbased:wall/gem/sapphire_star",
+          "placement": [
+            {
+              "type": "fbased:random_c",
+              "pass": 1.0
+            }
           ]
         }
       ]
     }
   },
-  "placement": [
-  ]
+  "placement": []
 }
-

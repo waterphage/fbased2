@@ -1,0 +1,27 @@
+[
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:orange_foggy_gem_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:orange_foggy_gem_raw",
+        "fbased:yellow_foggy_gem_raw",
+        "fbased:orpiment_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:orpiment_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:orpiment_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:orpiment_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:orpiment_raw"
+      ]
+    }
+  }
+]

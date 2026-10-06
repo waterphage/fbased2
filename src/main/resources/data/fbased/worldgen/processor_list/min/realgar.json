@@ -1,0 +1,29 @@
+[
+  {
+    "processor_type": "fbased:geo",
+    "types": {
+      "minecraft:orange_concrete": [
+        "fbased:red_foggy_gem_raw"
+      ],
+      "minecraft:lime_concrete": [
+        "fbased:realgar_raw",
+        "fbased:realgar_raw",
+        "fbased:realgar_raw",
+        "fbased:red_foggy_gem_raw",
+        "fbased:orange_foggy_gem_raw"
+      ],
+      "minecraft:light_blue_concrete": [
+        "fbased:realgar_raw"
+      ],
+      "minecraft:blue_concrete": [
+        "fbased:realgar_raw"
+      ],
+      "minecraft:purple_concrete": [
+        "fbased:realgar_raw"
+      ],
+      "minecraft:pink_concrete": [
+        "fbased:realgar_raw"
+      ]
+    }
+  }
+]

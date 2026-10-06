@@ -1,0 +1,52 @@
+{
+  "type": "fbased:fossil_s",
+  "config": {
+    "str": [
+      "fbased:crst_5_1",
+      "fbased:crst_5_2",
+      "fbased:crst_5_3",
+      "fbased:crst_5_4",
+      "fbased:crst_5_5",
+      "fbased:crst_5_6",
+      "fbased:crst_5_7",
+      "fbased:crst_6_1",
+      "fbased:crst_6_2",
+      "fbased:crst_6_3",
+      "fbased:crst_6_4",
+      "fbased:crst_6_5",
+      "fbased:crst_6_6",
+      "fbased:crst_6_7",
+      "fbased:crst_7_1",
+      "fbased:crst_7_2",
+      "fbased:crst_7_3",
+      "fbased:crst_7_4",
+      "fbased:crst_7_5",
+      "fbased:crst_7_6",
+      "fbased:crst_7_7",
+      "fbased:crst_8_1",
+      "fbased:crst_8_2",
+      "fbased:crst_8_3",
+      "fbased:crst_8_4",
+      "fbased:crst_8_5",
+      "fbased:crst_8_6",
+      "fbased:crst_8_7"
+    ],
+    "proc": [
+      "fbased:gem/bloodstone"
+    ],
+    "scales": [
+      0.05,
+      0.154,
+      0.368,
+      0.687,
+      1.0
+    ],
+    "weights": [
+      0.72,
+      0.86,
+      0.92,
+      0.98,
+      1.0
+    ]
+  }
+}

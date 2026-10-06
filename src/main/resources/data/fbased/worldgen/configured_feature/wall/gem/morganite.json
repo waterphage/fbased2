@@ -1,0 +1,38 @@
+{
+  "type": "fbased:fossil_s",
+  "config": {
+    "str": [
+      "fbased:disc_8_1",
+      "fbased:disc_8_2",
+      "fbased:disc_8_3",
+      "fbased:disc_8_4",
+      "fbased:disc_8_5",
+      "fbased:disc_8_6",
+      "fbased:disc_8_7",
+      "fbased:pllr_2_1",
+      "fbased:pllr_2_2",
+      "fbased:pllr_2_3",
+      "fbased:pllr_2_4",
+      "fbased:pllr_2_5",
+      "fbased:pllr_2_6",
+      "fbased:pllr_2_7"
+    ],
+    "proc": [
+      "fbased:gem/morganite"
+    ],
+    "scales": [
+      0.05,
+      0.154,
+      0.368,
+      0.687,
+      1.0
+    ],
+    "weights": [
+      0.72,
+      0.86,
+      0.92,
+      0.98,
+      1.0
+    ]
+  }
+}

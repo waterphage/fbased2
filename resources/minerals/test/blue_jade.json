@@ -1,0 +1,20 @@
+[
+  {
+    "processor_type": "minecraft:protected_blocks",
+    "value": "#fbased:natural_rock"
+  },
+  {
+    "processor_type": "fbased:rad",
+    "modes": [3],
+    "amp": [8.0],
+    "types": [
+      "fbased:light_blue_dirty_gem_raw",
+      "fbased:light_blue_foggy_gem_raw",
+      "fbased:light_blue_dirty_gem_raw",
+      "fbased:light_blue_foggy_gem_raw",
+      "fbased:blue_foggy_gem_raw",
+      "fbased:blue_dirty_gem_raw",
+      "fbased:light_gray_dirty_gem_raw"
+    ]
+  }
+]

@@ -11,7 +11,7 @@ import net.minecraft.world.gen.placementmodifier.PlacementModifierType;
 public interface FbasedPlacers extends PlacementModifierType {
     PlacementModifierType<GeoPlacerSurf> FBASED_A0 = register( "tex_s", GeoPlacerSurf.MODIFIER_CODEC);
     PlacementModifierType<GeoPlacer> FBASED_A1 = register( "tex_v", GeoPlacer.MODIFIER_CODEC);
-    PlacementModifierType<BiomeY> FBASED_A2 = register( "biome_y", BiomeY.MODIFIER_CODEC);
+    PlacementModifierType<BiomeY> FBASED_A2 = register( "biome", BiomeY.MODIFIER_CODEC);
     PlacementModifierType<Collumn> FBASED_A3 = register( "collumn", Collumn.MODIFIER_CODEC);
     PlacementModifierType<Layer> FBASED_A4 = register( "layer", Layer.MODIFIER_CODEC);
     PlacementModifierType<CheckAngle> FBASED_A5 = register( "angle_g", CheckAngle.MODIFIER_CODEC);
@@ -21,6 +21,8 @@ public interface FbasedPlacers extends PlacementModifierType {
     PlacementModifierType<Shadow> FBASED_A9 = register( "light", Shadow.MODIFIER_CODEC);
     PlacementModifierType<Glacier> FBASED_A10 = register( "glacier", Glacier.MODIFIER_CODEC);
     PlacementModifierType<BiomeYT> FBASED_A11 = register( "mod", BiomeYT.MODIFIER_CODEC);
+
+    PlacementModifierType<RandomS> FBASED_A12 = register( "random_c", RandomS.MODIFIER_CODEC);
     private static <P extends PlacementModifier> PlacementModifierType<P> register(String id, Codec<P> codec) {
         return Registry.register(Registries.PLACEMENT_MODIFIER_TYPE, new Identifier(Fbased.MOD_ID,id), () -> codec);
     }

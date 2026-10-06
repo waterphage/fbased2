@@ -26,7 +26,8 @@ public class FbGemBlock extends FbBlock{
     @Override
     public boolean isSideInvisible(BlockState state, BlockState adjacent, Direction side) {
         // если сосед — тот же класс, не прятать грань
-        return adjacent.isIn(GEMS);
+        if (adjacent.isIn(GEMS)){return state==adjacent;}
+        return false;
     }
     private int l=0;
     @Override
