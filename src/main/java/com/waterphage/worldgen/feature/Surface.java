@@ -7,6 +7,7 @@ import com.waterphage.Fbased;
 import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.FBNMesh;
 import com.waterphage.meta.FBXZMap;
+import com.waterphage.worldgen.ModRules;
 import it.unimi.dsi.fastutil.ints.*;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
@@ -28,6 +29,8 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.world.gen.noise.NoiseConfig;
+import net.minecraft.world.gen.noise.NoiseRouter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -149,6 +152,10 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         if(context.getWorld().getChunk(context.getOrigin()) instanceof ChunkExtension ext){if (ext.second())return false;}
         SurfCont ctx=new SurfCont(context);
         placer(ctx);// 1 holds all math stores placement positions and their indexes
+
+        ChunkGenerator generator=ctx.w.toServerWorld().getChunkManager().getChunkGenerator();
+
+
         return true;
     }
     // 1 Placement positions calculation

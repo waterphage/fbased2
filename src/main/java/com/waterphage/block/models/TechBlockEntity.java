@@ -1,15 +1,11 @@
 package com.waterphage.block.models;
 
-import com.waterphage.meta.IntPair;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.gen.feature.util.CaveSurface;
 
 import java.util.*;
-
-import java.util.ArrayList;
 
 public class TechBlockEntity extends BlockEntity {
 

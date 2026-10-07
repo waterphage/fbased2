@@ -3,64 +3,37 @@ package com.waterphage.worldgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.waterphage.Fbased;
-import com.waterphage.block.models.TechBlock;
-import com.waterphage.block.models.TechBlockEntity;
 import com.waterphage.meta.ChunkExtension;
+import com.waterphage.meta.Storage;
 import net.minecraft.registry.entry.RegistryEntry;
 
 import com.waterphage.meta.FBXZMap;
-import com.waterphage.meta.IntPair;
-import com.waterphage.worldgen.feature.Surface;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.longs.Long2IntMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BannerBlockEntity;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.ChestBlockEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.dynamic.CodecHolder;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
-import net.minecraft.util.math.random.ChunkRandom;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
-import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ProtoChunk;
-import net.minecraft.world.chunk.WorldChunk;
 import net.minecraft.world.gen.HeightContext;
-import net.minecraft.world.gen.chunk.ChunkNoiseSampler;
-import net.minecraft.world.gen.chunk.NoiseChunkGenerator;
 import net.minecraft.world.gen.densityfunction.DensityFunction;
-import net.minecraft.world.gen.densityfunction.DensityFunctions;
 import net.minecraft.world.gen.noise.NoiseConfig;
 import net.minecraft.world.gen.noise.NoiseRouter;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.surfacebuilder.MaterialRules;
-import org.spongepowered.asm.mixin.injection.struct.InjectorGroupInfo;
 
-import java.io.IOException;
 import java.util.*;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import static com.waterphage.meta.Storage.*;
 import static java.lang.Math.abs;
 
 public class ModRules extends MaterialRules {
@@ -139,12 +112,12 @@ public class ModRules extends MaterialRules {
         }
         public MaterialRules.BlockStateRule apply(MaterialRules.MaterialRuleContext context) {
             Chunk chunk = context.chunk;
+
             ChunkPos chunkPos = chunk.getPos();
             int miny = chunk.getBottomY() + 1;
 
             // Используем временное хранилище в чанке через миксин
             if (!(chunk instanceof ChunkExtension ext)) {return (x, y, z) -> null;}
-
             NoiseRouter router=context.noiseConfig.getNoiseRouter();
             Long2IntMap chunkData = ext.getCustomMap();
             FBXZMap fbxzMap=ext.getXZmap();
@@ -193,75 +166,9 @@ public class ModRules extends MaterialRules {
                                               List<Float> bedrockParams, List<GeologyD.RockFill> rockTypes) {
         return new ModRules.GeologyD(idL, idO, yT, idD, scaleOffsets, matrix, goal, bedrockParams, rockTypes);
     }
-    public static final TagKey<Biome> FB_HOT =
-            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "hot"));
 
-    public static final TagKey<Biome> FB_COLD =
-            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "cold"));
 
-    public static final TagKey<Biome> FB_DRY =
-            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "dry"));
 
-    public static final TagKey<Biome> FB_WET =
-            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "wet"));
-
-    // Enum to map different noise types to their respective functions in the NoiseRouter
-    private enum NoiseType {
-        TEMP {@Override public DensityFunction getNoise(NoiseRouter params) {
-                return params.temperature();
-            }},
-        CONT {@Override public DensityFunction getNoise(NoiseRouter params) {
-                return params.continents();
-            }},
-        WERD {@Override public DensityFunction getNoise(NoiseRouter params) {
-                return params.ridges();
-            }},
-        HUM {@Override public DensityFunction getNoise(NoiseRouter params) {
-                return params.vegetation();
-            }},
-        EROS {@Override public DensityFunction getNoise(NoiseRouter params) {
-                return params.erosion();
-            }},
-        DEPT {@Override public DensityFunction getNoise(NoiseRouter params) {
-                return params.depth();
-            }},
-        INIT {@Override public DensityFunction getNoise(NoiseRouter params) {return params.initialDensityWithoutJaggedness();}},
-        LAVA {@Override public DensityFunction getNoise(NoiseRouter params) {return params.lavaNoise();}},
-        SPRD {@Override public DensityFunction getNoise(NoiseRouter params) {
-                return params.fluidLevelSpreadNoise();
-            }},
-        FLOD {@Override public DensityFunction getNoise(NoiseRouter params) {return params.fluidLevelFloodednessNoise();}},
-        BARR {@Override public DensityFunction getNoise(NoiseRouter params) {return params.barrierNoise();}},
-        VRID {@Override public DensityFunction getNoise(NoiseRouter params) {return params.veinRidged();}},
-        VGAP {@Override public DensityFunction getNoise(NoiseRouter params) {return params.veinGap();}},
-        VTOG {@Override public DensityFunction getNoise(NoiseRouter params) {return params.veinToggle();}},
-        FIN {@Override public DensityFunction getNoise(NoiseRouter params) {return params.finalDensity();}};
-
-        // Abstract method to be implemented by all noise types
-        public abstract DensityFunction getNoise(NoiseRouter params);
-        public static final Codec<NoiseType> CODEC = Codec.STRING.xmap(NoiseType::fromString, Enum::name);
-        // Map a string to its corresponding NoiseType enum value
-        private static NoiseType fromString(String name) {
-            return switch (name.toLowerCase()) {
-                case "temperature" -> NoiseType.TEMP;
-                case "humidity" -> NoiseType.HUM;
-                case "continentalness" -> NoiseType.CONT;
-                case "erosion" -> NoiseType.EROS;
-                case "depth" -> NoiseType.DEPT;
-                case "ridges" -> NoiseType.WERD;
-                case "barrier" -> NoiseType.BARR;
-                case "fluid_level_floodedness" -> NoiseType.FLOD;
-                case "fluid_level_spread" -> NoiseType.SPRD;
-                case "lava" -> NoiseType.LAVA;
-                case "initial_density_without_jaggedness" -> NoiseType.INIT;
-                case "final_density" -> NoiseType.FIN;
-                case "vein_ridged" -> NoiseType.VRID;
-                case "vein_toggle" -> NoiseType.VTOG;
-                case "vein_gap" -> NoiseType.VGAP;
-                default -> throw new IllegalArgumentException("Unknown noise type: " + name);
-            };
-        }
-    }
 
     // Helper class to store and manage intermediate state for block generation
     private static class Backup {
@@ -346,6 +253,8 @@ public class ModRules extends MaterialRules {
             int matrixX = matrix.get(0), matrixY = matrix.get(1);
             float bedrockStart = bedrockParams.get(0), bedrockGradient = bedrockParams.get(1);
             int bedrockBase = bedrockParams.get(2).intValue(), bedrockHeight = bedrockParams.get(3).intValue();
+            NoiseRouter params=noise.getNoiseRouter();
+            if(Storage.params()==null)Storage.write(params);
             Backup backups[][] = new Backup[16][16];
             int xo=chunk.getPos().getStartX(),zo=chunk.getPos().getStartZ();
             for (int x = 0; x < 16; x++) {
@@ -356,8 +265,9 @@ public class ModRules extends MaterialRules {
                         @Override public int blockY() { return yT; }
                         @Override public int blockZ() { return zf; }
                     };
-                    double newDistOs = idO.getNoise(noise.getNoiseRouter()).sample(pos);
-                    double newDistLs = idL.getNoise(noise.getNoiseRouter()).sample(pos);
+
+                    double newDistOs = idO.getNoise(params).sample(pos);
+                    double newDistLs = idL.getNoise(params).sample(pos);
                     List<Integer> newPoints = calculatePoints(goal, matrixX, matrixY, newDistOs, newDistLs);
                     Random r =Random.create(FBXZMap.xzL(x,z));
                     double scale = offset(newDistOs,newDistLs,scaleOffsets);
