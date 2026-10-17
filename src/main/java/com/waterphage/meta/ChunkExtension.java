@@ -11,7 +11,7 @@ public interface ChunkExtension {
     BlockPos pos = null;
     void setPos(BlockPos p);
     BlockPos getPos();
-    boolean second();
+    int second();
     void count();
     FBNMesh getNMesh(String id);
     void setNMesh(String id,FBNMesh mesh);

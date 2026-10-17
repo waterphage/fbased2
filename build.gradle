@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.4-SNAPSHOT'
+	id 'fabric-loom' version '1.6.12'
 	id 'maven-publish'
 }
 
@@ -16,9 +16,17 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+	maven {
+		url = "https://api.modrinth.com/maven"
+	}
 }
 
 loom {
+	runs {
+		client {
+			vmArgs "-Dmixin.debug.export=true", "-Dmixin.debug.verbose=true"
+		}
+	}
 	accessWidenerPath = file("src/main/resources/fbased.accesswidener")
 }
 dependencies {
@@ -29,7 +37,10 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	
+	modImplementation "maven.modrinth:sodium:mc1.20.2-0.5.5"
+	modImplementation "maven.modrinth:continuity:3.0.0+1.20.2"
+	modImplementation "maven.modrinth:Orvt0mRa:tD2IqHXC"
+	modImplementation "maven.modrinth:VSNURh3q:vADXBkQ9"
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
@@ -85,10 +96,10 @@ import org.gradle.api.tasks.JavaExec
 // Настраиваем таску runClient — это именно та JavaExec‑таска, которую Loom использует для запуска игры
 tasks.named('runClient', JavaExec).configure {
 	// Метод jvmArgs(vararg String) добавляет аргументы в список, а не пытается перезаписать readonly‑свойство
-	jvmArgs '-Xms1G', '-Xmx4G'
+	jvmArgs '-Xms32G', '-Xmx32G'
 }
 
 // Если вы иногда тестируете сервер локально через Loom
 tasks.named('runServer', JavaExec).configure {
-	jvmArgs '-Xms1G', '-Xmx4G'
+	jvmArgs '-Xms32G', '-Xmx32G'
 }

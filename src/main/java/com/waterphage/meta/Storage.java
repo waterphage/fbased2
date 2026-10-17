@@ -1,16 +1,74 @@
 package com.waterphage.meta;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.fluid.FlowableFluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockRenderView;
+import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.ColorResolver;
 import net.minecraft.world.gen.densityfunction.DensityFunction;
 import net.minecraft.world.gen.noise.NoiseRouter;
 
 public class Storage {
+    public static final ColorResolver FOG_COLOR = (biome, x, z) -> biome.getFogColor();
+    public static final ColorResolver SKY_COLOR = (biome, x, z) -> biome.getSkyColor();
+    public static final ColorResolver GRS_COLOR = (biome, x, z) -> biome.getGrassColorAt(x, z);
+    public static final ColorResolver FLG_COLOR = (biome, x, z) -> biome.getFoliageColor();
+    public static final ColorResolver WTR_COLOR = (biome, x, z) -> biome.getWaterColor();
+    public static final ColorResolver WFG_COLOR = (biome, x, z) -> biome.getWaterFogColor();
+    public static final BlockState MIST = Registries.BLOCK.get(new Identifier("fbased", "mist")).getDefaultState();
+    public static final Block MIST_B=Registries.BLOCK.get(new Identifier("fbased", "mist"));
+    public static final FlowableFluid FLOW = Fluids.FLOWING_WATER;
     private static NoiseRouter params;
+    public static int calculateColor(
+            BlockRenderView world,
+            BlockPos pos,
+            ColorResolver colorResolver
+    ) {
+        int radius = MinecraftClient.getInstance()
+                .options.getBiomeBlendRadius().getValue();
+
+        if (radius == 0) {
+            return colorResolver.getColor(
+                    world.getBiomeFabric(pos).value(),
+                    pos.getX(),
+                    pos.getZ()
+            );
+        }
+
+        int size = radius * 2 + 1;
+        int count = size * size;
+
+        int red = 0;
+        int green = 0;
+        int blue = 0;
+
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+
+        for (int x = pos.getX() - radius; x <= pos.getX() + radius; x++) {
+            for (int z = pos.getZ() - radius; z <= pos.getZ() + radius; z++) {
+                mutable.set(x, pos.getY(), z);
+                int color = colorResolver.getColor(world.getBiomeFabric(mutable).value(), x, z);
+                red += (color >> 16) & 255;
+                green += (color >> 8) & 255;
+                blue += color & 255;
+            }
+        }
+        return ((red / count) & 255) << 16
+                | ((green / count) & 255) << 8
+                | ((blue / count) & 255);
+    }
 
     public static void write(NoiseRouter params) {
         Storage.params = params;

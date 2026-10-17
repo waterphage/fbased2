@@ -106,6 +106,11 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
             15,0, 15,1, 15,2, 15,3, 15,4, 15,5, 15,6, 15,7, 15,8, 15,9, 15,10, 15,11, 15,12, 15,13, 15,14, 15,15,
             1,0, 2,0, 3,0, 4,0, 5,0, 6,0, 7,0, 8,0, 9,0, 10,0, 11,0, 12,0, 13,0, 14,0,
             1,15, 2,15, 3,15, 4,15, 5,15, 6,15, 7,15, 8,15, 9,15, 10,15, 11,15, 12,15, 13,15, 14,15,
+
+            1,1, 1,2, 1,3, 1,4, 1,5, 1,6, 1,7, 1,8, 1,9, 1,10, 1,11, 1,12, 1,13, 1,14,
+            14,1, 14,2, 14,3, 14,4, 14,5, 14,6, 14,7, 14,8, 14,9, 14,10, 14,11, 14,12, 14,13, 14,14,
+            2,1, 3,1, 4,1, 5,1, 6,1, 7,1, 8,1, 9,1, 10,1, 11,1, 12,1, 13,1,
+            2,14, 3,14, 4,14, 5,14, 6,14, 7,14, 8,14, 9,14, 10,14, 11,14, 12,14, 13,14,
     };
     private class SurfCont {
         Chunk chunk;
@@ -149,7 +154,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
     // 0 Main method
     @Override
     public boolean generate(FeatureContext<SurfaceConfig> context) {
-        if(context.getWorld().getChunk(context.getOrigin()) instanceof ChunkExtension ext){if (ext.second())return false;}
+        if(context.getWorld().getChunk(context.getOrigin()) instanceof ChunkExtension ext){if (ext.second()>0)return false;}
         SurfCont ctx=new SurfCont(context);
         placer(ctx);// 1 holds all math stores placement positions and their indexes
 
@@ -198,22 +203,30 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
         id=0;while (id<ctx.bannedxyz.size()/2){edgeBan(ctx.bannedxyz.getLong(id*2),ctx.bannedxyz.getLong(id*2+1)>0,ctx);id+=1;}
     }
     private static void load(int id,SurfCont ctx,ChunkExtension ext,BlockPos org) {
+        //if (id==5||
         if (ext.getNMesh("mapSF").keyset().isEmpty()){calc(id,ctx,ext,org);return;} // 1.1.2 Generating local data
         int xo=org.getX();int zo=org.getZ();
-        for(int i=0;i< banpos.length/2;++i){
-            Long xzb=FBXZMap.xzL(xo+banpos[i*2],zo+banpos[i*2+1]);
-            ctx.banned.add(xzb);
-            Long2IntMap vls = ext.getCustomMap();
-            if(id==4){}
+        if (id==5){ctx.toSave.add(5);}
+        if(ext.second()<2){
+            for(int i=0;i< banpos.length/2;++i){
+                ctx.banned.add(FBXZMap.xzL(xo+banpos[i*2],zo+banpos[i*2+1]));
+            }
             FBXZMap xzm=ext.getXZmap();
-            int idk=xzm.indexMap().get(xzb);
-            int start = xzm.helper().getInt(idk);
-            int end = (idk + 1 < xzm.helper().size()) ? xzm.helper().getInt(idk + 1) : xzm.values().size();
-            for (int idy=start;idy<end;idy++){
-                int y = xzm.values().getInt(idy);
-                Long xyz=FBXZMap.L(xzb,y);
-                ctx.bannedxyz.add(xyz);
-                ctx.bannedxyz.add((long)vls.get(xyz));
+            Long2IntMap vls = ext.getCustomMap();
+
+            for(long xz:xzm.keyset()) {
+                if (ctx.banned.contains(xz)) { // 1.1.2.1 Splitting calculation (banned positions should not be written)
+                    int idk = xzm.indexMap().get(xz);
+                    int start = xzm.helper().getInt(idk);
+                    int end = (idk + 1 < xzm.helper().size()) ? xzm.helper().getInt(idk + 1) : xzm.values().size();
+                    for (int idy = start; idy < end; idy++) {
+                        int y = xzm.values().getInt(idy);
+                        Long xyz = FBXZMap.L(xz, y);
+                        ctx.bannedxyz.add(xyz);
+                        ctx.bannedxyz.add((long) vls.get(xyz));
+                    }
+                    continue;
+                }
             }
         }
         for (int i=0;i<MESH_NAMES.length;++i){
@@ -362,14 +375,17 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 Chunk chunk = ctx.w.getChunk(chunkX, chunkZ, ChunkStatus.EMPTY, false);
                 if (!(chunk instanceof ChunkExtension ext)) continue;
                 Long2IntMap Cmap=ext.getCustomMap();
+                if(id==5){ext.count();}
                 for (long xyz:Cmap.keySet()){
-                    Long xz=FBXZMap.xzL(xyz);
-                    if (ctx.banned.contains(xz)){continue;}
+                    //if (!ctx.global.containsKey(xyz)){continue;}
+                    if (ctx.bannedxyz.contains(xyz)&&id!=5){continue;}
                     Cmap.put(xyz,ctx.global.get(xyz));
                     keyset.add(xyz);
-                    for (int Im=0;Im<MESH_NAMES.length;++Im){
+                    //for (int Im=0;Im<MESH_NAMES.length;++Im){
+                    int[] go = {0,2,3,4,6};
+                    for (Integer Im : go){
                         FBNMesh map=ext.getNMesh(MESH_NAMES[Im]);
-                        if (!map.keyset().contains(xyz))continue;
+                        if (!ctx.meshes[Im].keyset().contains(xyz))continue;
                         map.add(xyz,ctx.meshes[Im].get(xyz));
                     }
                 }
@@ -410,6 +426,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 }
             }
             for (Long point : use) {
+                if(!ctx.global.keySet().contains(point)){continue;}
                 Integer val = Math.abs(ctx.global.get(point));
                 if (val == null) continue;
                 Integer f=val;
@@ -462,6 +479,7 @@ public class Surface extends Feature<Surface.SurfaceConfig> {
                 }
             }
             for (Long point : use) {
+                if(!ctx.global.keySet().contains(point)){continue;}
                 Integer val = Math.abs(ctx.global.get(point));
                 if (val == null) continue;
                 Integer f=val;

@@ -4,6 +4,6 @@
     "minecraft:air",
     "minecraft:water",
     "minecraft:lava",
-    "minecraft:magma_block"
+    "fbased:magma_block_f"
   ]
 }

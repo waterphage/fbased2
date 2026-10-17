@@ -91,8 +91,17 @@ public class ChunkSerializerMixin {
         if (map == null || map.isEmpty()) return;
 
         NbtCompound root = cir.getReturnValue();
-        root.putLongArray("FBSurfPos", map.keySet().toLongArray());
-        root.putIntArray("FBSurfTyp", map.values().toIntArray());
+        long[] positions = new long[map.size()];
+        int[] types = new int[map.size()];
+
+        int m = 0;
+        for (Long2IntMap.Entry entry : map.long2IntEntrySet()) {
+            positions[m] = entry.getLongKey();
+            types[m] = entry.getIntValue();
+            m++;
+        }
+        root.putLongArray("FBSurfPos", positions);
+        root.putIntArray("FBSurfTyp", types);
         root.putLongArray("FBSurfXZ", XZmap.keyset().toLongArray());
         root.putIntArray("FBSurfY", XZmap.values().toIntArray());
         root.putIntArray("FBSurfA", XZmap.helper().toIntArray());

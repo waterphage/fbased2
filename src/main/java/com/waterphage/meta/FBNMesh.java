@@ -17,11 +17,18 @@ public class FBNMesh {
     public void setKeyset(LongArrayList xz){this.key=xz;}
     public void setValues(LongArrayList y){this.neig=y;}
     public void setHelper(IntArrayList adr){this.adr=adr;}
-    public void regenInd(LongArrayList xz){
-        int i=0;
-        for (long l:xz){this.indexMap.put(l,i);i+=1;}
+    public void regenInd(LongArrayList keys) {
+        indexMap.clear();
+        indexMap.defaultReturnValue(-1);
+
+        for (int i = 0; i < keys.size(); i++) {
+            indexMap.put(keys.getLong(i), i);
+        }
     }
     private Long2IntMap indexMap = new Long2IntOpenHashMap(); // search position map
+    {
+        indexMap.defaultReturnValue(-1);
+    }
     private Int2IntMap chunkMap=new Int2IntOpenHashMap();
     public Int2IntMap chunk(){return this.chunkMap;}
     public FBNMesh() {

@@ -3,6 +3,6 @@
   "values": [
     "minecraft:air",
     "minecraft:water",
-    "minecraft:lava"
+    "fbased:magma_block_f"
   ]
 }

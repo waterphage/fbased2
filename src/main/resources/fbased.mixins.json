@@ -3,14 +3,25 @@
 	"package": "com.waterphage.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"ExampleMixin",
-		"ProtoChunkMixin",
+		"BakedQuadShaderEffectMixin",
+		"BlockColorsMixin",
+		"BlockRendererInvoker",
+		"BlockRendererMixin",
 		"ChunkMixin",
-		"WorldChunkMixin",
 		"ChunkSerializerMixin",
-		"StructureTemplateMixin",
+		"ChunkShaderInterfaceMixin",
 		"ChunkStatusMixin",
-		"BlockColorsMixin"
+		"ExampleMixin",
+		"FlowingWaterMixin",
+		"FluidRendererMixin",
+		"JsonUnbakedModelMixin",
+		"ModelElementFaceDeserializerMixin",
+		"ModelElementFaceMixin",
+		"NoiseConfigMixin",
+		"ProtoChunkMixin",
+		"ShaderLoaderMixin",
+		"StructureTemplateMixin",
+		"WorldChunkMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

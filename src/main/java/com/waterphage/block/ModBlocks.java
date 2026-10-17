@@ -23,12 +23,11 @@ import java.util.List;
 public class ModBlocks {
 
     private static final Block AI2 = filler();
-
-    private static final Block AI3 = registerBlock((String)"magma_block", new MagmaBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_RED).instrument(Instrument.BASEDRUM).requiresTool().luminance((state) -> {
-        return 7;
-    }).strength(0.5F).allowsSpawning((state, world, pos, entityType) -> {
-        return entityType.isFireImmune();
-    }).postProcess(Blocks::always).emissiveLighting(Blocks::always)));
+    private static final Block AI3 = registerBlock((String)"magma_block", new FbMagmaBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_RED).instrument(Instrument.BASEDRUM).requiresTool().luminance((state) -> {
+        return 7;}).strength(0.5F).allowsSpawning((state, world, pos, entityType) -> {return entityType.isFireImmune();})));
+    private static final Block AI4 = registerBlock((String)"magma_block_f", new FbMagmaBlock(AbstractBlock.Settings.create().mapColor(MapColor.DARK_RED).instrument(Instrument.BASEDRUM).requiresTool().luminance((state) -> {
+        return 15;}).strength(0.5F).allowsSpawning((state, world, pos, entityType) -> {return entityType.isFireImmune();})));
+    public static final Block AI5=registerBlock("mist", new FbMistBlock(FabricBlockSettings.create().resistance(1000F).replaceable()));
     private static final Block AI1 = registerBlock("geo_filler_2", new FbBlock(FabricBlockSettings.copyOf(Blocks.STONE).hardness(0.8F*5F).resistance(0.8F*1.25F)));
     private static final Block A0 = registerBlock("geo_filler_1", new FbBlock(FabricBlockSettings.copyOf(Blocks.STONE).hardness(0.767F*5F).resistance(0.767F*1.25F)));
     private static final Block B1 = registerBlock("carcass", new FbCrpBlock(FabricBlockSettings.copyOf(Blocks.OAK_WOOD).nonOpaque().hardness(0).resistance(0)));
@@ -188,6 +187,7 @@ public class ModBlocks {
     }
     private static final String MINERAL = minerals();
     public static void registerModBlocks() {
+        BlockRenderLayerMap.INSTANCE.putBlock(AI5, RenderLayer.getTranslucent());
         for (ModMaterials.Color dir: ModMaterials.Color.values()){
             String id1="fbased:"+dir.name+"_carcass";
             String id2="fbased:"+dir.name+"_carcass_stairs";

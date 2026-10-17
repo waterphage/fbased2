@@ -12,10 +12,10 @@ noise = OpenSimplex(seed=12345)
 
 # Аналог одной октавы Minecraft
 # firstOctave влияет на масштаб, здесь просто крупный шум
-scale = 2 ** -11
+scale = 2 ** -7
 
 
-values = []
+values = [1]
 
 for x in range(SIZE):
     for z in range(SIZE):

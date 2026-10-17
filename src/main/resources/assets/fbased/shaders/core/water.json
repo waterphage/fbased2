@@ -1,0 +1,14 @@
+{
+  "vertex": "fbased:water",
+  "fragment": "fbased:water",
+  "attributes": [
+    "Position",
+    "Color",
+    "UV0",
+    "UV2",
+    "Normal"
+  ],
+  "samplers": [
+    {"name": "Sampler0" }
+  ]
+}

@@ -21,11 +21,11 @@ public class ProtoChunkMixin implements ChunkExtension {
     @Override
     public BlockPos getPos() {return pos;}
     @Unique
-    private boolean second = false;
+    private int second = 0;
     @Override
-    public boolean second() {return this.second;}
+    public int second() {return this.second;}
     @Override
-    public void count() {this.second=true;}
+    public void count() {this.second+=1;}
     @Unique
     private FBNMesh mapSF = new FBNMesh();
     @Unique

@@ -109,7 +109,7 @@
         "then_run": {
           "type": "minecraft:block",
           "result_state": {
-            "Name": "minecraft:magma_block"
+            "Name": "fbased:magma_block_f"
           }
         }
       },

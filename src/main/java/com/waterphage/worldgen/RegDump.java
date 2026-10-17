@@ -28,6 +28,7 @@ public class RegDump {
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "raw_st"), new Stone(Stone.StoneConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "variants"), new Variants(Variants.VariantsConfig.CODEC));
         Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "fossil_s"), new FossilS(FossilS.FossilSConfig.CODEC));
+        Registry.register(Registries.FEATURE, new Identifier(Fbased.MOD_ID, "river"), new River(River.RiverConfig.CODEC));
         FbasedPlacers.registerplacers();
         ModRules.registerrules();
         ModPredicatesType.registerpredicates();

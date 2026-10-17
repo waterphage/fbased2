@@ -8,25 +8,25 @@
       "minecraft:lime_concrete": [
         "fbased:black_basalt_raw",
         "fbased:black_basalt_raw",
-        "minecraft:magma_block"
+        "fbased:magma_block"
       ],
       "minecraft:light_blue_concrete": [
         "fbased:black_basalt_raw",
-        "minecraft:magma_block"
+        "fbased:magma_block"
       ],
       "minecraft:blue_concrete": [
         "fbased:black_basalt_raw",
-        "minecraft:magma_block",
-        "minecraft:magma_block"
+        "fbased:magma_block",
+        "fbased:magma_block"
       ],
       "minecraft:purple_concrete": [
         "fbased:black_basalt_raw",
-        "minecraft:magma_block",
-        "minecraft:magma_block",
-        "minecraft:magma_block"
+        "fbased:magma_block",
+        "fbased:magma_block",
+        "fbased:magma_block"
       ],
       "minecraft:pink_concrete": [
-        "minecraft:magma_block"
+        "fbased:magma_block"
       ]
     }
   }

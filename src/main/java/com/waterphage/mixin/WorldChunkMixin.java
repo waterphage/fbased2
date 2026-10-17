@@ -27,11 +27,11 @@ public class WorldChunkMixin implements ChunkExtension{
     @Override
     public BlockPos getPos() {return pos;}
     @Unique
-    private boolean second = false;
+    private int second = 0;
     @Override
-    public boolean second() {return this.second;}
+    public int second() {return this.second;}
     @Override
-    public void count() {this.second=true;}
+    public void count() {this.second+=1;}
     @Unique
     private FBNMesh mapSF = new FBNMesh();
     @Unique
@@ -105,9 +105,7 @@ public class WorldChunkMixin implements ChunkExtension{
             self.setXZmap(proto.getXZmap());
             self.setNoise(proto.getNoise());
             // NEW: Copy the 'second' initialization flag
-            if (proto.second()) {
-                self.count();
-            }
+            this.second=proto.second();
             // NEW: Transfer all calculated meshes
             String[] MESH_TYPES = {"mapSF","inSF","outSF","wallF","mapSC","inSC","outSC","wallC"};
             for (String type : MESH_TYPES) {

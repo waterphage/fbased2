@@ -17,6 +17,9 @@
 	"entrypoints": {
 		"main": [
 			"com.waterphage.Fbased"
+		],
+		"client": [
+			"com.waterphage.FbasedClient"
 		]
 	},
 	"mixins": [

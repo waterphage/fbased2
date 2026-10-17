@@ -1,5 +1,19 @@
 accessWidener v2 named
+accessible field net/minecraft/client/render/WorldRenderer chunks Lnet/minecraft/client/render/BuiltChunkStorage;
+accessible field net/minecraft/client/render/block/FluidRenderer lavaSprites [Lnet/minecraft/client/texture/Sprite;
+accessible method net/minecraft/client/render/block/FluidRenderer getFluidHeight (Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/fluid/Fluid;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/fluid/FluidState;)F
+accessible method net/minecraft/client/render/block/FluidRenderer calculateFluidHeight (Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/fluid/Fluid;FFFLnet/minecraft/util/math/BlockPos;)F
+accessible field net/minecraft/client/render/block/FluidRenderer waterOverlaySprite Lnet/minecraft/client/texture/Sprite;
+accessible method net/minecraft/client/render/block/FluidRenderer vertex (Lnet/minecraft/client/render/VertexConsumer;DDDFFFFFI)V
+accessible field net/minecraft/client/render/block/FluidRenderer waterSprites [Lnet/minecraft/client/texture/Sprite;
+accessible method net/minecraft/client/render/block/FluidRenderer getLight (Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/util/math/BlockPos;)I
+accessible method net/minecraft/client/render/block/FluidRenderer isSameFluid (Lnet/minecraft/fluid/FluidState;Lnet/minecraft/fluid/FluidState;)Z
+accessible method net/minecraft/client/render/block/FluidRenderer isSideCovered (Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;FLnet/minecraft/block/BlockState;)Z
 
+accessible method net/minecraft/fluid/FlowableFluid getNextTickDelay (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/fluid/FluidState;Lnet/minecraft/fluid/FluidState;)I
+accessible method net/minecraft/fluid/FlowableFluid tryFlow (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/fluid/FluidState;)V
+
+accessible method net/minecraft/fluid/FlowableFluid getUpdatedState (Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)Lnet/minecraft/fluid/FluidState;
 accessible field net/minecraft/world/gen/surfacebuilder/MaterialRules$MaterialRuleContext posToBiome Ljava/util/function/Function;
 
 accessible method net/minecraft/world/chunk/ChunkStatus register (Ljava/lang/String;Lnet/minecraft/world/chunk/ChunkStatus;ILjava/util/EnumSet;Lnet/minecraft/world/chunk/ChunkStatus$ChunkType;Lnet/minecraft/world/chunk/ChunkStatus$SimpleGenerationTask;)Lnet/minecraft/world/chunk/ChunkStatus;
