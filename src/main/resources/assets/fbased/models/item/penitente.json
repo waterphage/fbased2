@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "fbased:block/climate/penitente_0_base"
+  }
+}

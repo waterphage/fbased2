@@ -21,6 +21,10 @@ public class FbCrpStrBlock extends FbStrBlock {
         super(settings);
     }
     @Override
+    public boolean isSideInvisible(BlockState state, BlockState adjacent, Direction side) {
+        return false;
+    }
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
     ItemStack itemh= new ItemStack(player.getInventory().getMainHandStack().getItem());
     if (itemh.isIn(FBSTAIRS)){

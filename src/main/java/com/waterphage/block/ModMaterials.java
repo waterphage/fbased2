@@ -1,5 +1,22 @@
 package com.waterphage.block;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Property;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.biome.Biome;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 public class ModMaterials {
     public enum Gem {
         A1("gem"),
@@ -55,6 +72,84 @@ public class ModMaterials {
             this.c4 = c4;
         }
 
+    }
+    public static Map<String, String[]> climate =new HashMap<String, String[]>(){{
+            //put("test",new String[]{"hot","wet","dry","cold","normal"});
+        put("tetrahedrite",new String[]{"","malachite","","",""});
+        put("limonite",new String[]{"hematite","hematite","","",""});
+        put("gypsum",new String[]{"anhydrite","anhydrite","","",""});
+        put("brimstone",new String[]{"minecraft:magma_block","","","",""});
+        put("hematite",new String[]{"","limonite","","",""});
+        put("marcasite",new String[]{"hematite","limonite","","",""});
+        put("coal_bituminous",new String[]{"minecraft:magma_block","","","",""});
+        put("lignite",new String[]{"minecraft:magma_block","","","",""});
+        put("jet",new String[]{"minecraft:magma_block","","","",""});
+        put("graphite",new String[]{"magma_block","","","",""});
+        put("hematite",new String[]{"","limonite","","",""});
+        put("horn_silver",new String[]{"native_silver","","","",""});
+        put("kaolinite",new String[]{"bauxite","","","",""});
+        put("cinnabar",new String[]{"minecraft:magma_block","","","",""});
+        put("realgar",new String[]{"minecraft:magma_block","","","",""});
+        put("alabaster",new String[]{"","gypsum","","",""});
+        put("malachite",new String[]{"native_copper","","","",""});
+        put("selenite",new String[]{"","gypsum","","",""});
+        put("satinspar",new String[]{"","gypsum","","",""});
+        put("native_copper",new String[]{"","malachite","","",""});
+        put("orpiment",new String[]{"minecraft:magma_block","","","",""});
+        put("anhydrite",new String[]{"","gypsum","","",""});
+        put("bismuthinite",new String[]{"minecraft:magma_block","","","",""});
+        put("stibnite",new String[]{"minecraft:magma_block","","","",""});
+
+        put("penitente",new String[]{"fbased:mist","","","","break"});
+    }};
+    public static void climatizer(BlockState state, ServerWorld world, BlockPos pos, RegistryEntry<Biome> biome){
+        String[] roster=climate.getOrDefault(Registries.BLOCK.getId(state.getBlock()).getPath().split("_", 2)[0],new String[]{"","","","",""});
+        if(biome.isIn(ModTags.FB_HOT)){replaceM(state,world,pos,roster[0]);return;}
+        if(biome.isIn(ModTags.FB_WET)){replaceM(state,world,pos,roster[1]);return;}
+        if(biome.isIn(ModTags.FB_DRY)){replaceM(state,world,pos,roster[2]);return;}
+        if(biome.isIn(ModTags.FB_COLD)){replaceM(state,world,pos,roster[3]);return;}
+        replaceM(state,world,pos,roster[4]);
+    }
+    public static void replaceM(BlockState state, ServerWorld world, BlockPos pos, String newM){
+        if(newM==""){return;}
+        if (newM=="break"){world.breakBlock(pos,false);return;}
+        Identifier targetId;
+        if (newM.contains(":")) {
+            targetId = Identifier.tryParse(newM);
+            if (targetId == null) return;
+            Block target = Registries.BLOCK.get(targetId);
+            world.setBlockState(pos, target.getDefaultState(), Block.NOTIFY_ALL);
+            return;
+        }
+        Identifier sourceId = Registries.BLOCK.getId(state.getBlock());
+        String sourcePath = sourceId.getPath();
+        int separator = sourcePath.indexOf('_');
+        if (separator < 0) return;
+        String targetPath = newM + sourcePath.substring(separator);
+        targetId = new Identifier(sourceId.getNamespace(), targetPath);
+        Block target = Registries.BLOCK.get(targetId);
+        BlockState replacement = target.getDefaultState();
+        for (Property<?> property : state.getProperties()) {
+            if (replacement.contains(property)) {
+                replacement = copyProperty(state, replacement, property);
+            }
+        }
+        world.setBlockState(pos, replacement, Block.NOTIFY_ALL);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static BlockState copyProperty(
+            BlockState source,
+            BlockState target,
+            Property property
+    ) {
+        Comparable value = source.get(property);
+
+        if (property.getValues().contains(value)) {
+            return target.with(property, value);
+        }
+
+        return target;
     }
     public enum Mineral {
 
@@ -118,7 +213,7 @@ public class ModMaterials {
         public final Float base;
         public final Boolean gem;
         public final Integer transp;
-        ;
+
 
         Mineral(String name,Float base,Boolean gem,Integer transp) {
             this.name = name;

@@ -39,8 +39,12 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation "maven.modrinth:sodium:mc1.20.2-0.5.5"
 	modImplementation "maven.modrinth:continuity:3.0.0+1.20.2"
-	modImplementation "maven.modrinth:Orvt0mRa:tD2IqHXC"
+	modImplementation "maven.modrinth:Orvt0mRa:1.0.28+mc1.20.4"
 	modImplementation "maven.modrinth:VSNURh3q:vADXBkQ9"
+
+
+
+	//modImplementation "maven.modrinth:gvQqBUqZ:qdzL5Hkg"
 	// Uncomment the following line to enable the deprecated Fabric API modules. 
 	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
 
@@ -95,11 +99,13 @@ import org.gradle.api.tasks.JavaExec
 
 // Настраиваем таску runClient — это именно та JavaExec‑таска, которую Loom использует для запуска игры
 tasks.named('runClient', JavaExec).configure {
-	// Метод jvmArgs(vararg String) добавляет аргументы в список, а не пытается перезаписать readonly‑свойство
-	jvmArgs '-Xms32G', '-Xmx32G'
+	jvmArgs '-Xms8G', '-Xmx32G'
+	jvmArgs '-XX:ActiveProcessorCount=32'
+	jvmArgs '-Dmixin.debug.export=true'
+	jvmArgs '-Dmixin.debug.verbose=true'
 }
 
-// Если вы иногда тестируете сервер локально через Loom
 tasks.named('runServer', JavaExec).configure {
-	jvmArgs '-Xms32G', '-Xmx32G'
+	jvmArgs '-Xms8G', '-Xmx32G'
+	jvmArgs '-XX:ActiveProcessorCount=32'
 }

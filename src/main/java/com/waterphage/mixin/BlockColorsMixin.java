@@ -37,12 +37,9 @@ public class BlockColorsMixin {
             int tintIndex,
             CallbackInfoReturnable<Integer> cir
     ) {
-        if (!state.isIn(ModTags.FBTINT)) {
-            return;
-        }
-        if (world == null || pos == null) {
-            return;
-        }
+        if (!state.isIn(ModTags.FBTINT)) {return;}
+        if (world == null || pos == null) {return;}
+        if (world.getBiomeFabric(pos) == null) {return;}
         switch (tintIndex) {
             case 0: cir.setReturnValue(calculateColor(world, pos, FOG_COLOR));return;
             case 1: cir.setReturnValue(calculateColor(world, pos, SKY_COLOR));return;

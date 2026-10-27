@@ -1,4 +1,6 @@
 accessWidener v2 named
+accessible method net/minecraft/fluid/Fluid hasRandomTicks ()Z
+accessible method net/minecraft/block/AbstractCauldronBlock canBeFilledByDripstone (Lnet/minecraft/fluid/Fluid;)Z
 accessible field net/minecraft/client/render/WorldRenderer chunks Lnet/minecraft/client/render/BuiltChunkStorage;
 accessible field net/minecraft/client/render/block/FluidRenderer lavaSprites [Lnet/minecraft/client/texture/Sprite;
 accessible method net/minecraft/client/render/block/FluidRenderer getFluidHeight (Lnet/minecraft/world/BlockRenderView;Lnet/minecraft/fluid/Fluid;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/fluid/FluidState;)F

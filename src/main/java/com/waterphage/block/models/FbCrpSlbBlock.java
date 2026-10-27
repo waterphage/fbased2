@@ -24,7 +24,10 @@ public class FbCrpSlbBlock extends FbSlbBlock {
     public FbCrpSlbBlock(Settings settings, SoundEvent blockSoundEvent) {
         super(settings,blockSoundEvent);
     }
-
+    @Override
+    public boolean isSideInvisible(BlockState state, BlockState adjacent, Direction side) {
+        return false;
+    }
     @Override
     @Environment(EnvType.CLIENT)
     public ActionResult onUse(BlockState state, World world, BlockPos pos,

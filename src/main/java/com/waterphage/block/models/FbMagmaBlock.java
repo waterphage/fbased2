@@ -18,6 +18,8 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
+import static com.waterphage.block.ModTags.FBFLOW;
+
 public class FbMagmaBlock extends Block {
 
     public FbMagmaBlock(AbstractBlock.Settings settings) {super(settings);}
@@ -44,13 +46,13 @@ public class FbMagmaBlock extends Block {
     ) {
         BlockPos above = pos.up();
         FluidState water = world.getFluidState(above);
-        if (water.isOf(Fluids.FLOWING_WATER)) {world.setBlockState(above, Registries.BLOCK.get(new Identifier("fbased:mist")).getDefaultState());}
+        if (water.isIn(FBFLOW)) {world.setBlockState(above, Registries.BLOCK.get(new Identifier("fbased:mist")).getDefaultState());}
     }
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
         BlockPos up=pos.up();
         FluidState f=world.getFluidState(up);
-        if (f.isOf(Fluids.FLOWING_WATER)) {
+        if (f.isIn(FBFLOW)) {
             world.setBlockState(up,Registries.BLOCK.get(new Identifier("fbased:mist")).getDefaultState());
             world.scheduleBlockTick(pos, this, 20);
             world.playSound(null,pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);

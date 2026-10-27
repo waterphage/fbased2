@@ -30,6 +30,10 @@ import me.jellysquid.mods.sodium.client.render.chunk.compile.pipeline.FluidRende
 
 @Mixin(FluidRenderer.class)
 public class FluidRendererMixin {
+    @Shadow
+    private me.jellysquid.mods.sodium.client.model.color.ColorProviderRegistry colorProviderRegistry;
+    @Shadow
+    private int[] quadColors;
     @Redirect(
             method = "render",
             at = @At(

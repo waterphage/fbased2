@@ -44,7 +44,6 @@ public class ShaderLoaderMixin {
             }
 
             cir.setReturnValue(new String(in.readAllBytes(), StandardCharsets.UTF_8));
-            System.out.println("[fbased] Loaded custom Sodium shader: " + path);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load custom Sodium shader: " + path, e);
         }

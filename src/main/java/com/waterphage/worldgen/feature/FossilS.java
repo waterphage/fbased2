@@ -29,11 +29,13 @@ import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class FossilS extends Feature<FossilS.FossilSConfig> {
     public FossilS(Codec<FossilSConfig> codec) {
         super(codec);
     }
+
     private static final Map<Identifier, Float> STR_SIZES = Map.ofEntries(
             Map.entry(new Identifier("fbased","pod_1_1"), 0.873033f),
             Map.entry(new Identifier("fbased","pod_1_2"), 0.859366f),
@@ -141,6 +143,7 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
             Map.entry(new Identifier("fbased","icos_1_6"), 0.614458f),
             Map.entry(new Identifier("fbased","icos_1_7"), 0.613424f)
     );
+
     public static class FossilSConfig implements FeatureConfig {
         public static final Codec<FossilSConfig> CODEC = RecordCodecBuilder.create(
                 instance -> instance.group(
@@ -153,7 +156,7 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
 
         public final List<Identifier>  str;
         public final List<RegistryEntry<StructureProcessorList>> proc;
-        public final List<Float> scales; //0.05f, 0.154f, 0.368f, 0.687f, 1.0f
+        public final List<Float> scales;
         public final List<Float> weights;
         public FossilSConfig(
                 List<Identifier> str,
@@ -167,7 +170,9 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
             this.weights=weights;
         }
     }
-    private static final Map<Identifier, List<StructureTemplate>> CACHE = new HashMap<>();
+
+    private static final Object LOCK = new Object();
+    private static final Map<Identifier, List<StructureTemplate>> CACHE = new ConcurrentHashMap<>();
 
     private static List<StructureTemplate> buildScaled(
             Identifier id,
@@ -175,16 +180,23 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
             ServerWorld world,
             FossilSConfig c
     ) {
-        StructureTemplate base = mgr.getTemplateOrBlank(id);
-        Float stype=STR_SIZES.getOrDefault(id, 1.0f);
+        StructureTemplate base;
+        synchronized (LOCK) {
+            base = mgr.getTemplateOrBlank(id);
+        }
+        Float stype = STR_SIZES.getOrDefault(id, 1.0f);
         List<StructureTemplate> list = new ArrayList<>(c.scales.size());
         for (float scale : c.scales) {
-            StructureTemplate copy = cloneTemplate(base, world);
-            ((ScalableStructure) copy).scaleStructure(scale*stype);
+            StructureTemplate copy;
+            synchronized (LOCK) {
+                copy = cloneTemplate(base, world);
+            }
+            ((ScalableStructure) copy).scaleStructure(scale * stype);
             list.add(copy);
         }
         return List.copyOf(list); // immutable
     }
+
     private static StructureTemplate get(
             Identifier id,
             int scaleIndex,
@@ -193,9 +205,10 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
             FossilSConfig c
     ) {
         return CACHE.computeIfAbsent(id, k ->
-                buildScaled(k, mgr, world,c)
+                buildScaled(k, mgr, world, c)
         ).get(scaleIndex);
     }
+
     public static StructureTemplate cloneTemplate(
             StructureTemplate original,
             ServerWorld world
@@ -211,38 +224,40 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
         copy.readNbt(blockLookup, nbt);
         return copy;
     }
+
     public int choose(FossilSConfig c, Random random){
-        Float n= random.nextFloat();
-        int id=-1;
-        for(Float cs:c.weights) {
-            id+=1;
-            if(n<cs){return id;}
+        Float n = random.nextFloat();
+        int id = -1;
+        for(Float cs : c.weights) {
+            id += 1;
+            if(n < cs){return id;}
         }
         return 0;
     }
+
     @Override
     public boolean generate(FeatureContext<FossilSConfig> context) {
         Random random = context.getRandom();
         StructureWorldAccess world = context.getWorld();
         BlockPos blockPos = context.getOrigin();
-        FossilSConfig c =context.getConfig();
+        FossilSConfig c = context.getConfig();
         ServerWorld serv = world.toServerWorld();
         BlockRotation blockRotation = BlockRotation.random(random);
         StructureTemplateManager structureTemplateManager = world.toServerWorld().getServer().getStructureTemplateManager();
-        StructureTemplate work=get(c.str.get(random.nextInt(c.str.size())), choose(c,random), structureTemplateManager,serv,c);
+        StructureTemplate work = get(c.str.get(random.nextInt(c.str.size())), choose(c, random), structureTemplateManager, serv, c);
         ChunkPos chunkPos = new ChunkPos(blockPos);
         Vec3i vec3i = work.getRotatedSize(blockRotation);
-        int x=blockPos.getX();int z=blockPos.getZ();int y=blockPos.getY();
-        int vx=vec3i.getX()/2;int vz=vec3i.getZ()/2;int vy=vec3i.getY()/2;
-        int dx=Math.max(0,chunkPos.getStartX()-16-x+vx)-
-                Math.max(0,x+vx-chunkPos.getEndX()-16);
-        int dz=Math.max(0,chunkPos.getStartZ()-16-z+vz)-
-                Math.max(0,z+vz-chunkPos.getEndZ()-16);
-        int dy=Math.max(0,world.getBottomY()-y+vy)-
-                Math.max(0,blockPos.getY()+vy-world.getTopY());
-        int cx1=x-vx+dx;int cx2=x+vx+dx;
-        int cz1=z-vz+dz;int cz2=z+vz+dz;
-        int cy1=y-vy+dy;int cy2=y+vy+dy;
+        int x = blockPos.getX(); int z = blockPos.getZ(); int y = blockPos.getY();
+        int vx = vec3i.getX() / 2; int vz = vec3i.getZ() / 2; int vy = vec3i.getY() / 2;
+        int dx = Math.max(0, chunkPos.getStartX() - 16 - x + vx) -
+                Math.max(0, x + vx - chunkPos.getEndX() - 16);
+        int dz = Math.max(0, chunkPos.getStartZ() - 16 - z + vz) -
+                Math.max(0, z + vz - chunkPos.getEndZ() - 16);
+        int dy = Math.max(0, world.getBottomY() - y + vy) -
+                Math.max(0, blockPos.getY() + vy - world.getTopY());
+        int cx1 = x - vx + dx; int cx2 = x + vx + dx;
+        int cz1 = z - vz + dz; int cz2 = z + vz + dz;
+        int cy1 = y - vy + dy; int cy2 = y + vy + dy;
         BlockBox blockBox = new BlockBox(
                 cx1,
                 cy1,
@@ -252,7 +267,7 @@ public class FossilS extends Feature<FossilS.FossilSConfig> {
                 cz2
         );
         StructurePlacementData structurePlacementData = new StructurePlacementData().setRotation(blockRotation).setBoundingBox(blockBox).setRandom(random);
-        BlockPos blockPos2 = blockBox.getCenter().add(-vx,-vy,-vz);
+        BlockPos blockPos2 = blockBox.getCenter().add(-vx, -vy, -vz);
         BlockPos blockPos3 = work.offsetByTransformedSize(blockPos2, BlockMirror.NONE, blockRotation);
 
         structurePlacementData.clearProcessors();

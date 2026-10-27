@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
@@ -31,17 +32,39 @@ public class Storage {
     public static final Block MIST_B=Registries.BLOCK.get(new Identifier("fbased", "mist"));
     public static final FlowableFluid FLOW = Fluids.FLOWING_WATER;
     private static NoiseRouter params;
-    public static int calculateColor(
-            BlockRenderView world,
-            BlockPos pos,
+    private static <T> Biome get(T w, BlockPos pos){
+        BlockRenderView world=(BlockRenderView)w;
+        var biome = world.getBiomeFabric(pos);
+        if (biome != null) {
+            return biome.value();
+        }
+        if (world instanceof ClientWorld clientWorld) {
+            return clientWorld.getBiome(pos).value();
+        }
+        System.out.println("Biome unavailable: " + world.getClass().getName());
+        System.out.println("Interfaces:");
+        for (Class<?> iface : world.getClass().getInterfaces()) {
+            System.out.println(iface.getName());
+        }
+        return null;
+    }
+    private static <P> BlockPos pos(P p){
+        if(p instanceof BlockPos pos){return pos;}
+        System.out.println("unsupported position feed:"+p.getClass().getName());
+        return null;
+    }
+    public static <T,P> int calculateColor(
+            T w,
+            P p,
             ColorResolver colorResolver
     ) {
         int radius = MinecraftClient.getInstance()
                 .options.getBiomeBlendRadius().getValue();
+        BlockPos pos=pos(p);
 
         if (radius == 0) {
             return colorResolver.getColor(
-                    world.getBiomeFabric(pos).value(),
+                    get(w,pos),
                     pos.getX(),
                     pos.getZ()
             );
@@ -59,7 +82,7 @@ public class Storage {
         for (int x = pos.getX() - radius; x <= pos.getX() + radius; x++) {
             for (int z = pos.getZ() - radius; z <= pos.getZ() + radius; z++) {
                 mutable.set(x, pos.getY(), z);
-                int color = colorResolver.getColor(world.getBiomeFabric(mutable).value(), x, z);
+                int color = colorResolver.getColor(get(w,mutable), x, z);
                 red += (color >> 16) & 255;
                 green += (color >> 8) & 255;
                 blue += color & 255;
@@ -134,15 +157,5 @@ public class Storage {
             };
         }
     }
-    public static final TagKey<Biome> FB_HOT =
-            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "hot"));
 
-    public static final TagKey<Biome> FB_COLD =
-            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "cold"));
-
-    public static final TagKey<Biome> FB_DRY =
-            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "dry"));
-
-    public static final TagKey<Biome> FB_WET =
-            TagKey.of(RegistryKeys.BIOME, new Identifier("fbased", "wet"));
 }

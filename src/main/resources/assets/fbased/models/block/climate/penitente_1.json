@@ -1,0 +1,8 @@
+{
+  "parent": "fbased:block/climate/penitente",
+  "textures": {
+    "cross": "fbased:block/climate/penitente_1_base",
+    "cross2": "fbased:block/climate/penitente_1_base2",
+    "overlay": "fbased:block/climate/penitente_1_over"
+  }
+}

@@ -3,6 +3,7 @@ package com.waterphage.worldgen;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.waterphage.Fbased;
+import com.waterphage.block.ModTags;
 import com.waterphage.meta.ChunkExtension;
 import com.waterphage.meta.Storage;
 import net.minecraft.registry.entry.RegistryEntry;
@@ -330,19 +331,19 @@ public class ModRules extends MaterialRules {
             }
         }
         private BlockState modRock(RegistryEntry<Biome> biome, RockMod fill) {
-            if (biome.isIn(FB_HOT) && fill.hot.isPresent()) {
+            if (biome.isIn(ModTags.FB_HOT) && fill.hot.isPresent()) {
                 return fill.hot.get();
             }
 
-            if (biome.isIn(FB_WET) && fill.wet.isPresent()) {
+            if (biome.isIn(ModTags.FB_WET) && fill.wet.isPresent()) {
                 return fill.wet.get();
             }
 
-            if (biome.isIn(FB_COLD) && fill.cold.isPresent()) {
+            if (biome.isIn(ModTags.FB_COLD) && fill.cold.isPresent()) {
                 return fill.cold.get();
             }
 
-            if (biome.isIn(FB_DRY) && fill.dry.isPresent()) {
+            if (biome.isIn(ModTags.FB_DRY) && fill.dry.isPresent()) {
                 return fill.dry.get();
             }
 

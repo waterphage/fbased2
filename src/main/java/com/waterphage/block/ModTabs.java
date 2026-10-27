@@ -155,6 +155,15 @@ public class ModTabs {
                         entries.add(new ItemStack(Registries.ITEM.get(new Identifier("fbased:carcass"))));
                     }).build());
 
+    public static final ItemGroup CLIMATE = Registry.register(Registries.ITEM_GROUP,
+            new Identifier(Fbased.MOD_ID, "climate"),
+            FabricItemGroup.builder().displayName(Text.translatable("fbased.itemgroup.climate"))
+                    .icon(() -> new ItemStack(Registries.ITEM.get(new Identifier("fbased:penitente"))))
+                    .entries((displayContext, entries) -> {
+                        entries.add(new ItemStack(Registries.ITEM.get(new Identifier("fbased:penitente"))));
+                        entries.add(new ItemStack(Registries.ITEM.get(new Identifier("fbased:mist"))));
+                    }).build());
+
     private ModTabs() {}
     public static void registerModTabs(){
 

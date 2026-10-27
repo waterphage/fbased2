@@ -35,7 +35,9 @@ public abstract class BlockRendererMixin {
             QuadLightData light
     ) {
         Material selected = material;
-
+        if (ctx.state().getBlock() instanceof com.waterphage.block.models.FbSpike) {
+            offset = Vec3d.ZERO;
+        }
         if (((Points.ShaderEffectQuad) quad).fbased$hasShaderEffect()) {
             selected = new ShaderEffectMaterial(material);
         }

@@ -1,5 +1,6 @@
 package com.waterphage.block.models;
 
+import com.waterphage.block.ModMaterials;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
@@ -10,6 +11,8 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.state.StateManager;
@@ -20,11 +23,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import net.minecraft.world.biome.Biome;
 import org.jetbrains.annotations.Nullable;
 
 import static com.waterphage.Fbased.fbKeyFlip;
@@ -101,7 +106,11 @@ public class FbSlbBlock extends FacingBlock implements Waterloggable {
 
         return ACTION;
     }
-
+    @Override
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        RegistryEntry<Biome> b= world.getBiome(pos);
+        ModMaterials.climatizer(state,world,pos,b);
+    }
     public ActionResult combineSlab(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand,
                                      BlockHitResult hit) {
 

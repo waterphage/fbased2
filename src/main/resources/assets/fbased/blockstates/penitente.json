@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "thickness=0,facing=up": {
+      "model": "fbased:block/climate/penitente_0"
+    },
+    "thickness=1,facing=up": {
+      "model": "fbased:block/climate/penitente_1"
+    },
+    "thickness=2,facing=up": {
+      "model": "fbased:block/climate/penitente_2"
+    },
+    "thickness=3,facing=up": {
+      "model": "fbased:block/climate/penitente_3"
+    },
+    "thickness=0,facing=down": {
+      "model": "fbased:block/climate/penitente_0","x": 180,"y":180
+    },
+    "thickness=1,facing=down": {
+      "model": "fbased:block/climate/penitente_1","x": 180,"y":180
+    },
+    "thickness=2,facing=down": {
+      "model": "fbased:block/climate/penitente_2","x": 180,"y":180
+    },
+    "thickness=3,facing=down": {
+      "model": "fbased:block/climate/penitente_3","x": 180,"y":180
+    }
+  }
+}

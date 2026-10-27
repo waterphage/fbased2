@@ -19,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static com.waterphage.block.ModTags.FBFLOW;
 import static com.waterphage.meta.Storage.*;
 import static com.waterphage.meta.Storage.MIST;
 
@@ -81,19 +82,19 @@ public abstract class FlowingWaterMixin {
 
         if (world.getRandom().nextFloat() > 0.9) return;
         BlockPos p=pos.up(15);
-        if(!world.getFluidState(p).isOf(FLOW)&&!world.getBlockState(p).isOf(MIST_B)){return;}
+        if(!world.getFluidState(p).isIn(FBFLOW)&&!world.getBlockState(p).isOf(MIST_B)){return;}
 
         p=pos.down();
         BlockState st=world.getBlockState(p);
         if (st.isAir()){
             world.setBlockState(p, MIST, Block.NOTIFY_ALL);
-        } else if (st.getFluidState().isOf(FLOW)) {
+        } else if (st.getFluidState().isIn(FBFLOW)) {
             world.setBlockState(p, MIST, Block.NOTIFY_ALL);
         }else {return;}
         p=pos;
         world.setBlockState(p, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
         p=pos.up();
-        if(world.getFluidState(p).isOf(FLOW)){
+        if(world.getFluidState(p).isIn(FBFLOW)){
             world.setBlockState(p, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
         }
 
